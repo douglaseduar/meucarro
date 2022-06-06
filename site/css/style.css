@@ -1,0 +1,64 @@
+.login{
+max-width: 500px;
+margin-top: 150px;
+}
+.register{
+max-width: 500px;
+margin-top: 30px;
+}
+a{
+    color: var(--cor-verde)!important;
+}
+.select{
+    background-color: var(--cor-verde);
+    color: white!important;
+    border-radius: 30px;
+}
+footer{
+    margin-top: 100px;
+}
+.footer{
+    display: flex;
+    justify-content: center;
+}
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.check{
+    float: right;
+}
+.form-check-input:checked{
+    background-color: var(--cor-verde);
+    border-color: var(--cor-verde);
+}
+.grid {
+	display: grid;
+}
+
+.grid-template-2 {
+	grid-template:
+    "sidenav content" 100%
+    / 20% 1fr 0px
+}
+
+.content {
+	grid-area: content;
+}
+
+.sidenav {
+	grid-area: sidenav;
+    background-color: var(--cor-verde);
+    color: white;
+}
+
+.item {
+	text-align: center;
+	font-size: 1.5em;
+}
+.sidenav > img {
+    border-radius: 300px;
+    width: 100px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}

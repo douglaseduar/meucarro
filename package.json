@@ -1,0 +1,28 @@
+{
+  "type": "module",
+  "name": "tads4-web-ii---bimestre-2---trabalho-2-web-ii",
+  "version": "1.0.0",
+  "description": "Descreva aqui sobre o seu trabalho.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifpruva/tads4-web-ii---bimestre-2---trabalho-2-web-ii.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ifpruva/tads4-web-ii---bimestre-2---trabalho-2-web-ii/issues"
+  },
+  "homepage": "https://github.com/ifpruva/tads4-web-ii---bimestre-2---trabalho-2-web-ii#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "express-fileupload": "^1.3.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.15"
+  }
+}
