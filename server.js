@@ -36,6 +36,22 @@ app.get('/inicio', (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/inicio.html');
 })
+app.get('/veiculos', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/veiculos.html');
+})
+app.get('/cadastro-de-veiculo', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/cadastro-de-veiculo.html');
+})
+app.get('/historico', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/historico.html');
+})
+app.get('/agendar', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/agendar.html');
+})
 
 
 

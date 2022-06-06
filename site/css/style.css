@@ -13,6 +13,7 @@ a{
     background-color: var(--cor-verde);
     color: white!important;
     border-radius: 30px;
+    border: 0px solid transparent
 }
 footer{
     margin-top: 100px;
@@ -48,17 +49,85 @@ footer{
 
 .sidenav {
 	grid-area: sidenav;
-    background-color: var(--cor-verde);
+    background-color: gainsboro;
     color: white;
 }
 
 .item {
 	text-align: center;
 	font-size: 1.5em;
+    height: 100vh;
 }
 .sidenav > img {
     border-radius: 300px;
     width: 100px;
     margin-top: 30px;
     margin-bottom: 20px;
+}
+.botoes{
+    margin-top: 100px;
+    
+}
+.botoes > a > button{
+    width: 100%;
+    color: var(--cor-verde);
+    margin-top: -6px;
+    border-radius: 0px!important;
+}
+.botoes > a > button:hover{
+    background-color: var(--cor-verde);
+    color: white;
+}
+button > a{
+    text-decoration: none!important;
+    color: white;
+}
+button > a:hover {
+    color: white!important;
+}
+.loja{
+    margin-top: 30px;
+}
+.logoinit{
+    width: 205px;
+    margin-top: 64px;
+}
+.info{
+width: 100%;
+background-color: ghostwhite;
+text-align: end;
+padding-right: 30px;
+height: 50px;
+}
+.lista{
+    margin-top: 30px;
+    padding: 10px;
+}
+.card-body > .bi-truck{
+    font-size: 70pt;
+}
+.bi-plus-circle{
+    font-size: 100pt;
+    text-align: center;
+    color: gainsboro;
+}
+.cadastro{
+    max-width: 340px;
+    margin-top: 150px;
+}
+.more > div {
+font-size: 11pt;
+}
+.more{
+    text-align: left;
+    margin-top: 20px;
+}
+.observacao{
+    background-color: gainsboro;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.data{
+    text-align: right!important;
 }
