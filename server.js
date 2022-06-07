@@ -53,8 +53,13 @@ app.get('/agendar', (req, res) => {
     res.sendFile(__dirname + '/agendar.html');
 })
 
-
-
+app.get('/car/:id', async(req, res) => {
+    res.send(await database.getVeiculos(req.params.id));
+})
+app.delete('/car/:id', async (req, res) => {
+    database.deleteVeiculo(req.params.id);
+    res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
+})
 
 
  app.get('/produtos', async(req, res) => {

@@ -131,3 +131,9 @@ font-size: 11pt;
 .data{
     text-align: right!important;
 }
+.apagar{
+    text-align: right;
+    font-size: 12pt;
+    padding-right: 5px;
+    cursor: pointer;
+}

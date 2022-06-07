@@ -6,18 +6,25 @@ database.con = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'emissao_cheque',
+    database: 'meu_carro',
     port: '3306'
 })
 
 
 database.con.connect();
 
-database.getProdutos = async function(){
-  //  let [rows, fields] = await database.con.execute('SELECT * FROM produtos');
+database.getVeiculos = async function(id){
+   let [rows, fields] = await database.con.execute('SELECT * FROM veiculo WHERE id = ?', [id]);
     
-    //return rows;
+    return rows;
 }
+database.deleteVeiculo = async function(id){
+    let [data] = await database.con.execute('DELETE FROM veiculo WHERE id = ?', [id]);
+
+    return {'deletado': id}
+}
+
+
 database.getProdutosSelecionado = async function(id){
   //  let [rows, fields] = await database.con.execute('SELECT * FROM produtos WHERE id = ?', [id]);
 
