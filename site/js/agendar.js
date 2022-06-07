@@ -1,3 +1,31 @@
+function carregarVeiculos(id){
+    fetch('/car/'+ id)
+    .then((res) => res.json())
+    .then((res) => {
+        for(veiculo of res){
+            criarLinha(veiculo.placa, veiculo.id);
+        }
+    })
+    
+}
+
+function criarLinha (vplaca, vid){
+    var option = document.createElement("option");
+    option.setAttribute("value", vid)
+    option.textContent = vplaca
+    
+
+    document.querySelector(".form-select").appendChild(option);
+}
+
+
+
+
+
+
+
+
+
 document.querySelector('#agendar').addEventListener("click", verificarData);
 
 function verificarData(event){
@@ -7,6 +35,7 @@ function verificarData(event){
     let vdata = form.vdata.value;
     console.log(vdata);
 }
+carregarVeiculos(1);
 
 // document.querySelector('#add').addEventListener("click", adicionar);
 

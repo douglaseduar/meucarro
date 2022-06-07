@@ -44,6 +44,8 @@ function criarLinha (vid, vplaca, vmodelo, vtipo){
 
     titulo.innerHTML = "<b>" + vplaca + "</b>";
     titulo1.textContent = vmodelo;
+    titulo.style.textTransform = "uppercase";
+    titulo1.style.textTransform = "uppercase";
     
     card2.appendChild(fotoc);
     card2.appendChild(placa);

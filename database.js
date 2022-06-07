@@ -14,7 +14,7 @@ database.con = await mysql.createConnection({
 database.con.connect();
 
 database.getVeiculos = async function(id){
-   let [rows, fields] = await database.con.execute('SELECT * FROM veiculo WHERE id = ?', [id]);
+   let [rows, fields] = await database.con.execute('SELECT * FROM veiculo WHERE fk_cliente = ?', [id]);
     
     return rows;
 }
@@ -23,24 +23,21 @@ database.deleteVeiculo = async function(id){
 
     return {'deletado': id}
 }
-
-
-database.getProdutosSelecionado = async function(id){
-  //  let [rows, fields] = await database.con.execute('SELECT * FROM produtos WHERE id = ?', [id]);
-
-   // return rows;
+database.getAgendamento = async function(id){
+  let [rows, fields] = await database.con.execute('SELECT * FROM agendamento WHERE fk_cliente = ?', [id]);
+   
+   return rows;
 }
-database.insertProduto = async function(titulo, descricao, img, preco){
- //  let [data] = await database.con.execute('INSERT INTO produtos (titulo, descricao, img, preco) VALUES (?, ?, ?, ?)', 
-  //  [titulo, descricao, img, preco]);
 
-  //  return {'numero': data.insertId}
-}
-database.deleteProduto = async function(id){
-  //  let [data] = await database.con.execute('DELETE FROM produtos WHERE id = ?', [id]);
 
-  //  return {'deletado': id}
+
+database.insertVeiculo = async function(placa, modelo, cliente, tipo){
+ let [data] = await database.con.execute('INSERT INTO veiculo (placa, modelo, fk_cliente, tipo) VALUES (?, ?, ?, ?)', 
+    [placa, modelo, cliente, tipo]);
+
+  return {'numero': data.insertId}
 }
+
 database.editProduto = async function(titulo, descricao, img, preco, id){
   //  let [data] = await database.con.execute('UPDATE produtos SET titulo = ?, descricao = ?, img = ?, preco = ? WHERE id = ?', [titulo, descricao, img, preco, id]);
 

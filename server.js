@@ -3,6 +3,7 @@ import database from './database.js';
 import url from 'url';
 import path from 'path';
 import fileupload from 'express-fileupload'
+import cors from 'cors';
 
 const app = express();
 var __filename = url.fileURLToPath(import.meta.url);
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.static('site/css'));
 app.use(express.static('site/js'));
 app.use(express.static('site/img'));
+app.use(cors());
 
  app.get('/', (req, res) => {
      res.header('Content-Type', 'text/html');
@@ -60,6 +62,14 @@ app.delete('/car/:id', async (req, res) => {
     database.deleteVeiculo(req.params.id);
     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
 })
+app.post('/car', async (req, res) => {
+    let {placa, tipo, cliente, modelo} = req.body;
+    res.status(201).send(await database.insertVeiculo(placa, modelo, cliente, tipo));
+})
+app.get('/agender/:id', async(req, res) => {
+    res.send(await database.getAgendamento(req.params.id));
+})
+
 
 
  app.get('/produtos', async(req, res) => {
