@@ -49,7 +49,7 @@ footer{
 
 .sidenav {
 	grid-area: sidenav;
-    background-color: gainsboro;
+    background-color: lightslategray;
     color: white;
 }
 
@@ -96,8 +96,9 @@ button > a:hover {
 width: 100%;
 background-color: ghostwhite;
 text-align: end;
-padding-right: 30px;
-height: 50px;
+padding-right: 5px;
+height: 30px;
+font-size: 12pt;
 }
 .lista{
     margin-top: 30px;
@@ -144,4 +145,32 @@ font-size: 11pt;
 #formedit > div > label{
     float: left;
     margin-bottom: 20px;
+}
+.fidelidadelogo{
+    
+    width: 600px;
+}
+.premio{
+    max-width: 700px;
+    margin-top: 200px;
+}
+.reto{
+    text-align: -webkit-center;
+}
+.premios{
+    margin-top: 30px;
+    font-size: 50pt;
+    color: grey;
+}
+.premios > i {
+    padding: 5px;
+}
+.premios > i:nth-child(6){
+padding-left: 40px;
+}
+#gift{
+    display: none;
+}
+.tamanho{
+    font-size: 14pt;
 }

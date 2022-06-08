@@ -1,3 +1,5 @@
+document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
+
 function carregarAgendamento(id){
     fetch('/agender/'+ id)
     .then((res) => res.json())
@@ -47,7 +49,7 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     var status = document.createElement("div");
     status.className = "status;"
     if(realizado = 0){
-        status.style.color = "gren";
+        status.style.color = "green";
         status.innerHTML = "<i>Aberto</i>";
     }else {
         status.style.color = "red";
@@ -90,4 +92,24 @@ async function apagando(){
 
 
 carregarAgendamento(1);
+function carregarDadosMenu(id){
+    fetch('/user/'+ id)
+    .then((res) => res.json())
+    .then((res) => {
+        for(cliente of res){
+            preencherMenu( cliente.nome, cliente.foto);
+        }
+
+    })
+    
+}
+
+function preencherMenu(nome, foto){
+    document.querySelector("#fotomenu").src = foto
+    document.querySelector("#nomemenu").textContent = nome;
+
+}
+
+carregarDadosMenu(1);
+
 

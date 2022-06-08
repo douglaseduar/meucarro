@@ -76,7 +76,14 @@ app.get('/agender/:id', async(req, res) => {
 app.get('/user/:id', async(req, res) => {
     res.send(await database.getDados(req.params.id));
 })
-
+app.put('/user/:id', async (req, res) => {
+    let {nome, telefone, email, foto, endereco} = req.body;
+    res.status(201).send(await database.editUser(nome, telefone, email, foto, endereco, req.params.id));
+})
+app.post('/user', async (req, res) => {
+    let {nome, telefone, permicao, email, senha, fidelidade} = req.body;
+    res.status(201).send(await database.insertUser(nome, telefone, permicao, email, senha, fidelidade));
+})
 
 
  app.get('/produtos', async(req, res) => {
@@ -92,25 +99,12 @@ app.delete('/produtos/:id', async (req, res) => {
     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
 })
 
-app.post('/produtos', async (req, res) => {
-    let {titulo, descricao, img, preco} = req.body;
-    res.status(201).send(await database.insertProduto(titulo, descricao, img, preco));
-})
-
-app.put('/produtos/:id', async (req, res) => {
-    let {titulo, descricao, img, preco} = req.body;
-    res.status(201).send(await database.editProduto(titulo, descricao, img, preco, req.params.id));
-})
-
-// var con = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: ''
+// app.post('/produtos', async (req, res) => {
+//     let {titulo, descricao, img, preco} = req.body;
+//     res.status(201).send(await database.insertProduto(titulo, descricao, img, preco));
 // })
 
-// con.connect((err => {
-//     if(err) throw err;
-//     console.log('Conectado com sucesso!')
-// }))
-
-// con.end();
+// app.put('/produtos/:id', async (req, res) => {
+//     let {titulo, descricao, img, preco} = req.body;
+//     res.status(201).send(await database.editProduto(titulo, descricao, img, preco, req.params.id));
+// })

@@ -14,40 +14,63 @@
     <link rel="shortcut icon" href="carro.png" type="image/x-icon">
 </head>
 <body>
-    <form action="" id="formcadastro">
-    <div class="container-sm cadastro">
-        <div class="card">
-            <div class="card-body">
-                <div class="logo"><img src="LOGO.png" alt="" srcset="" width="200px">
-                </div>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Placa ou Identificação" aria-describedby="button-addon2" maxlength="7" minlength="7" required name="consultaplaca">
+  <div>
+    <section class="grid grid-template-2">
+        <div class="item content">
+        <div class="info"><marquee></marquee></div>
+        <div class="container-sm register">
+          <form action="" id="formcadastro">
+            <div class="container-sm cadastro">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="logo"><img src="LOGO.png" alt="" srcset="" width="200px">
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
-                            <label class="form-check-label" for="inlineRadio1">Carro</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                            <label class="form-check-label" for="inlineRadio2">Caminhão</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-                            <label class="form-check-label" for="inlineRadio3">Trator</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option3">
-                            <label class="form-check-label" for="inlineRadio3">Moto</label>
-                          </div></div>
-                        </form>
-        <button type="submit" class="btn btn-success btn-block mb-4" id="cadastrar">Cadastrar Veículo</button>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Placa ou Identificação" aria-describedby="button-addon2" maxlength="7" minlength="7" required name="consultaplaca">
+                                </div>
+                                <div class="form-check form-check-inline tamanho ">
+                                    <input class="form-check-input " type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
+                                    <label class="form-check-label tamanho" for="inlineRadio1">Carro</label>
+                                  </div>
+                                  <div class="form-check form-check-inline tamanho">
+                                    <input class="form-check-input " type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                    <label class="form-check-label tamanho" for="inlineRadio2">Caminhão</label>
+                                  </div>
+                                  <div class="form-check form-check-inline tamanho">
+                                    <input class="form-check-input " type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                                    <label class="form-check-label tamanho" for="inlineRadio3">Trator</label>
+                                  </div>
+                                  <div class="form-check form-check-inline tamanho">
+                                    <input class="form-check-input " type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4">
+                                    <label class="form-check-label tamanho" for="inlineRadio3">Moto</label>
+                                  </div></div>
+                                </form>
+                <button type="submit" class="btn btn-success btn-block mb-4" id="cadastrar">Cadastrar Veículo</button>
+            </div>
+        </div>
+        </div>
+        <footer>
+          <div class="footer"><a href="#"><img src="footer.jpg" alt="" srcset="" width="150px"></a></div>
+      </footer>
+        </div>
+    
+        
+        <div class="item sidenav">
+            <img src="image.jpg" id="fotomenu" alt="" srcset="">
+            <h4 id="nomemenu"></h4>
+                <div class="botoes">
+                <a href="/inicio"><button type="button" class="btn btn-light">Início</button></a>
+                <a href="/agendar"><button type="button" class="btn btn-light">Agendar Serviço</button></a>
+                <a href="/historico"><button type="button" class="btn btn-light">Agendamentos Anteriores</button></a>
+                <a href="/veiculos"><button type="button" class="btn btn-light select ">Meus Veículos</button> </a>
+                <a href="configuracao"><button type="button" class="btn btn-light ">Editar Dados</button></a>
+                <a href="https://api.whatsapp.com/send?phone=5542991557036"><button type="button" class="btn btn-light">Suporte</button>  </a>        
+                <h6 class="loja">Conheça nossos produtos:</h6>
+                <a href="https://www.distribuidoragranderio.com.br" target="_blank"><button type="button" class="btn btn-light">Site <i class="bi bi-arrow-up-right-square"></i></button></a>
+                <img class="logoinit" src="logo.png" alt="" srcset="">
+                </div>
+            </div>
+    </section>
     </div>
-</div>
-</div>
-</div>
-
 </body>
-<footer>
-    <div class="footer"><a href="#"><img src="footer.jpg" alt="" srcset="" width="150px"></a></div>
-</footer>
 </html>

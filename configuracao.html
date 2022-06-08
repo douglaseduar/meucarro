@@ -17,7 +17,7 @@
     <div>
         <section class="grid grid-template-2">
             <div class="item content">
-            <div class="info"></div>
+            <div class="info"><marquee></marquee></div>
             <div class="container-sm register">
                 <div class="card">
                     <div class="card-body">
@@ -38,14 +38,14 @@
                     <label class="form-label" for="loginName">Email</label>
                   </div>
                   <div class="form-outline mb-2">
-                    <textarea id="loginName" class="form-control" placeholder="União da Vitória - PR"> </textarea>
+                    <textarea id="endereco" class="form-control" placeholder="União da Vitória - PR" name="endereco"> </textarea>
                     <label class="form-label" for="loginName">Endereço</label>
                   </div>
                   <div class="form-outline mb-2">
                     <input type="text" id="loginName" class="form-control" placeholder="link da foto do perfil" name="foto"/>
                     <label class="form-label" for="loginName">Foto</label>
                   </div>
-                <button type="submit" class="btn btn-success btn-block mb-4 mt-4">Salvar</button>
+                <button type="submit" class="btn btn-success btn-block mb-4 mt-4" id="atualizar">Salvar</button>
               </form>
             </div>
         </div>
@@ -54,8 +54,8 @@
             </div>
             
             <div class="item sidenav">
-                <img src="image.jpg" alt="" srcset="">
-                <h4>Douglas Eduardo Machado</h4>
+                <img src="image.jpg" id="fotomenu" alt="" srcset="">
+                <h4 id="nomemenu"></h4>
                     <div class="botoes">
                     <a href="/inicio"><button type="button" class="btn btn-light">Início</button></a>
                     <a href="/agendar"><button type="button" class="btn btn-light">Agendar Serviço</button></a>

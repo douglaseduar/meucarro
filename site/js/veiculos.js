@@ -1,5 +1,5 @@
 
-
+document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
 
 function carregarVeiculos(id){
@@ -79,3 +79,22 @@ async function apagando(){
 
 carregarVeiculos(1);
 
+function carregarDadosMenu(id){
+    fetch('/user/'+ id)
+    .then((res) => res.json())
+    .then((res) => {
+        for(cliente of res){
+            preencherMenu( cliente.nome, cliente.foto);
+        }
+
+    })
+    
+}
+
+function preencherMenu(nome, foto){
+    document.querySelector("#fotomenu").src = foto
+    document.querySelector("#nomemenu").textContent = nome;
+
+}
+
+carregarDadosMenu(1);

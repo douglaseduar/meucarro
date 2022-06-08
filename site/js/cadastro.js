@@ -1,3 +1,5 @@
+document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
+
 document.querySelector("#cadastrar").addEventListener("click", cadastrando);
 var aux = 0;
 var cliente = 1;
@@ -22,7 +24,7 @@ async function cadastrando(event){
                 body: JSON.stringify({           
                     placa: placa,
                     tipo: aux,
-                    cliente: cliente,
+                    cliente: 1,
                     modelo: 'carro'
                 })
             }
@@ -32,3 +34,23 @@ async function cadastrando(event){
             location = "/veiculos";
             
 }
+
+function carregarDadosMenu(id){
+    fetch('/user/'+ id)
+    .then((res) => res.json())
+    .then((res) => {
+        for(cliente of res){
+            preencherMenu( cliente.nome, cliente.foto);
+        }
+
+    })
+    
+}
+
+function preencherMenu(nome, foto){
+    document.querySelector("#fotomenu").src = foto
+    document.querySelector("#nomemenu").textContent = nome;
+
+}
+
+carregarDadosMenu(1);

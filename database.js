@@ -29,12 +29,10 @@ database.getAgendamento = async function(id){
    return rows;
 }
 database.getDados = async function(id){
-  let [rows, fields] = await database.con.execute('SELECT id, nome, telefone, email, endereco, foto FROM cliente WHERE id = ?', [id]);
+  let [rows, fields] = await database.con.execute('SELECT id, nome, telefone, email, endereco, foto, fidelidade FROM cliente WHERE id = ?', [id]);
    
    return rows;
 }
-
-
 
 database.insertVeiculo = async function(placa, modelo, cliente, tipo){
  let [data] = await database.con.execute('INSERT INTO veiculo (placa, modelo, fk_cliente, tipo) VALUES (?, ?, ?, ?)', 
@@ -42,11 +40,16 @@ database.insertVeiculo = async function(placa, modelo, cliente, tipo){
 
   return {'numero': data.insertId}
 }
+database.insertUser = async function(nome, telefone, permicao, email, senha, fidelidade){
+  let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, email, senha, fidelidade) VALUES (?, ?, ?, ?, ?, ?)', 
+     [nome, telefone, permicao, email, senha, fidelidade]);
+ 
+   return {'numero': data.insertId}
+ }
+database.editUser = async function(nome, telefone, email, foto, endereco, id){
+   let [data] = await database.con.execute('UPDATE cliente SET nome = ?, telefone = ?, email = ?, foto = ?, endereco = ? WHERE id = ?', [nome, telefone, email, foto, endereco, id]);
 
-database.editProduto = async function(titulo, descricao, img, preco, id){
-  //  let [data] = await database.con.execute('UPDATE produtos SET titulo = ?, descricao = ?, img = ?, preco = ? WHERE id = ?', [titulo, descricao, img, preco, id]);
-
-  //  return {'alterado': id}
+    return {'alterado': id}
 }
 
 export default database;
