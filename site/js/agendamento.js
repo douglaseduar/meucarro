@@ -3,7 +3,7 @@ function carregarAgendamento(id){
     .then((res) => res.json())
     .then((res) => {
         for(veiculo of res){
-            criarLinha(veiculo.id, veiculo.fk_placa, veiculo.observacao, veiculo.km, veiculo.oleo, veiculo.filtro_oleo, veiculo.filtro_ar, veiculo.filtro_arcondicionado, veiculo.filtro_gasolina, veiculo.filtro_hidraulico, veiculo.filtro_racor, veiculo.data, veiculo.realizado);
+            criarLinha(veiculo.id, veiculo.fk_placa, veiculo.obeservacao, veiculo.km, veiculo.oleo, veiculo.filtro_oleo, veiculo.filtro_ar, veiculo.filtro_arcondicionado, veiculo.filtro_gasolina, veiculo.filtro_hidraulico, veiculo.filtro_racor, veiculo.data, veiculo.realizado);
         }
     })
     
@@ -17,13 +17,15 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     var card2 = document.createElement("div");
     card2.className = "card-body hyst";
     var placa = document.createElement("div");
+    placa.className = "placa";
     var placa1 = document.createElement("h5");
     placa1.innerHTML = "<b>" + fk_placa + "</b>";
     var more = document.createElement("div");
-    var oleo = document.createElement("div");
-    oleo.innerHTML = "<b>ÓLEO: </b> " + oleo;
-    var km = document.createElement("div");
-    km.innerHTML = "<b>KM: </b>" + km;
+    more.className = "more";
+    var oleoando = document.createElement("div");
+    oleoando.innerHTML = "<b>ÓLEO: </b> " + oleo;
+    var kmando = document.createElement("div");
+    kmando.innerHTML = "<b>KM: </b>" + km;
     var filtrooleo = document.createElement("div");
     filtrooleo.innerHTML = "<b>FILTRO DE ÓLEO: </b>" + filtro_oleo;
     var filtrocomb = document.createElement("div");
@@ -36,27 +38,35 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     filtroracor.innerHTML = "<b>FILTRO SEPARADOR: </b>" + filtro_racor;
     var outrofiltro = document.createElement("div");
     outrofiltro.innerHTML = "<b>OUTRO FILTRO: </b>" + filtro_hidraulico;
-    var observacao = document.createElement("div");
-    observacao.className = "observacao";
-    observacao.textContent = observacao;
+    var observando = document.createElement("div");
+    observando.className = "observacao";
+    observando.textContent = observacao;
     var data = document.createElement("div");
     data.className = "data";
     data.textContent = data1;
+    var status = document.createElement("div");
+    status.className = "status;"
+    if(realizado = 0){
+        status.style.color = "gren";
+        status.innerHTML = "<i>Aberto</i>";
+    }else {
+        status.style.color = "red";
+        status.innerHTML = "<i>Fechado</i>"
+    }
 
-    card2.appendChild(placa);
-    card2.appendChild(placa1);
-    more.appendChild(oleo);
-    more.appendChild(km);
+    more.appendChild(oleoando);
+    more.appendChild(kmando);
     more.appendChild(filtrooleo);
     more.appendChild(filtrocomb);
     more.appendChild(filtroar);
     more.appendChild(filtroarc);
     more.appendChild(filtroracor);
     more.appendChild(outrofiltro);
-    more.appendChild(observacao);
+    more.appendChild(observando);
     more.appendChild(data);
+    more.appendChild(status);
 
-    document.querySelector(".lista").appendChild(card).appendChild(card1).appendChild(card2).appendChild(more);
+    document.querySelector(".lista").appendChild(card).appendChild(card1).appendChild(card2).appendChild(placa).appendChild(placa1).appendChild(more);
 }
 
 

@@ -28,6 +28,11 @@ database.getAgendamento = async function(id){
    
    return rows;
 }
+database.getDados = async function(id){
+  let [rows, fields] = await database.con.execute('SELECT id, nome, telefone, email, endereco, foto FROM cliente WHERE id = ?', [id]);
+   
+   return rows;
+}
 
 
 

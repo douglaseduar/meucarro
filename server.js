@@ -54,6 +54,10 @@ app.get('/agendar', (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/agendar.html');
 })
+app.get('/configuracao', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/configuracao.html');
+})
 
 app.get('/car/:id', async(req, res) => {
     res.send(await database.getVeiculos(req.params.id));
@@ -68,6 +72,9 @@ app.post('/car', async (req, res) => {
 })
 app.get('/agender/:id', async(req, res) => {
     res.send(await database.getAgendamento(req.params.id));
+})
+app.get('/user/:id', async(req, res) => {
+    res.send(await database.getDados(req.params.id));
 })
 
 

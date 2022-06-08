@@ -121,6 +121,7 @@ font-size: 11pt;
 .more{
     text-align: left;
     margin-top: 20px;
+    line-height: 1.5;
 }
 .observacao{
     background-color: gainsboro;
@@ -136,4 +137,11 @@ font-size: 11pt;
     font-size: 12pt;
     padding-right: 5px;
     cursor: pointer;
+}
+#formedit{
+    font-size: 12pt;
+}
+#formedit > div > label{
+    float: left;
+    margin-bottom: 20px;
 }
