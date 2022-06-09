@@ -24,8 +24,7 @@ async function cadastrando(event){
                 body: JSON.stringify({           
                     placa: placa,
                     tipo: aux,
-                    cliente: 1,
-                    modelo: 'carro'
+                    cliente: 1
                 })
             }
             let resposta = await fetch('/car', header);

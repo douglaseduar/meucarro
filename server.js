@@ -4,6 +4,7 @@ import url from 'url';
 import path from 'path';
 import fileupload from 'express-fileupload'
 import cors from 'cors';
+import request from 'request';
 
 const app = express();
 var __filename = url.fileURLToPath(import.meta.url);
@@ -71,8 +72,21 @@ app.delete('/car/:id', async (req, res) => {
     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
 })
 app.post('/car', async (req, res) => {
-    let {placa, tipo, cliente, modelo} = req.body;
-    res.status(201).send(await database.insertVeiculo(placa, modelo, cliente, tipo));
+    let {placa, tipo, cliente} = req.body;
+    const link = `https://www.fipeplaca.com.br/_next/data/WGPJkdDfWv_2lHAboCzpJ/placa/${placa}.json?placa=${placa}`;
+    request(link, (err, response, html) => {
+        if (!err) {
+         const json = JSON.parse(html);
+         if(json.pageProps.vehicleData.Marca){
+         let marca = json.pageProps.vehicleData.Marca;
+         let modelo = json.pageProps.vehicleData.Modelo;
+         let aux = marca + " " + modelo;
+         res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo));
+         }
+         else{res.status(201).send(database.insertVeiculo(placa, " ", cliente, tipo));}
+        }
+      });
+    
 })
 app.get('/agender/:id', async(req, res) => {
     res.send(await database.getAgendamento(req.params.id));
@@ -119,3 +133,17 @@ app.post('/agender', async (req, res) => {
 //     let {titulo, descricao, img, preco} = req.body;
 //     res.status(201).send(await database.editProduto(titulo, descricao, img, preco, req.params.id));
 // })
+// app.get("/post/:placa", (req, res) => {
+//     const { placa } = req?.params;
+//     if (placa) {
+//         const link = `https://www.fipeplaca.com.br/_next/data/WGPJkdDfWv_2lHAboCzpJ/placa/${placa}.json?placa=${placa}`;
+//         request(link, (err, response, html) => {
+//             if (!err) {
+//               const json = JSON.parse(html);
+//              let marca = json.pageProps.vehicleData.Marca;
+//              let modelo = json.pageProps.vehicleData.Modelo;
+//              let aux = marca + modelo;
+//               console.log(aux);  
+//     }
+//   });
+// }})

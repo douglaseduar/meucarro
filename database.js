@@ -24,7 +24,7 @@ database.deleteVeiculo = async function(id){
     return {'deletado': id}
 }
 database.getAgendamento = async function(id){
-  let [rows, fields] = await database.con.execute('SELECT * FROM agendamento WHERE fk_cliente = ?', [id]);
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id = a.fk_placa and a.fk_cliente = ?', [id]);
    
    return rows;
 }
@@ -39,9 +39,9 @@ database.getDados = async function(id){
    return rows;
 }
 
-database.insertVeiculo = async function(placa, modelo, cliente, tipo){
+database.insertVeiculo = async function(placa, resposta, cliente, tipo){
  let [data] = await database.con.execute('INSERT INTO veiculo (placa, modelo, fk_cliente, tipo) VALUES (?, ?, ?, ?)', 
-    [placa, modelo, cliente, tipo]);
+    [placa, resposta, cliente, tipo]);
 
   return {'numero': data.insertId}
 }

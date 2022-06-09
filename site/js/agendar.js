@@ -35,6 +35,7 @@ function criarLinha (vplaca, vid){
     var option = document.createElement("option");
     option.setAttribute("value", vid)
     option.textContent = vplaca
+    option.style.textTransform = "uppercase";
     
 
     document.querySelector(".form-select").appendChild(option);

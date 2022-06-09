@@ -5,13 +5,13 @@ function carregarAgendamento(id){
     .then((res) => res.json())
     .then((res) => {
         for(veiculo of res){
-            criarLinha(veiculo.id, veiculo.fk_placa, veiculo.obeservacao, veiculo.km, veiculo.oleo, veiculo.filtro_oleo, veiculo.filtro_ar, veiculo.filtro_arcondicionado, veiculo.filtro_gasolina, veiculo.filtro_hidraulico, veiculo.filtro_racor, veiculo.data, veiculo.realizado);
+            criarLinha(veiculo.id, veiculo.fk_placa, veiculo.obeservacao, veiculo.km, veiculo.oleo, veiculo.filtro_oleo, veiculo.filtro_ar, veiculo.filtro_arcondicionado, veiculo.filtro_gasolina, veiculo.filtro_hidraulico, veiculo.filtro_racor, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.modelo);
         }
     })
     
 }
 
-function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data1, realizado){
+function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data1, realizado, vplaca, vmodelo){
     var card = document.createElement("div");
     card.className = "col";
     var card1 = document.createElement("div");
@@ -21,7 +21,11 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     var placa = document.createElement("div");
     placa.className = "placa";
     var placa1 = document.createElement("h5");
-    placa1.innerHTML = "<b>" + fk_placa + "</b>";
+    placa1.innerHTML = "<b>" + vplaca + "</b>";
+    placa.style.textTransform = "uppercase"
+    var modelo = document.createElement("h6");
+    modelo.innerHTML = "<i> " + vmodelo + "</i>"
+    modelo.style.textTransform = "lowercase";
     var more = document.createElement("div");
     more.className = "more";
     var oleoando = document.createElement("div");
@@ -45,19 +49,24 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     observando.textContent = observacao;
     var data = document.createElement("div");
     data.className = "data";
-    data.textContent = data1;
+    fdata = data1.split("T");
+    hora = fdata[1];
+    auxdata = fdata[0].split("-");
+    data.textContent = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
     var status = document.createElement("div");
     status.className = "status;"
     if(realizado == 0){
         status.style.color = "green";
         status.innerHTML = "<i>Aberto</i>";
         card1.setAttribute("id", id);
-       // card1.addEventListener("click", editagendamento)
+        card1.addEventListener("click", editagendamento)
+        card.style.cursor = "pointer";
     }else {
         status.style.color = "red";
         status.innerHTML = "<i>Fechado</i>"
     }
 
+    placa1.appendChild(modelo); 
     more.appendChild(oleoando);
     more.appendChild(kmando);
     more.appendChild(filtrooleo);
@@ -70,11 +79,13 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     more.appendChild(data);
     more.appendChild(status);
 
+
     document.querySelector(".lista").appendChild(card).appendChild(card1).appendChild(card2).appendChild(placa).appendChild(placa1).appendChild(more);
 }
 
 function editagendamento(){
     let aux = this.getAttribute("id");
+    console.log("clicou" + aux);
 }
 
 
