@@ -14,55 +14,83 @@
     <link rel="shortcut icon" href="carro.png" type="image/x-icon">
 </head>
 <body>
-  <form action="" id="agendamento">
-    <div class="container-sm login">
-        <div class="card">
-            <div class="card-body">
-                <div class="logo"><img src="LOGO.png" alt="" srcset="" width="200px">
-                </div>
-                        <select class="form-select" aria-label="Default select example">
-                          </select>
-                        <h6 style="margin-top: 15px; margin-bottom: 15px;"> O que voce quer trocar? </h6>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked>
-                            <label class="form-check-label" for="inlineCheckbox1">Filtro de Óleo</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                            <label class="form-check-label" for="inlineCheckbox2">Filtro de Ar</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                            <label class="form-check-label" for="inlineCheckbox3">Filtro de Combustível</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                            <label class="form-check-label" for="inlineCheckbox3">Filtro de Ar Condicioonado</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                            <label class="form-check-label" for="inlineCheckbox3">Filtro Separador</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                            <label class="form-check-label" for="inlineCheckbox3">Filtro Hidráulico</label>
-                          </div>                        
-                        <div class="form-floating" style="margin-top: 20px;">
-                          <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px"></textarea>
-                          <label for="floatingTextarea2">Faltou alguma coisa?</label>
-                        </div>
-                        <h6 style="margin-top: 15px; margin-bottom: 15px;"> Quando você quer trocar? </h6>
-                        <div class="datetime">
-                        <input type="datetime-local" class="form-control datetime" name="vdata" required="">
+  <div>
+    <section class="grid grid-template-2">
+        <div class="item content">
+        <div class="info"><marquee></marquee></div>
+        <form action="" id="agendamento">
+          <div class="container-sm agender">
+              <div class="card">
+                  <div class="card-body">
+                      <div class="logo"><img src="LOGO.png" alt="" srcset="" width="200px">
                       </div>
-                    </div>
-                  </form>
-                      <button class="btn btn-success btn-block mb-4" id="agendar">Agendar Veículo</button>
+                              <select class="form-select" aria-label="Default select example" name="select">
+                                </select>
+                              <h6 style="margin-top: 15px; margin-bottom: 15px;"> O que voce quer trocar? </h6>
+                              <div class="form-check form-check-inline tamanho">
+                                  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked>
+                                  <label class="form-check-label tamanho" for="inlineCheckbox1">Filtro de Óleo</label>
+                                </div>
+                                <div class="form-check form-check-inline tamanho">
+                                  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                  <label class="form-check-label tamanho" for="inlineCheckbox2">Filtro de Ar</label>
+                                </div>
+                                <div class="form-check form-check-inline tamanho">
+                                  <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
+                                  <label class="form-check-label tamanho" for="inlineCheckbox3">Filtro de Combustível</label>
+                                </div>
+                                <div class="form-check form-check-inline tamanho">
+                                  <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4">
+                                  <label class="form-check-label tamanho" for="inlineCheckbox3">Filtro de Ar Condicioonado</label>
+                                </div>
+                                <div class="form-check form-check-inline tamanho">
+                                  <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option5">
+                                  <label class="form-check-label tamanho" for="inlineCheckbox3">Filtro Separador</label>
+                                </div>
+                                <div class="form-check form-check-inline tamanho">
+                                  <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="option6">
+                                  <label class="form-check-label tamanho" for="inlineCheckbox3">Filtro Hidráulico</label>
+                                </div>     
+                                <h6 style="margin-top: 15px; margin-bottom: 15px;"> Qual óleo você quer usar?<i> (opcional)</i> </h6>
+                                <input type="text" class="form-control datetime" name="oleo" >                   
+                              <div class="form-floating" style="margin-top: 20px;">
+                                <textarea class="form-control tamanho" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px; font-size: 12pt;" name="observacao"></textarea>
+                                <label for="floatingTextarea2" class="tamanho">Faltou alguma coisa?</label>
+                              </div>
+                              <h6 style="margin-top: 15px; margin-bottom: 15px;"> Quando você quer trocar? </h6>
+                              <div class="datetime">
+                              <input type="datetime-local" class="form-control datetime" name="vdata" required>
+                            </div>
+                          </div>
+                          <button class="btn btn-success btn-block mb-4" id="agendar" style="margin: 10px;">Agendar Veículo</button>
+                        </form>
+                            
+          </div></div>
+      
+      
+        <footer>
+          <div class="footer"><a href="https://www.distribuidoragranderio.com.br/"><img src="footer.jpg" alt="" srcset="" width="150px"></a></div>
+      </footer>
+        </div></body>
+    
+        
+        <div class="item sidenav">
+            <img src="image.jpg" id="fotomenu" alt="" srcset="">
+            <h4 id="nomemenu"></h4>
+            <button type="button" class="btn btn-outline-success" id="logout"><i class="bi bi-box-arrow-left"></i> Logout</button>
+                <div class="botoes">
+                <a href="/inicio"><button type="button" class="btn btn-light">Início</button></a>
+                <a href="/agendar"><button type="button" class="btn btn-light select">Agendar Serviço</button></a>
+                <a href="/historico"><button type="button" class="btn btn-light">Agendamentos Anteriores</button></a>
+                <a href="/veiculos"><button type="button" class="btn btn-light  ">Meus Veículos</button> </a>
+                <a href="configuracao"><button type="button" class="btn btn-light ">Editar Dados</button></a>
+                <a href="https://api.whatsapp.com/send?phone=5542991557036"><button type="button" class="btn btn-light">Suporte</button>  </a>        
+                <h6 class="loja">Conheça nossos produtos:</h6>
+                <a href="https://www.distribuidoragranderio.com.br" target="_blank"><button type="button" class="btn btn-light">Site <i class="bi bi-arrow-up-right-square"></i></button></a>
+                <img class="logoinit" src="logo.png" alt="" srcset="">
+                </div>
+            </div>
+    </section>
     </div>
-
-
 </body>
-<footer>
-    <div class="footer"><a href="#"><img src="footer.jpg" alt="" srcset="" width="150px"></a></div>
-</footer>
 </html>

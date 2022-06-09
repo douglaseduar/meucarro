@@ -152,7 +152,7 @@ font-size: 11pt;
 }
 .premio{
     max-width: 700px;
-    margin-top: 200px;
+    margin-top: 17vh;
 }
 .reto{
     text-align: -webkit-center;
@@ -173,4 +173,19 @@ padding-left: 40px;
 }
 .tamanho{
     font-size: 14pt;
+}
+.agender{
+
+        max-width: 690px;
+        margin-top: 30px;
+
+}
+#logout{
+    background-color: white;
+    border-radius: 0px 30px 30px 0px;
+    float: left;
+    margin-top: 20px;
+}
+#logout:hover{
+    background-color: #009045;
 }

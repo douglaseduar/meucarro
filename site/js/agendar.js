@@ -1,3 +1,25 @@
+document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
+
+function carregarDadosMenu(id){
+    fetch('/user/'+ id)
+    .then((res) => res.json())
+    .then((res) => {
+        for(cliente of res){
+            preencherMenu( cliente.nome, cliente.foto);
+        }
+
+    })
+    
+}
+
+function preencherMenu(nome, foto){
+    document.querySelector("#fotomenu").src = foto
+    document.querySelector("#nomemenu").textContent = nome;
+
+}
+
+carregarDadosMenu(1);
+
 function carregarVeiculos(id){
     fetch('/car/'+ id)
     .then((res) => res.json())
@@ -18,24 +40,95 @@ function criarLinha (vplaca, vid){
     document.querySelector(".form-select").appendChild(option);
 }
 
+// document.querySelector('#agendar').addEventListener("click", verificarData);
 
+// function verificarData(event){
+//     event.preventDefault();
 
-
-
-
-
-
-
-document.querySelector('#agendar').addEventListener("click", verificarData);
-
-function verificarData(event){
-    event.preventDefault();
-
-    var form = document.querySelector('#agendamento');
-    let vdata = form.vdata.value;
-    console.log(vdata);
-}
+//     var form = document.querySelector('#agendamento');
+//     let vdata = form.vdata.value;
+//     console.log(vdata);
+// }
 carregarVeiculos(1);
+
+document.querySelector("#logout").addEventListener("click", sair)
+
+function sair(){
+    location = "/login";
+}
+
+
+document.querySelector("#agendar").addEventListener("click", agendando)
+
+async function agendando(event){
+    event.preventDefault();
+    
+let aobservacao = "";
+let aoleo = '<i class="bi bi-check-lg"></i>';
+let afiltrooleo = "";
+let afiltroar = "";
+let afiltroarc = "";
+let afiltrocomb = "";
+let afiltrohidraulico = "";
+let afiltrosep = "";
+
+    form = document.querySelector("#agendamento");
+    adata = form.vdata.value;
+    aobservacao = form.observacao.value;
+    aplaca = form.select.value;
+    aoleo = form.oleo.value + '<i class="bi bi-check-lg"></i>';
+    if(document.querySelector("#inlineCheckbox1").checked){
+    afiltrooleo = '<i class="bi bi-check-lg"></i>';
+    }
+    if(document.querySelector("#inlineCheckbox2").checked){
+        afiltroar = '<i class="bi bi-check-lg"></i>';
+        }
+    if(document.querySelector("#inlineCheckbox3").checked){
+            afiltrocomb = '<i class="bi bi-check-lg"></i>';
+    }
+    if(document.querySelector("#inlineCheckbox4").checked){
+        afiltroarc = '<i class="bi bi-check-lg"></i>';
+}    
+if(document.querySelector("#inlineCheckbox5").checked){
+    afiltrosep = '<i class="bi bi-check-lg"></i>';
+}
+if(document.querySelector("#inlineCheckbox6").checked){
+    afiltrohidraulico = '<i class="bi bi-check-lg"></i>';
+}
+
+let header = {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+    },
+    body: JSON.stringify({           
+        fk_placa: aplaca,
+        observacao: aobservacao,
+        oleo: aoleo,
+        filtro_oleo: afiltrooleo,
+        filtro_ar: afiltroar,
+        filtro_arcondicionado: afiltroarc,
+        filtro_gasolina: afiltrocomb,
+        filtro_hidraulico: afiltrohidraulico,
+        filtro_racor: afiltrosep,
+        vdata: adata,
+        realizado: 0,
+        fk_cliente: 1
+    })
+}
+let resposta = await fetch('/agender', header);
+resposta = await resposta.json();
+
+location = "/historico";
+
+}
+
+
+
+
+
+
+
 
 // document.querySelector('#add').addEventListener("click", adicionar);
 

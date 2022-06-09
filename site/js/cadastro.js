@@ -54,3 +54,9 @@ function preencherMenu(nome, foto){
 }
 
 carregarDadosMenu(1);
+
+document.querySelector("#logout").addEventListener("click", sair)
+
+function sair(){
+    location = "/login";
+}

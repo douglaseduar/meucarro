@@ -1,7 +1,5 @@
-document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
-
-function carregarAgendamento(id){
-    fetch('/agender/'+ id)
+function carregarAgendamento(){
+    fetch('/agenderadmin/')
     .then((res) => res.json())
     .then((res) => {
         for(veiculo of res){
@@ -73,54 +71,4 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     document.querySelector(".lista").appendChild(card).appendChild(card1).appendChild(card2).appendChild(placa).appendChild(placa1).appendChild(more);
 }
 
-function editagendamento(){
-    let aux = this.getAttribute("id");
-}
-
-
-async function apagando(){
-    let idaux = this.getAttribute("id");
-   // console.log("Produto com id  deletado com sucesso!")
-
-    let header = {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json; charset=UTF-8'
-        }
-    }
-    let resposta = await fetch('/car/' + idaux, header);
-
-   // console.log("Produto com id " + idaux + " deletado com sucesso!")
-   document.location.reload(true);
-}
-
-
-
-
-carregarAgendamento(1);
-function carregarDadosMenu(id){
-    fetch('/user/'+ id)
-    .then((res) => res.json())
-    .then((res) => {
-        for(cliente of res){
-            preencherMenu( cliente.nome, cliente.foto);
-        }
-
-    })
-    
-}
-
-function preencherMenu(nome, foto){
-    document.querySelector("#fotomenu").src = foto
-    document.querySelector("#nomemenu").textContent = nome;
-
-}
-
-carregarDadosMenu(1);
-
-
-document.querySelector("#logout").addEventListener("click", sair)
-
-function sair(){
-    location = "/login";
-}
+carregarAgendamento();

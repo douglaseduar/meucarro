@@ -27,6 +27,11 @@ document.querySelector("#endereco").value = endereco
 
 carregarDados(1);
 
+document.querySelector("#logout").addEventListener("click", sair)
+
+function sair(){
+    location = "/login";
+}
 
 
 

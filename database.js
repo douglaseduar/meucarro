@@ -28,6 +28,11 @@ database.getAgendamento = async function(id){
    
    return rows;
 }
+database.getAgendamentoadmin = async function(){
+  let [rows, fields] = await database.con.execute('SELECT * FROM agendamento');
+   
+   return rows;
+}
 database.getDados = async function(id){
   let [rows, fields] = await database.con.execute('SELECT id, nome, telefone, email, endereco, foto, fidelidade FROM cliente WHERE id = ?', [id]);
    
@@ -40,6 +45,12 @@ database.insertVeiculo = async function(placa, modelo, cliente, tipo){
 
   return {'numero': data.insertId}
 }
+database.insertAgendamento = async function(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente){
+  let [data] = await database.con.execute('INSERT INTO agendamento (fk_placa, obeservacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data, realizado, fk_cliente) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+     [fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente]);
+ 
+   return {'numero': data.insertId}
+ }
 database.insertUser = async function(nome, telefone, permicao, email, senha, fidelidade){
   let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, email, senha, fidelidade) VALUES (?, ?, ?, ?, ?, ?)', 
      [nome, telefone, permicao, email, senha, fidelidade]);

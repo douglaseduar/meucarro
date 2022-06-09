@@ -58,6 +58,10 @@ app.get('/configuracao', (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/configuracao.html');
 })
+app.get('/admin', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/admin.html');
+})
 
 app.get('/car/:id', async(req, res) => {
     res.send(await database.getVeiculos(req.params.id));
@@ -73,6 +77,9 @@ app.post('/car', async (req, res) => {
 app.get('/agender/:id', async(req, res) => {
     res.send(await database.getAgendamento(req.params.id));
 })
+app.get('/agenderadmin/', async(req, res) => {
+    res.send(await database.getAgendamentoadmin(req.params.id));
+})
 app.get('/user/:id', async(req, res) => {
     res.send(await database.getDados(req.params.id));
 })
@@ -84,20 +91,24 @@ app.post('/user', async (req, res) => {
     let {nome, telefone, permicao, email, senha, fidelidade} = req.body;
     res.status(201).send(await database.insertUser(nome, telefone, permicao, email, senha, fidelidade));
 })
-
-
- app.get('/produtos', async(req, res) => {
-    res.send(await database.getProdutos());
-})
-app.get('/produt/:id', async(req, res) => {
-    res.send(await database.getProdutosSelecionado(req.params.id));
+app.post('/agender', async (req, res) => {
+    let {fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente} = req.body;
+    res.status(201).send(await database.insertAgendamento(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente));
 })
 
 
-app.delete('/produtos/:id', async (req, res) => {
-    database.deleteProduto(req.params.id);
-    res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
-})
+//  app.get('/produtos', async(req, res) => {
+//     res.send(await database.getProdutos());
+// })
+// app.get('/produt/:id', async(req, res) => {
+//     res.send(await database.getProdutosSelecionado(req.params.id));
+// })
+
+
+// app.delete('/produtos/:id', async (req, res) => {
+//     database.deleteProduto(req.params.id);
+//     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
+// })
 
 // app.post('/produtos', async (req, res) => {
 //     let {titulo, descricao, img, preco} = req.body;
