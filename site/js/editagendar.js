@@ -1,3 +1,7 @@
+let iddoagendamento = location.search;
+let idaux = iddoagendamento.split("=");
+let idmesmo = idaux[1];
+
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
 function carregarDadosMenu(id){
@@ -20,26 +24,93 @@ function preencherMenu(nome, foto){
 
 carregarDadosMenu(1);
 
-function carregarVeiculos(id){
-    fetch('/car/'+ id)
+carregarDadosAgendamento(idmesmo);
+
+function carregarDadosAgendamento(idmesmo){
+    fetch('/editagender/'+ idmesmo)
     .then((res) => res.json())
     .then((res) => {
-        for(veiculo of res){
-            criarLinha(veiculo.placa, veiculo.id);
+        for(agendamento of res){
+            preencheformulario(agendamento.id, agendamento.placa, agendamento.oleo, agendamento.obeservacao, agendamento.data, agendamento.filtro_oleo, agendamento.filtro_ar, agendamento.filtro_arcondicionado, agendamento.filtro_gasolina, agendamento.filtro_hidraulico, agendamento.filtro_racor);
         }
+
     })
     
 }
 
-function criarLinha (vplaca, vid){
+function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor ){
+    let form = document.querySelector("#agendamento");
+    if(voleo != undefined){
+        form.oleo.value = voleo;
+    }
+    if(vobservacao != undefined){
+        form.observacao.value = vobservacao;
+    }
+    if(filtro_oleo == '<i class="bi bi-check-lg"></i>'){
+        document.querySelector("#inlineCheckbox1").checked = true;
+    }
+    if(filtro_ar == '<i class="bi bi-check-lg"></i>'){
+        document.querySelector("#inlineCheckbox2").checked = true;
+    }
+    if(filtro_gasolina == '<i class="bi bi-check-lg"></i>'){
+        document.querySelector("#inlineCheckbox3").checked = true;
+    }
+    if(filtro_arcondicionado == '<i class="bi bi-check-lg"></i>'){
+        document.querySelector("#inlineCheckbox4").checked = true;
+    }
+    if(filtro_racor == '<i class="bi bi-check-lg"></i>'){
+        document.querySelector("#inlineCheckbox5").checked = true;
+    }
+    if(filtro_hidraulico == '<i class="bi bi-check-lg"></i>'){
+        document.querySelector("#inlineCheckbox6").checked = true;
+    }
+    form.vdata.value = vdata;
     var option = document.createElement("option");
-    option.setAttribute("value", vid)
-    option.textContent = vplaca
-    option.style.textTransform = "uppercase";
+        //option.setAttribute("value", id)
+        option.textContent = vplaca
+        option.style.textTransform = "uppercase";
+        
+    
+        document.querySelector(".form-select").appendChild(option);
+
+}
+document.querySelector("#dropagendar").addEventListener("click", drop);
+
+async function drop(event){
+    event.preventDefault();
+
+    let header = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+        }
+    }
+    let resposta = await fetch('/editagender/' + idmesmo, header);
+    location = "/historico";
+    
+}
+
+
+// function carregarVeiculos(id){
+//     fetch('/car/'+ id)
+//     .then((res) => res.json())
+//     .then((res) => {
+//         for(veiculo of res){
+//             criarLinha(veiculo.placa, veiculo.id);
+//         }
+//     })
+    
+// }
+
+// function criarLinha (vplaca, vid){
+//     var option = document.createElement("option");
+//     option.setAttribute("value", vid)
+//     option.textContent = vplaca
+//     option.style.textTransform = "uppercase";
     
 
-    document.querySelector(".form-select").appendChild(option);
-}
+//     document.querySelector(".form-select").appendChild(option);
+// }
 
 // document.querySelector('#agendar').addEventListener("click", verificarData);
 
@@ -50,7 +121,7 @@ function criarLinha (vplaca, vid){
 //     let vdata = form.vdata.value;
 //     console.log(vdata);
 // }
-carregarVeiculos(1);
+//carregarVeiculos(1);
 
 document.querySelector("#logout").addEventListener("click", sair)
 
@@ -59,9 +130,9 @@ function sair(){
 }
 
 
-document.querySelector("#agendar").addEventListener("click", agendando)
+document.querySelector("#agendar").addEventListener("click", editaragendando)
 
-async function agendando(event){
+async function editaragendando(event){
     event.preventDefault();
     
 let aobservacao = "";
@@ -98,12 +169,11 @@ if(document.querySelector("#inlineCheckbox6").checked){
 }
 
 let header = {
-    method: 'POST',
+    method: 'PUT',
     headers: {
         'Content-Type': 'application/json; charset=UTF-8'
     },
     body: JSON.stringify({           
-        fk_placa: aplaca,
         observacao: aobservacao,
         oleo: aoleo,
         filtro_oleo: afiltrooleo,
@@ -117,7 +187,7 @@ let header = {
         fk_cliente: 1
     })
 }
-let resposta = await fetch('/agender', header);
+let resposta = await fetch('/editagender/' + idmesmo, header);
 resposta = await resposta.json();
 
 location = "/historico";

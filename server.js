@@ -63,6 +63,10 @@ app.get('/admin', (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/admin.html');
 })
+app.get('/editagendamento', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/editagendamento.html');
+})
 
 app.get('/car/:id', async(req, res) => {
     res.send(await database.getVeiculos(req.params.id));
@@ -80,16 +84,25 @@ app.post('/car', async (req, res) => {
          if(json.pageProps.vehicleData.Marca){
          let marca = json.pageProps.vehicleData.Marca;
          let modelo = json.pageProps.vehicleData.Modelo;
+         let AnoModelo = json.pageProps.vehicleData.AnoModelo;
+         let Combustivel = json.pageProps.vehicleData.Combustivel;
+         let cilindradas = json.pageProps.vehicleData.cilindradas;
+         let potencia = json.pageProps.vehicleData.potencia;
+         let cor = json.pageProps.vehicleData.cor;
+
          let aux = marca + " " + modelo;
-         res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo));
+         res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo, AnoModelo, Combustivel, cilindradas, potencia, cor));
          }
-         else{res.status(201).send(database.insertVeiculo(placa, " ", cliente, tipo));}
+         else{res.status(201).send(database.insertVeiculo(placa, " ", cliente, tipo, "", "", "", "", ""));}
         }
       });
     
 })
 app.get('/agender/:id', async(req, res) => {
     res.send(await database.getAgendamento(req.params.id));
+})
+app.get('/editagender/:id', async(req, res) => {
+    res.send(await database.geteditAgendamento(req.params.id));
 })
 app.get('/agenderadmin/', async(req, res) => {
     res.send(await database.getAgendamentoadmin(req.params.id));
@@ -109,6 +122,18 @@ app.post('/agender', async (req, res) => {
     let {fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente} = req.body;
     res.status(201).send(await database.insertAgendamento(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente));
 })
+app.put('/editagender/:id', async (req, res) => {
+    let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente} = req.body;
+    res.status(201).send(await database.editAgendamento(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente, req.params.id));
+})
+app.delete('/editagender/:id', async (req, res) => {
+    database.deleteAgendamento(req.params.id);
+    res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
+})
+app.get('/cardetalhe/:id', async(req, res) => {
+    res.send(await database.getVeiculosdetalhe(req.params.id));
+})
+
 
 
 //  app.get('/produtos', async(req, res) => {

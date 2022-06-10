@@ -42,7 +42,12 @@ function criarLinha (vid, vplaca, vmodelo, vtipo){
     apagar.addEventListener("click", apagando);
     
 
-    titulo.innerHTML = "<b>" + vplaca + "</b>";
+    titulo.innerHTML = "<b>" + vplaca + "</b>" + " " + '<i class="bi bi-search"></i>';
+    titulo.setAttribute("id", vplaca);
+    titulo.setAttribute("data-bs-toggle", "modal");
+    titulo.setAttribute("data-bs-target", "#staticBackdrop");
+    titulo.addEventListener("click", chamarModal);
+    titulo.style.cursor = "pointer";
     titulo1.textContent = vmodelo;
     titulo.style.textTransform = "uppercase";
     titulo1.style.textTransform = "uppercase";
@@ -56,6 +61,28 @@ function criarLinha (vid, vplaca, vmodelo, vtipo){
 
     document.querySelector(".lista").appendChild(card).appendChild(card1).appendChild(card2);
 }
+
+function chamarModal(){
+    let auxid = this.getAttribute("id");
+    fetch('/cardetalhe/'+ auxid)
+    .then((res) => res.json())
+    .then((res) => {
+        for(veiculo1 of res){
+            document.querySelector(".modal-title").textContent = veiculo1.placa;
+            document.querySelector(".modal-title").style.textTransform = "uppercase";
+            document.querySelector(".modelo1").textContent = "VEÍCULO: " + veiculo1.modelo;
+            document.querySelector(".ano").textContent = "ANO/MODELO: " + veiculo1.AnoModelo;
+            document.querySelector(".combustivel").textContent = "COMBUSTÍVEL: " + veiculo1.Combustivel;
+            document.querySelector(".cc").textContent = "MOTOR: " + veiculo1.cilindradas;
+            document.querySelector(".potencia").textContent = "POTÊNCIA: " + veiculo1.potencia + "cv";
+            document.querySelector(".cor").textContent = "COR: " + veiculo1.cor;
+
+        }
+
+    })
+    
+} 
+
 
 
 async function apagando(){

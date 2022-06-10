@@ -6,7 +6,7 @@ var cliente = 1;
 
 async function cadastrando(event){
     event.preventDefault();
-
+    document.querySelector("body").style.opacity = 0.5
     let form = document.querySelector('#formcadastro');
     placa = form.consultaplaca.value
     if(document.querySelector("#inlineRadio1").checked){

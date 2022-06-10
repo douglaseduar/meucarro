@@ -189,3 +189,7 @@ padding-left: 40px;
 #logout:hover{
     background-color: #009045;
 }
+.bi-search{
+    font-size: 12pt;
+    cursor: pointer;
+}

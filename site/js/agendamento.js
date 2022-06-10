@@ -85,13 +85,12 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
 
 function editagendamento(){
     let aux = this.getAttribute("id");
-    console.log("clicou" + aux);
+    document.location = "/editagendamento?id=" + aux;
 }
 
 
 async function apagando(){
     let idaux = this.getAttribute("id");
-   // console.log("Produto com id  deletado com sucesso!")
 
     let header = {
         method: 'DELETE',
@@ -101,7 +100,6 @@ async function apagando(){
     }
     let resposta = await fetch('/car/' + idaux, header);
 
-   // console.log("Produto com id " + idaux + " deletado com sucesso!")
    document.location.reload(true);
 }
 
