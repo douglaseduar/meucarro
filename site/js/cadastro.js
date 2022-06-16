@@ -1,8 +1,12 @@
+if(!localStorage.getItem("sessionid")){
+    location = "/login"
+}
+
+
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
 document.querySelector("#cadastrar").addEventListener("click", cadastrando);
 var aux = 0;
-var cliente = 1;
 
 async function cadastrando(event){
     event.preventDefault();
@@ -24,7 +28,7 @@ async function cadastrando(event){
                 body: JSON.stringify({           
                     placa: placa,
                     tipo: aux,
-                    cliente: 1
+                    cliente: localStorage.getItem("id")
                 })
             }
             let resposta = await fetch('/car', header);
@@ -52,10 +56,12 @@ function preencherMenu(nome, foto){
 
 }
 
-carregarDadosMenu(1);
+carregarDadosMenu(localStorage.getItem("id"));
 
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
+    localStorage.removeItem("id");
+    localStorage.removeItem("sessionid");
     location = "/login";
 }

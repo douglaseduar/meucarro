@@ -1,3 +1,7 @@
+if(!localStorage.getItem("sessionid")){
+    location = "/login"
+}
+
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
 function carregarDadosMenu(id){
@@ -13,12 +17,14 @@ function carregarDadosMenu(id){
 }
 
 function preencherMenu(nome, foto){
-    document.querySelector("#fotomenu").src = foto
+    if(foto != ""){
+        document.querySelector("#fotomenu").src = foto
+    }
     document.querySelector("#nomemenu").textContent = nome;
 
 }
 
-carregarDadosMenu(1);
+carregarDadosMenu(localStorage.getItem("id"));
 
 function carregarVeiculos(id){
     fetch('/car/'+ id)
@@ -51,11 +57,13 @@ function criarLinha (vplaca, vid){
 //     let vdata = form.vdata.value;
 //     console.log(vdata);
 // }
-carregarVeiculos(1);
+carregarVeiculos(localStorage.getItem("id"));
 
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
+    localStorage.removeItem("id");
+    localStorage.removeItem("sessionid");
     location = "/login";
 }
 

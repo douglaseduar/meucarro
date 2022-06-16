@@ -1,4 +1,6 @@
-
+if(!localStorage.getItem("sessionid")){
+    location = "/login"
+}
 
 function carregarAgendamento(id){
     fetch('/agender/'+ id)
@@ -106,7 +108,7 @@ async function apagando(){
 
 
 
-carregarAgendamento(1);
+carregarAgendamento(localStorage.getItem("id"));
 function carregarDadosMenu(id){
     fetch('/user/'+ id)
     .then((res) => res.json())
@@ -120,16 +122,20 @@ function carregarDadosMenu(id){
 }
 
 function preencherMenu(nome, foto){
-    document.querySelector("#fotomenu").src = foto
+    if(foto != ""){
+        document.querySelector("#fotomenu").src = foto
+    }
     document.querySelector("#nomemenu").textContent = nome;
 
 }
 
-carregarDadosMenu(1);
+carregarDadosMenu(localStorage.getItem("id"));
 
 
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
+    localStorage.removeItem("id");
+    localStorage.removeItem("sessionid");
     location = "/login";
 }

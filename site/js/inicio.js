@@ -1,3 +1,7 @@
+if(!localStorage.getItem("sessionid")){
+    location = "/login"
+}
+
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 // data();
 
@@ -23,7 +27,9 @@ function carregarDadosMenu(id){
 
 function preencherMenu(nome, foto, fidelidade){
     var aux = 5;
+    if(foto != ""){
     document.querySelector("#fotomenu").src = foto
+}
     document.querySelector("#nomemenu").textContent = nome;
     for (var i = 0; i < fidelidade; i++){
         var check = document.createElement("i");
@@ -50,11 +56,13 @@ function preencherMenu(nome, foto, fidelidade){
 
 }
 
-carregarDadosMenu(1);
+carregarDadosMenu(localStorage.getItem("id"));
 
 
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
+    localStorage.removeItem("id");
+    localStorage.removeItem("sessionid");
     location = "/login";
 }

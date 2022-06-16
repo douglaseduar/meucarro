@@ -19,7 +19,10 @@
   },
   "homepage": "https://github.com/ifpruva/tads4-web-ii---bimestre-2---trabalho-2-web-ii#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "express": "^4.17.3",
     "express-fileupload": "^1.3.1",
     "mysql": "^2.18.1",

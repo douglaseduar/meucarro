@@ -1,3 +1,7 @@
+if(!localStorage.getItem("sessionid")){
+    location = "/login"
+}
+
 let iddoagendamento = location.search;
 let idaux = iddoagendamento.split("=");
 let idmesmo = idaux[1];
@@ -17,12 +21,14 @@ function carregarDadosMenu(id){
 }
 
 function preencherMenu(nome, foto){
-    document.querySelector("#fotomenu").src = foto
+    if(foto != ""){
+        document.querySelector("#fotomenu").src = foto
+    }
     document.querySelector("#nomemenu").textContent = nome;
 
 }
 
-carregarDadosMenu(1);
+carregarDadosMenu(localStorage.getItem("id"));
 
 carregarDadosAgendamento(idmesmo);
 
@@ -66,7 +72,7 @@ function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, 
     }
     form.vdata.value = vdata;
     var option = document.createElement("option");
-        //option.setAttribute("value", id)
+        option.setAttribute("id", vplaca)
         option.textContent = vplaca
         option.style.textTransform = "uppercase";
         
@@ -90,13 +96,18 @@ async function drop(event){
     })
 }
 async function enviaracancelamento(telefone){ 
+    form = document.querySelector("#agendamento");
+    adata = form.vdata.value;
+    aplaca = form.select.value;
     let header = {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8'
         },
         body: JSON.stringify({           
-            telefone: telefone
+            telefone: telefone,
+            placa: aplaca,
+            vdata: adata
         })
     }
     let resposta = await fetch('/editagender/' + idmesmo, header);
@@ -140,15 +151,27 @@ async function enviaracancelamento(telefone){
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
+    localStorage.removeItem("id");
+    localStorage.removeItem("sessionid");
     location = "/login";
 }
-
 
 document.querySelector("#agendar").addEventListener("click", editaragendando)
 
 async function editaragendando(event){
     event.preventDefault();
-    
+
+    let idcliente = localStorage.getItem("id");
+    fetch('/user/'+ idcliente)
+    .then((res) => res.json())
+    .then((res) => {
+        for(cliente of res){
+            enviaredicao(cliente.telefone, idcliente);
+        }
+
+    })
+}    
+async function enviaredicao(telefone, idcliente){   
 let aobservacao = "";
 let aoleo = '<i class="bi bi-check-lg"></i>';
 let afiltrooleo = "";
@@ -162,6 +185,8 @@ let afiltrosep = "";
     adata = form.vdata.value;
     aobservacao = form.observacao.value;
     aplaca = form.select.value;
+    auxplacao = form.select.selectedOptions;
+    placao = auxplacao[0].getAttribute("id");
     aoleo = form.oleo.value;
     if(document.querySelector("#inlineCheckbox1").checked){
     afiltrooleo = '<i class="bi bi-check-lg"></i>';
@@ -198,7 +223,9 @@ let header = {
         filtro_racor: afiltrosep,
         vdata: adata,
         realizado: 0,
-        fk_cliente: 1
+        fk_cliente: idcliente,
+        placao: placao,
+        telefone: telefone
     })
 }
 let resposta = await fetch('/editagender/' + idmesmo, header);

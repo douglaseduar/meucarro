@@ -56,9 +56,9 @@ database.insertAgendamento = async function(fk_placa, observacao, oleo, filtro_o
  
    return {'numero': data.insertId}
  }
-database.insertUser = async function(nome, telefone, permicao, email, senha, fidelidade){
-  let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, email, senha, fidelidade) VALUES (?, ?, ?, ?, ?, ?)', 
-     [nome, telefone, permicao, email, senha, fidelidade]);
+database.insertUser = async function(nome, telefone, permicao, email, senha, fidelidade, verificacao){
+  let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, email, senha, fidelidade, verificacao) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+     [nome, telefone, permicao, email, senha, fidelidade, verificacao]);
  
    return {'numero': data.insertId}
  }
@@ -81,6 +81,21 @@ database.getVeiculosdetalhe = async function(id){
   let [rows, fields] = await database.con.execute('SELECT * FROM veiculo WHERE placa = ?', [id]);
    
    return rows;
+}
+database.getLogin = async function(email){
+  let [rows, fields] = await database.con.execute('SELECT * FROM cliente WHERE email = ?', [email]);
+   
+   return rows;
+}
+database.setLogin = async function(email, hash){
+  let [data] = await database.con.execute('UPDATE cliente SET sessionid = ? WHERE email = ?', [hash, email]);
+
+    return {'alterado': "asd"}
+}
+database.getLoginsession = async function(email){
+  let [rows, fields]  = await database.con.execute('SELECT id, sessionid FROM cliente WHERE email = ?', [email]);
+
+  return rows;
 }
 
 export default database;
