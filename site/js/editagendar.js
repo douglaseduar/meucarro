@@ -79,11 +79,25 @@ document.querySelector("#dropagendar").addEventListener("click", drop);
 async function drop(event){
     event.preventDefault();
 
+    let idcliente = localStorage.getItem("id");
+    fetch('/user/'+ idcliente)
+    .then((res) => res.json())
+    .then((res) => {
+        for(cliente of res){
+            enviaracancelamento(cliente.telefone);
+        }
+
+    })
+}
+async function enviaracancelamento(telefone){ 
     let header = {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8'
-        }
+        },
+        body: JSON.stringify({           
+            telefone: telefone
+        })
     }
     let resposta = await fetch('/editagender/' + idmesmo, header);
     location = "/historico";

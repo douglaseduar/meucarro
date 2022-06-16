@@ -1,4 +1,4 @@
-document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
+
 
 function carregarAgendamento(id){
     fetch('/agender/'+ id)

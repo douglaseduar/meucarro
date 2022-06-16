@@ -35,6 +35,7 @@ function criarLinha (vplaca, vid){
     var option = document.createElement("option");
     option.setAttribute("value", vid)
     option.textContent = vplaca
+    option.setAttribute("id", vplaca)
     option.style.textTransform = "uppercase";
     
 
@@ -63,7 +64,20 @@ document.querySelector("#agendar").addEventListener("click", agendando)
 
 async function agendando(event){
     event.preventDefault();
-    
+
+let idcliente = localStorage.getItem("id");
+fetch('/user/'+ idcliente)
+    .then((res) => res.json())
+    .then((res) => {
+        for(cliente of res){
+            enviaragendamento(cliente.telefone, idcliente);
+        }
+
+    })
+}
+
+async function enviaragendamento(telefone, idcliente ){
+
 let aobservacao = "";
 let aoleo = '<i class="bi bi-check-lg"></i>';
 let afiltrooleo = "";
@@ -78,6 +92,8 @@ let afiltrosep = "";
     aobservacao = form.observacao.value;
     aplaca = form.select.value;
     aoleo = form.oleo.value;
+    auxplacao = form.select.selectedOptions;
+    placao = auxplacao[0].getAttribute("id");
     if(document.querySelector("#inlineCheckbox1").checked){
     afiltrooleo = '<i class="bi bi-check-lg"></i>';
     }
@@ -114,7 +130,9 @@ let header = {
         filtro_racor: afiltrosep,
         vdata: adata,
         realizado: 0,
-        fk_cliente: 1
+        fk_cliente: idcliente,
+        telefone: telefone,
+        placao: placao
     })
 }
 let resposta = await fetch('/agender', header);
