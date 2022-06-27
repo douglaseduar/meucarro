@@ -19,17 +19,18 @@
             <div class="item content">
                 <div class="row">
                     <div class="col">
-                        <nav class="navbar navbar-light bg-light">
-                            <a class="navbar-brand">Lista de Veículos</a>
-                            <div class="form-inline">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Placa, Veículo..." aria-label="Search"
-                                       name="pesquisa">
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
-                            </div>
+                        <nav class="navbar navbar-light bg-light nave">
+
+                            <form class="form-inline" id="pesquisar">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Placa" aria-describedby="button-addon2" name="consultaplaca">
+                                        <button class="btn btn-outline-success" type="submit" id="button-addon2" style="padding: 0px 10px!important;font-size: 18pt;"><i class="bi bi-arrow-right-circle-fill"></i></button>
+                                </div>
+                            </form>
                         </nav>
                     </div>
                 </div>
-            <div class="row row-cols-1 row-cols-md-3 g-4 lista">
+            <div class="row row-cols-1 row-cols-md-3 g-4 lista" id="lista">
                 <div class="col">
                     <div class="card h-100">
                      <a href="/agendar"> <div class="card-body">
@@ -39,8 +40,6 @@
                 </div>
                   </div>
               </div>
-
-
             </div>
             <div class="item sidenav">
                 <img src="image.jpg" id="fotomenu" alt="" srcset="">

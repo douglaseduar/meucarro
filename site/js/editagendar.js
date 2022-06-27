@@ -160,6 +160,7 @@ document.querySelector("#agendar").addEventListener("click", editaragendando)
 
 async function editaragendando(event){
     event.preventDefault();
+    console.log("teste");
 
     let idcliente = localStorage.getItem("id");
     fetch('/user/'+ idcliente)

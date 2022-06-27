@@ -55,6 +55,9 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     hora = fdata[1];
     auxdata = fdata[0].split("-");
     data.textContent = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
+    var tag = document.createElement("div");
+    tag.className = "tag";
+    tag.textContent = "ÚLTIMA TROCA";
     var status = document.createElement("div");
     status.className = "status;"
     if(realizado == 0){
@@ -80,6 +83,7 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     more.appendChild(observando);
     more.appendChild(data);
     more.appendChild(status);
+    more.appendChild(tag);
 
 
     document.querySelector(".lista").appendChild(card).appendChild(card1).appendChild(card2).appendChild(placa).appendChild(placa1).appendChild(more);
@@ -138,4 +142,32 @@ function sair(){
     localStorage.removeItem("id");
     localStorage.removeItem("sessionid");
     location = "/login";
+}
+document.querySelector("#button-addon2").addEventListener("click", pesquisar)
+
+function pesquisar(event){
+    event.preventDefault();
+
+    form1 = document.querySelector("#pesquisar");
+    pesquisa = form1.consultaplaca.value;
+    carregarPlaca(pesquisa, localStorage.getItem("id"))
+   
+}
+function carregarPlaca(pesquisa, id){
+    var elemento = document.getElementById("lista");
+    while (elemento.firstChild) {
+  elemento.removeChild(elemento.firstChild);
+    }
+    if(pesquisa == ""){
+        carregarAgendamento(localStorage.getItem("id"));
+    }else{
+    fetch('/agenderesp/'+ id + '/' + pesquisa)
+    .then((res) => res.json())
+    .then((res) => {
+        for(veiculo1 of res){
+            criarLinha(veiculo1.id, veiculo1.fk_placa, veiculo1.obeservacao, veiculo1.km, veiculo1.oleo, veiculo1.filtro_oleo, veiculo1.filtro_ar, veiculo1.filtro_arcondicionado, veiculo1.filtro_gasolina, veiculo1.filtro_hidraulico, veiculo1.filtro_racor, veiculo1.data, veiculo1.realizado, veiculo1.placa, veiculo1.modelo);
+        }
+
+    })}
+    
 }

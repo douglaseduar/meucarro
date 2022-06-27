@@ -193,3 +193,15 @@ padding-left: 40px;
     font-size: 12pt;
     cursor: pointer;
 }
+.nave{
+    padding: 10px 0px 0px 10px;
+    justify-content: center;
+}
+.tag {
+    position: absolute;
+    top: 2%;
+    left: 88%;
+    font-size: 7pt!important;
+    text-align: center;
+    color: orange;
+}

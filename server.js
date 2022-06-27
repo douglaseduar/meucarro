@@ -113,6 +113,9 @@ app.post('/car', async (req, res) => {
 app.get('/agender/:id', async(req, res) => {
     res.send(await database.getAgendamento(req.params.id));
 })
+app.get('/agenderesp/:id/:pesquisa', async(req, res) => {
+    res.send(await database.getAgendamentoesp(req.params.id, req.params.pesquisa));
+})
 app.get('/editagender/:id', async(req, res) => {
     res.send(await database.geteditAgendamento(req.params.id));
 })

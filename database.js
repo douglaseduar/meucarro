@@ -24,7 +24,12 @@ database.deleteVeiculo = async function(id){
     return {'deletado': id}
 }
 database.getAgendamento = async function(id){
-  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id = a.fk_placa and a.fk_cliente = ?', [id]);
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id = a.fk_placa and a.fk_cliente = ? ORDER BY realizado = 1, data desc', [id]);
+   
+   return rows;
+}
+database.getAgendamentoesp = async function(id, pesquisa){
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.placa LIKE ? AND v.id = a.fk_placa and a.fk_cliente = ? ORDER BY realizado = 1, data desc;', [pesquisa, id]);
    
    return rows;
 }
