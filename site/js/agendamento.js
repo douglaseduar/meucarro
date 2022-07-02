@@ -66,6 +66,7 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     }else {
         status.style.color = "red";
         status.innerHTML = "<i>Fechado</i>"
+        card.style.opacity = 0.6;
     }
 
     placa1.appendChild(modelo); 

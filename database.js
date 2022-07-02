@@ -61,9 +61,9 @@ database.insertAgendamento = async function(fk_placa, observacao, oleo, filtro_o
  
    return {'numero': data.insertId}
  }
-database.insertUser = async function(nome, telefone, permicao, email, senha, fidelidade, verificacao){
-  let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, email, senha, fidelidade, verificacao) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-     [nome, telefone, permicao, email, senha, fidelidade, verificacao]);
+database.insertUser = async function(nome, telefone, permicao, email, fidelidade, sessionid){
+  let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, email, fidelidade, sessionid) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+     [nome, telefone, permicao, email, fidelidade, sessionid]);
  
    return {'numero': data.insertId}
  }

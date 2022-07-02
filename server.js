@@ -10,9 +10,9 @@ import bcrypt from 'bcryptjs';
 import FacebookStrategy from 'passport-facebook';
 import session from 'express-session';
 import passport from 'passport';
-import 'dotenv/config';
+import dotenv from 'dotenv'; 
 
-
+dotenv.config();
 const app = express();
 var __filename = url.fileURLToPath(import.meta.url);
 var __dirname = path.dirname(__filename);
@@ -77,10 +77,25 @@ app.use(session({
    app.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'}));
   
    app.get('/auth/facebook/callback',
-     passport.authenticate('facebook', { successRedirect : '/account', failureRedirect: '/login' }),
+     passport.authenticate('facebook', { successRedirect : '/verificacao', failureRedirect: '/login' }),
      function(req, res) {
        res.redirect('/');
      });
+
+    app.get('/verificacao', isLoggedIn, async (req, res) => {
+        // res.send(req.user);
+        let foto = req.user.photos[0].value;
+        let email = req.user.emails[0].value;
+        let nome = req.user.displayName;
+        let idfacebook = req.user.id;
+        let resposta = await database.getLogin(email);
+        if(resposta == ![]){
+             res.redirect('/inicio');
+        }else{
+            res.status(201).send(await database.insertUser(nome, "", 0, email, 0, idfacebook));
+        }});   
+        
+    colocar a foto aqui
 
      app.get('/logout', (req, res) =>{
         req.logout(function(err){
@@ -91,7 +106,7 @@ app.use(session({
 
  app.get('/', (req, res) => {
      res.header('Content-Type', 'text/html');
-     res.sendFile(__dirname + '/index.html');
+     res.sendFile(__dirname + '/login.html');
  })
  app.get('/login', (req, res) => {
     res.header('Content-Type', 'text/html');
@@ -105,23 +120,23 @@ app.get('/inicio', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/inicio.html');
 })
-app.get('/veiculos', (req, res) => {
+app.get('/veiculos', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/veiculos.html');
 })
-app.get('/cadastro-de-veiculo', (req, res) => {
+app.get('/cadastro-de-veiculo', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/cadastro-de-veiculo.html');
 })
-app.get('/historico', (req, res) => {
+app.get('/historico', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/historico.html');
 })
-app.get('/agendar', (req, res) => {
+app.get('/agendar', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/agendar.html');
 })
-app.get('/configuracao', (req, res) => {
+app.get('/configuracao', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/configuracao.html');
 })
@@ -312,7 +327,7 @@ function start(client) {
         let verificacao = Math.floor(Math.random() * 100);  
         res.status(201).send(await database.insertUser(nome, telefone, permicao, email, hash, fidelidade, verificacao));
         let number = "55" + telefone + "@c.us";
-        let menssage = "🚗 *SEJA BEM VINDO(A) " + nome.toUpperCase() + "!*\n\nNós da empresa Meu Carro agradecemos por você utilizar nosso serviço...\n\nPara mais informações acesse: www.meucarro.com.br/suporte\n\nSeu número de verficação é: " + verificacao;
+        let menssage = "🚗 *SEJA BEM VINDO(A) " + nome.toUpperCase() + "!*\n\nNós da Meu Carro agradecemos por você utilizar nosso serviço...\n\nPara mais informações acesse: www.meucarro.com.br/suporte\n\nSeu número de verficação é: " + verificacao;
         client.sendText(number, menssage)
         .then((result) => {
           console.log('Result: ', result); //return object success
@@ -332,3 +347,7 @@ function start(client) {
       }
     });
   }
+  app.get('*', (req, res) => {
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/erro.html');
+})
