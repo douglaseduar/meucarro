@@ -1,6 +1,3 @@
-if(!localStorage.getItem("sessionid")){
-    location = "/login"
-}
 
 function carregarAgendamento(id){
     fetch('/agender/'+ id)
@@ -139,8 +136,6 @@ carregarDadosMenu(localStorage.getItem("id"));
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
-    localStorage.removeItem("id");
-    localStorage.removeItem("sessionid");
     location = "/login";
 }
 document.querySelector("#button-addon2").addEventListener("click", pesquisar)

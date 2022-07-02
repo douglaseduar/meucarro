@@ -205,3 +205,33 @@ padding-left: 40px;
     text-align: center;
     color: orange;
 }
+
+
+.btn-social {
+    position: relative;
+    padding-left: 44px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white!important;
+}
+
+.btn-social:hover {
+    color: #eee;
+}
+
+.btn-social :first-child {
+    position: absolute;
+    left: 0;
+    top: -2;
+    bottom: 0;
+    width: 40px;
+    font-size: 1.6em;
+    text-align: center;
+    border-right: 1px solid rgba(0,0,0,0.2);
+}
+.termo{
+    margin-top: 30px;
+    text-align-last: center;
+}

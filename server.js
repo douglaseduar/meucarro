@@ -7,6 +7,11 @@ import cors from 'cors';
 import request from 'request';
 import venom from 'venom-bot';
 import bcrypt from 'bcryptjs';
+import FacebookStrategy from 'passport-facebook';
+import session from 'express-session';
+import passport from 'passport';
+import 'dotenv/config';
+
 
 const app = express();
 var __filename = url.fileURLToPath(import.meta.url);
@@ -28,12 +33,61 @@ var __dirname = path.dirname(__filename);
 //     console.log(req.url);
 //     next();
 // })
+
 app.use(fileupload());
 app.use(express.json());
 app.use(express.static('site/css'));
 app.use(express.static('site/js'));
 app.use(express.static('site/img'));
 app.use(cors());
+app.use(session({
+    resave:false,
+    saveUninitialized: true,
+    secret: 'calvo'
+   }));
+   app.use(passport.initialize());
+   app.use(passport.session());
+   passport.use(new FacebookStrategy({
+       clientID: process.env.CLIENTE_ID,
+       clientSecret: process.env.CLIENTE_SECRET,
+       callbackURL: "http://localhost:8080/auth/facebook/callback",
+       profileFields: ['id', 'displayName', 'photos', 'emails', 'gender']
+     },
+     function(accessToken, refreshToken, profile, done) {
+       process.nextTick(function () {
+             return done(null, profile);
+       });
+     }
+   ));
+
+   function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated())
+    return next();
+    res.redirect('/login');
+   }
+
+   passport.serializeUser((user, done) =>{
+    done(null, user)
+   });
+   
+   passport.deserializeUser((user,done)=>{
+    done(null, user)
+   });
+
+   app.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'}));
+  
+   app.get('/auth/facebook/callback',
+     passport.authenticate('facebook', { successRedirect : '/account', failureRedirect: '/login' }),
+     function(req, res) {
+       res.redirect('/');
+     });
+
+     app.get('/logout', (req, res) =>{
+        req.logout(function(err){
+        if(err) {return next (err);}
+        res.redirect('/');
+        });
+       });
 
  app.get('/', (req, res) => {
      res.header('Content-Type', 'text/html');
@@ -47,7 +101,7 @@ app.get('/register', (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/register.html');
 })
-app.get('/inicio', (req, res) => {
+app.get('/inicio', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/inicio.html');
 })

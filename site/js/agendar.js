@@ -1,6 +1,3 @@
-if(!localStorage.getItem("sessionid")){
-    location = "/login"
-}
 
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
@@ -62,8 +59,6 @@ carregarVeiculos(localStorage.getItem("id"));
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
-    localStorage.removeItem("id");
-    localStorage.removeItem("sessionid");
     location = "/login";
 }
 

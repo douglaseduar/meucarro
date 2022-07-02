@@ -1,6 +1,3 @@
-if(!localStorage.getItem("sessionid")){
-    location = "/login"
-}
 
 let iddoagendamento = location.search;
 let idaux = iddoagendamento.split("=");
@@ -151,8 +148,6 @@ async function enviaracancelamento(telefone){
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
-    localStorage.removeItem("id");
-    localStorage.removeItem("sessionid");
     location = "/login";
 }
 
