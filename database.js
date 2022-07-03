@@ -44,14 +44,14 @@ database.getAgendamentoadmin = async function(){
    return rows;
 }
 database.getDados = async function(id){
-  let [rows, fields] = await database.con.execute('SELECT id, nome, telefone, email, endereco, foto, fidelidade FROM cliente WHERE id = ?', [id]);
+  let [rows, fields] = await database.con.execute('SELECT id, nome, telefone, email, endereco, foto, fidelidade FROM cliente WHERE sessionid = ?', [id]);
    
    return rows;
 }
 
-database.insertVeiculo = async function(placa, resposta, cliente, tipo, AnoModelo, Combustivel, cilindradas, potencia, cor){
- let [data] = await database.con.execute('INSERT INTO veiculo (placa, modelo, fk_cliente, tipo, AnoModelo, Combustivel, cilindradas, potencia, cor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-    [placa, resposta, cliente, tipo, AnoModelo, Combustivel, cilindradas, potencia, cor]);
+database.insertVeiculo = async function(placa, resposta, cliente, tipo){
+ let [data] = await database.con.execute('INSERT INTO veiculo (placa, modelo, fk_cliente, tipo) VALUES (?, ?, ?, ?)', 
+    [placa, resposta, cliente, tipo]);
 
   return {'numero': data.insertId}
 }
@@ -61,15 +61,15 @@ database.insertAgendamento = async function(fk_placa, observacao, oleo, filtro_o
  
    return {'numero': data.insertId}
  }
-database.insertUser = async function(nome, telefone, permicao, email, fidelidade, sessionid){
-  let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, email, fidelidade, sessionid) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-     [nome, telefone, permicao, email, fidelidade, sessionid]);
+database.insertUser = async function(nome, telefone, permicao, sessionid, email, endereco, foto, fidelidade, ){
+  let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, sessionid, email, endereco, foto, fidelidade) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
+     [nome, telefone, permicao, sessionid, email, endereco, foto, fidelidade]);
  
    return {'numero': data.insertId}
  }
  
 database.editUser = async function(nome, telefone, email, foto, endereco, id){
-   let [data] = await database.con.execute('UPDATE cliente SET nome = ?, telefone = ?, email = ?, foto = ?, endereco = ? WHERE id = ?', [nome, telefone, email, foto, endereco, id]);
+   let [data] = await database.con.execute('UPDATE cliente SET nome = ?, telefone = ?, email = ?, foto = ?, endereco = ? WHERE sessionid = ?', [nome, telefone, email, foto, endereco, id]);
 
     return {'alterado': id}
 }
@@ -87,8 +87,8 @@ database.getVeiculosdetalhe = async function(id){
    
    return rows;
 }
-database.getLogin = async function(email){
-  let [rows, fields] = await database.con.execute('SELECT * FROM cliente WHERE email = ?', [email]);
+database.getLogin = async function(sessionid){
+  let [rows, fields] = await database.con.execute('SELECT * FROM cliente WHERE sessionid = ?', [sessionid]);
    
    return rows;
 }

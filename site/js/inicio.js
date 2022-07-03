@@ -10,8 +10,8 @@ document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema
     
 // }
 
-function carregarDadosMenu(id){
-    fetch('/user/'+ id)
+function carregarDadosMenu(){
+    fetch('/user/')
     .then((res) => res.json())
     .then((res) => {
         for(cliente of res){
@@ -53,7 +53,7 @@ function preencherMenu(nome, foto, fidelidade){
 
 }
 
-carregarDadosMenu(localStorage.getItem("id"));
+carregarDadosMenu();
 
 
 document.querySelector("#logout").addEventListener("click", sair)

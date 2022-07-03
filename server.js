@@ -11,6 +11,7 @@ import FacebookStrategy from 'passport-facebook';
 import session from 'express-session';
 import passport from 'passport';
 import dotenv from 'dotenv'; 
+import { ControlsLayer } from 'venom-bot/dist/api/layers/controls.layer.js';
 
 dotenv.config();
 const app = express();
@@ -83,19 +84,20 @@ app.use(session({
      });
 
     app.get('/verificacao', isLoggedIn, async (req, res) => {
-        // res.send(req.user);
         let foto = req.user.photos[0].value;
         let email = req.user.emails[0].value;
         let nome = req.user.displayName;
         let idfacebook = req.user.id;
-        let resposta = await database.getLogin(email);
+        let resposta = await database.getLogin(idfacebook);
         if(resposta == ![]){
-             res.redirect('/inicio');
+          let insert = await database.insertUser(nome, "", 0, idfacebook, email, "", foto, 0);
+             if(insert.numero =! 0){
+                res.redirect('/configuracao');
+             }else{res.redirect('/erro')}
         }else{
-            res.status(201).send(await database.insertUser(nome, "", 0, email, 0, idfacebook));
+            res.redirect('/inicio');
         }});   
         
-    colocar a foto aqui
 
      app.get('/logout', (req, res) =>{
         req.logout(function(err){
@@ -149,38 +151,35 @@ app.get('/editagendamento', (req, res) => {
     res.sendFile(__dirname + '/editagendamento.html');
 })
 
-app.get('/car/:id', async(req, res) => {
-    res.send(await database.getVeiculos(req.params.id));
+app.get('/car/', isLoggedIn, async(req, res) => {
+    res.send(await database.getVeiculos(req.user.id));
 })
 app.delete('/car/:id', async (req, res) => {
     database.deleteVeiculo(req.params.id);
     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
 })
-app.post('/car', async (req, res) => {
-    let {placa, tipo, cliente} = req.body;
-    const link = `https://www.fipeplaca.com.br/_next/data/WGPJkdDfWv_2lHAboCzpJ/placa/${placa}.json?placa=${placa}`;
+app.post('/car', isLoggedIn, async (req, res) => {
+    let {placa, tipo} = req.body;
+    let cliente = req.user.id;
+    const link = `https://www.fipeplaca.com.br/_next/data/XePhZPTecIOvSkzFrJBhg/placa/${placa}.json?placa=${placa}`;
     request(link, (err, response, html) => {
         if (!err) {
          const json = JSON.parse(html);
          if(json.pageProps.vehicleData.Marca){
          let marca = json.pageProps.vehicleData.Marca;
          let modelo = json.pageProps.vehicleData.Modelo;
-         let AnoModelo = json.pageProps.vehicleData.AnoModelo;
-         let Combustivel = json.pageProps.vehicleData.Combustivel;
-         let cilindradas = json.pageProps.vehicleData.cilindradas;
-         let potencia = json.pageProps.vehicleData.potencia;
-         let cor = json.pageProps.vehicleData.cor;
+
 
          let aux = marca + " " + modelo;
-         res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo, AnoModelo, Combustivel, cilindradas, potencia, cor));
+         res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo));
          }
-         else{res.status(201).send(database.insertVeiculo(placa, " ", cliente, tipo, "", "", "", "", ""));}
+         else{res.status(201).send(database.insertVeiculo(placa, " ", cliente, tipo));}
         }
       });
     
 })
-app.get('/agender/:id', async(req, res) => {
-    res.send(await database.getAgendamento(req.params.id));
+app.get('/agender/', isLoggedIn, async(req, res) => {
+    res.send(await database.getAgendamento(req.user.id));
 })
 app.get('/agenderesp/:id/:pesquisa', async(req, res) => {
     res.send(await database.getAgendamentoesp(req.params.id, req.params.pesquisa));
@@ -191,16 +190,13 @@ app.get('/editagender/:id', async(req, res) => {
 app.get('/agenderadmin/', async(req, res) => {
     res.send(await database.getAgendamentoadmin(req.params.id));
 })
-app.get('/user/:id', async(req, res) => {
-    res.send(await database.getDados(req.params.id));
+app.get('/user/', isLoggedIn, async(req, res) => {
+    res.send(await database.getDados(req.user.id));
 })
-app.put('/user/:id', async (req, res) => {
-    let {nome, telefone, email, foto, endereco} = req.body;
-    res.status(201).send(await database.editUser(nome, telefone, email, foto, endereco, req.params.id));
-})
-app.get('/cardetalhe/:id', async(req, res) => {
-    res.send(await database.getVeiculosdetalhe(req.params.id));
-})
+
+// app.get('/cardetalhe/:id', async(req, res) => {
+//     res.send(await database.getVeiculosdetalhe(req.params.id));
+// })
 
 // app.post('/user', async (req, res) => {
 //     let {nome, telefone, permicao, email, senha, fidelidade} = req.body;
@@ -221,21 +217,39 @@ app.get('/cardetalhe/:id', async(req, res) => {
 //     database.deleteAgendamento(req.params.id);
 //     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
 // })
-app.get('/cardetalhe/:id', async(req, res) => {
-    res.send(await database.getVeiculosdetalhe(req.params.id));
+app.get('/cardetalhe/:id', isLoggedIn, async(req, res) => {
+    let placa = req.params.id;
+    const link1 = `https://www.fipeplaca.com.br/_next/data/XePhZPTecIOvSkzFrJBhg/placa/${placa}.json?placa=${placa}`;
+    request(link1, (err, response, html) => {
+        if (!err) {
+         const json1 = JSON.parse(html);
+         let marca = json1.pageProps.vehicleData.Marca;
+         let modelo = json1.pageProps.vehicleData.Modelo;
+         let AnoModelo = json1.pageProps.vehicleData.AnoModelo;
+         let Combustivel = json1.pageProps.vehicleData.Combustivel;
+         let cilindradas = json1.pageProps.vehicleData.cilindradas;
+         let potencia = json1.pageProps.vehicleData.potencia;
+         let cor = json1.pageProps.vehicleData.cor;
+         let fipe = json1.pageProps.vehicleData.CodigoFipe;
+         let ipva = json1.pageProps.vehicleData.ipva;
+         let valor = json1.pageProps.vehicleData.Valor;
+    res.send([{placa: placa, marca: marca, modelo: modelo, AnoModelo: AnoModelo, Combustivel: Combustivel, cilindradas: cilindradas, potencia: potencia, cor: cor, fipe: fipe, ipva: ipva, valor: valor}]);
+
+}});
+
 })
-app.post('/login', async (req, res) => {
-    let {email, senha} = req.body;
-    let resposta = await database.getLogin(email);
-    if(bcrypt.compareSync(senha, resposta[0].senha)){
-        var hash1 = bcrypt.hashSync(resposta[0].nome, 8);
-        await database.setLogin(email, hash1);
-        res.send(await database.getLoginsession(email));
+// app.post('/login', async (req, res) => {
+//     let {email, senha} = req.body;
+//     let resposta = await database.getLogin(email);
+//     if(bcrypt.compareSync(senha, resposta[0].senha)){
+//         var hash1 = bcrypt.hashSync(resposta[0].nome, 8);
+//         await database.setLogin(email, hash1);
+//         res.send(await database.getLoginsession(email));
         
 
     
-    }else{console.log("diferente");}
-})
+//     }else{console.log("diferente");}
+// })
 
 //  app.get('/produtos', async(req, res) => {
 //     res.send(await database.getProdutos());
@@ -320,18 +334,19 @@ function start(client) {
           console.log('Result: ', result); //return object success
         })
     })
-    app.post('/user', async (req, res) => {
-        let {nome, telefone, permicao, email, senha, fidelidade} = req.body;
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(senha, salt); 
-        let verificacao = Math.floor(Math.random() * 100);  
-        res.status(201).send(await database.insertUser(nome, telefone, permicao, email, hash, fidelidade, verificacao));
-        let number = "55" + telefone + "@c.us";
-        let menssage = "🚗 *SEJA BEM VINDO(A) " + nome.toUpperCase() + "!*\n\nNós da Meu Carro agradecemos por você utilizar nosso serviço...\n\nPara mais informações acesse: www.meucarro.com.br/suporte\n\nSeu número de verficação é: " + verificacao;
-        client.sendText(number, menssage)
-        .then((result) => {
-          console.log('Result: ', result); //return object success
-        })
+    app.put('/user/', isLoggedIn, async (req, res) => {
+        let {nome, telefone, email, foto, endereco} = req.body;
+        if(telefone == ""){res.status(201).send(await database.editUser(nome, telefone, email, foto, endereco, req.user.id));
+        }else{
+            res.status(201).send(await database.editUser(nome, telefone, email, foto, endereco, req.user.id))    
+            let number = "55" + telefone + "@c.us";
+            let menssage = "🚗 *SEJA BEM VINDO(A) " + nome.toUpperCase() + "!*\n\nNós da Meu Carro agradecemos por você utilizar nosso serviço...\n\nPara mais informações acesse: www.meucarro.com.br/suporte";
+            client.sendText(number, menssage)
+            .then((result) => {
+              console.log('Result: ', result); //return object success
+            })    
+        }
+        
     })
 
     client.onMessage((message) => {

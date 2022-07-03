@@ -3,8 +3,8 @@
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
 
-function carregarVeiculos(id){
-    fetch('/car/'+ id)
+function carregarVeiculos(){
+    fetch('/car/')
     .then((res) => res.json())
     .then((res) => {
         for(veiculo of res){
@@ -48,6 +48,7 @@ function criarLinha (vid, vplaca, vmodelo, vtipo){
     titulo.setAttribute("data-bs-toggle", "modal");
     titulo.setAttribute("data-bs-target", "#staticBackdrop");
     titulo.addEventListener("click", chamarModal);
+    titulo.className = "titulo";
     titulo.style.cursor = "pointer";
     titulo1.textContent = vmodelo;
     titulo.style.textTransform = "uppercase";
@@ -63,9 +64,11 @@ function criarLinha (vid, vplaca, vmodelo, vtipo){
     document.querySelector(".lista").appendChild(card).appendChild(card1).appendChild(card2);
 }
 
-function chamarModal(){
+async function chamarModal(){
+    document.querySelector(".modal-dialog").style.display = "none";
     let auxid = this.getAttribute("id");
-    fetch('/cardetalhe/'+ auxid)
+    console.log(auxid);
+    await fetch('/cardetalhe/'+ auxid)
     .then((res) => res.json())
     .then((res) => {
         for(veiculo1 of res){
@@ -77,12 +80,17 @@ function chamarModal(){
             document.querySelector(".cc").textContent = "MOTOR: " + veiculo1.cilindradas;
             document.querySelector(".potencia").textContent = "POTÊNCIA: " + veiculo1.potencia + "cv";
             document.querySelector(".cor").textContent = "COR: " + veiculo1.cor;
+            document.querySelector(".fipe").textContent = "CÓDIGO FIPE: " + veiculo1.fipe;
+            document.querySelector(".valor").textContent = "VALOR: " + veiculo1.valor;
+            document.querySelector(".ipva").textContent = "IPVA: " + veiculo1.ipva;
+            document.querySelector(".modal-dialog").style.display = "block"
 
+      
         }
 
     })
     
-} 
+ } 
 
 
 
@@ -105,10 +113,10 @@ async function apagando(){
 
 
 
-carregarVeiculos(localStorage.getItem("id"));
+carregarVeiculos();
 
-function carregarDadosMenu(id){
-    fetch('/user/'+ id)
+function carregarDadosMenu(){
+    fetch('/user/')
     .then((res) => res.json())
     .then((res) => {
         for(cliente of res){
@@ -127,9 +135,9 @@ function preencherMenu(nome, foto){
 
 }
 
-carregarDadosMenu(localStorage.getItem("id"));
+carregarDadosMenu();
 
-document.querySelector("#logout").addEventListener("click", sair)
+document.querySelector("#logout").addEventListener("click", sair);
 
 function sair(){
     location = "/login";

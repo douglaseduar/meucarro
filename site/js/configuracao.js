@@ -3,7 +3,7 @@
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
 function carregarDados(id){
-    fetch('/user/'+ id)
+    fetch('/user/')
     .then((res) => res.json())
     .then((res) => {
         for(cliente of res){
@@ -27,7 +27,7 @@ document.querySelector("#endereco").value = endereco
 }
 
 
-carregarDados(localStorage.getItem("id"));
+carregarDados();
 
 document.querySelector("#logout").addEventListener("click", sair)
 
@@ -44,9 +44,9 @@ async function atualizar(event){
     
     var form = document.querySelector("#formedit");
     let nome = form.nome.value
-   let  telefone = form.telefone.value;
+    let  telefone = form.telefone.value;
     let email = form.email.value;
-   let  foto = form.foto.value;
+    let  foto = form.foto.value;
     let endereco = form.endereco.value;
     let id = form.nome.id;
     
@@ -63,14 +63,14 @@ async function atualizar(event){
             endereco: endereco   
         })
     }
-    let resposta = await fetch('/user/' + id, header);
+    let resposta = await fetch('/user/', header);
     resposta = await resposta.json();
 
     document.location.reload(true);
 }
 
 function carregarDadosMenu(id){
-    fetch('/user/'+ id)
+    fetch('/user/')
     .then((res) => res.json())
     .then((res) => {
         for(cliente of res){
@@ -89,4 +89,4 @@ function preencherMenu(nome, foto){
 
 }
 
-carregarDadosMenu(localStorage.getItem("id"));
+carregarDadosMenu();

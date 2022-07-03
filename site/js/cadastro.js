@@ -25,8 +25,7 @@ async function cadastrando(event){
                 },
                 body: JSON.stringify({           
                     placa: placa,
-                    tipo: aux,
-                    cliente: localStorage.getItem("id")
+                    tipo: aux
                 })
             }
             let resposta = await fetch('/car', header);
@@ -36,8 +35,8 @@ async function cadastrando(event){
             
 }
 
-function carregarDadosMenu(id){
-    fetch('/user/'+ id)
+function carregarDadosMenu(){
+    fetch('/user/')
     .then((res) => res.json())
     .then((res) => {
         for(cliente of res){
@@ -54,7 +53,7 @@ function preencherMenu(nome, foto){
 
 }
 
-carregarDadosMenu(localStorage.getItem("id"));
+carregarDadosMenu();
 
 document.querySelector("#logout").addEventListener("click", sair)
 

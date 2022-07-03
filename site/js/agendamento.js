@@ -1,6 +1,6 @@
 
-function carregarAgendamento(id){
-    fetch('/agender/'+ id)
+function carregarAgendamento(){
+    fetch('/agender/')
     .then((res) => res.json())
     .then((res) => {
         for(veiculo of res){
@@ -110,9 +110,9 @@ async function apagando(){
 
 
 
-carregarAgendamento(localStorage.getItem("id"));
-function carregarDadosMenu(id){
-    fetch('/user/'+ id)
+carregarAgendamento();
+function carregarDadosMenu(){
+    fetch('/user/')
     .then((res) => res.json())
     .then((res) => {
         for(cliente of res){
@@ -131,7 +131,7 @@ function preencherMenu(nome, foto){
 
 }
 
-carregarDadosMenu(localStorage.getItem("id"));
+carregarDadosMenu();
 
 
 document.querySelector("#logout").addEventListener("click", sair)
