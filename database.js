@@ -33,8 +33,8 @@ database.getAgendamentoesp = async function(id, pesquisa){
    
    return rows;
 }
-database.geteditAgendamento = async function(id){
-  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id = a.fk_placa and a.id = ?', [id]);
+database.geteditAgendamento = async function(id, sessionid){
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id = a.fk_placa and a.id = ? and a.fk_cliente = ?', [id, sessionid]);
    
    return rows;
 }

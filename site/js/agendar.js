@@ -1,8 +1,8 @@
 
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
-function carregarDadosMenu(id){
-    fetch('/user/'+ id)
+function carregarDadosMenu(){
+    fetch('/user/')
     .then((res) => res.json())
     .then((res) => {
         for(cliente of res){
@@ -21,10 +21,10 @@ function preencherMenu(nome, foto){
 
 }
 
-carregarDadosMenu(localStorage.getItem("id"));
+carregarDadosMenu();
 
 function carregarVeiculos(id){
-    fetch('/car/'+ id)
+    fetch('/car/')
     .then((res) => res.json())
     .then((res) => {
         for(veiculo of res){
@@ -54,7 +54,7 @@ function criarLinha (vplaca, vid){
 //     let vdata = form.vdata.value;
 //     console.log(vdata);
 // }
-carregarVeiculos(localStorage.getItem("id"));
+carregarVeiculos();
 
 document.querySelector("#logout").addEventListener("click", sair)
 

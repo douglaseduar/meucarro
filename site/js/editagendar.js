@@ -5,8 +5,8 @@ let idmesmo = idaux[1];
 
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
-function carregarDadosMenu(id){
-    fetch('/user/'+ id)
+function carregarDadosMenu(){
+    fetch('/user/')
     .then((res) => res.json())
     .then((res) => {
         for(cliente of res){
@@ -25,7 +25,7 @@ function preencherMenu(nome, foto){
 
 }
 
-carregarDadosMenu(localStorage.getItem("id"));
+carregarDadosMenu();
 
 carregarDadosAgendamento(idmesmo);
 
@@ -43,6 +43,7 @@ function carregarDadosAgendamento(idmesmo){
 
 function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor ){
     let form = document.querySelector("#agendamento");
+  
     if(voleo != undefined){
         form.oleo.value = voleo;
     }
@@ -155,7 +156,6 @@ document.querySelector("#agendar").addEventListener("click", editaragendando)
 
 async function editaragendando(event){
     event.preventDefault();
-    console.log("teste");
 
     let idcliente = localStorage.getItem("id");
     fetch('/user/'+ idcliente)

@@ -11,7 +11,6 @@ import FacebookStrategy from 'passport-facebook';
 import session from 'express-session';
 import passport from 'passport';
 import dotenv from 'dotenv'; 
-import { ControlsLayer } from 'venom-bot/dist/api/layers/controls.layer.js';
 
 dotenv.config();
 const app = express();
@@ -114,10 +113,10 @@ app.use(session({
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/login.html');
 })
-app.get('/register', (req, res) => {
-    res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/register.html');
-})
+// app.get('/register', (req, res) => {
+//     res.header('Content-Type', 'text/html');
+//     res.sendFile(__dirname + '/register.html');
+// })
 app.get('/inicio', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/inicio.html');
@@ -146,7 +145,7 @@ app.get('/admin', (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/admin.html');
 })
-app.get('/editagendamento', (req, res) => {
+app.get('/editagendamento', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/editagendamento.html');
 })
@@ -154,7 +153,7 @@ app.get('/editagendamento', (req, res) => {
 app.get('/car/', isLoggedIn, async(req, res) => {
     res.send(await database.getVeiculos(req.user.id));
 })
-app.delete('/car/:id', async (req, res) => {
+app.delete('/car/:id', isLoggedIn, async (req, res) => {
     database.deleteVeiculo(req.params.id);
     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
 })
@@ -181,11 +180,12 @@ app.post('/car', isLoggedIn, async (req, res) => {
 app.get('/agender/', isLoggedIn, async(req, res) => {
     res.send(await database.getAgendamento(req.user.id));
 })
-app.get('/agenderesp/:id/:pesquisa', async(req, res) => {
-    res.send(await database.getAgendamentoesp(req.params.id, req.params.pesquisa));
+app.get('/agenderesp/:pesquisa', isLoggedIn, async(req, res) => {
+    res.send(await database.getAgendamentoesp(req.user.id, req.params.pesquisa));
 })
-app.get('/editagender/:id', async(req, res) => {
-    res.send(await database.geteditAgendamento(req.params.id));
+app.get('/editagender/:id', isLoggedIn, async(req, res) => {
+    res.send(await database.geteditAgendamento(req.params.id, req.user.id));
+    
 })
 app.get('/agenderadmin/', async(req, res) => {
     res.send(await database.getAgendamentoadmin(req.params.id));
@@ -362,7 +362,7 @@ function start(client) {
       }
     });
   }
-  app.get('*', (req, res) => {
+app.get('*', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/erro.html');
 })

@@ -52,9 +52,9 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     hora = fdata[1];
     auxdata = fdata[0].split("-");
     data.textContent = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-    var tag = document.createElement("div");
-    tag.className = "tag";
-    tag.textContent = "ÚLTIMA TROCA";
+    // var tag = document.createElement("div");
+    // tag.className = "tag";
+    // tag.textContent = "ÚLTIMA TROCA";
     var status = document.createElement("div");
     status.className = "status;"
     if(realizado == 0){
@@ -81,7 +81,7 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     more.appendChild(observando);
     more.appendChild(data);
     more.appendChild(status);
-    more.appendChild(tag);
+    // more.appendChild(tag);
 
 
     document.querySelector(".lista").appendChild(card).appendChild(card1).appendChild(card2).appendChild(placa).appendChild(placa1).appendChild(more);
@@ -146,18 +146,18 @@ function pesquisar(event){
 
     form1 = document.querySelector("#pesquisar");
     pesquisa = form1.consultaplaca.value;
-    carregarPlaca(pesquisa, localStorage.getItem("id"))
+    carregarPlaca(pesquisa)
    
 }
-function carregarPlaca(pesquisa, id){
+function carregarPlaca(pesquisa){
     var elemento = document.getElementById("lista");
     while (elemento.firstChild) {
   elemento.removeChild(elemento.firstChild);
     }
     if(pesquisa == ""){
-        carregarAgendamento(localStorage.getItem("id"));
+        carregarAgendamento();
     }else{
-    fetch('/agenderesp/'+ id + '/' + pesquisa)
+    fetch('/agenderesp/' + pesquisa)
     .then((res) => res.json())
     .then((res) => {
         for(veiculo1 of res){
