@@ -63,23 +63,10 @@ function sair(){
 }
 
 
-document.querySelector("#agendar").addEventListener("click", agendando)
+document.querySelector("#agendar").addEventListener("click", enviaragendamento)
 
-async function agendando(event){
+async function enviaragendamento(event){
     event.preventDefault();
-
-let idcliente = localStorage.getItem("id");
-fetch('/user/'+ idcliente)
-    .then((res) => res.json())
-    .then((res) => {
-        for(cliente of res){
-            enviaragendamento(cliente.telefone, idcliente);
-        }
-
-    })
-}
-
-async function enviaragendamento(telefone, idcliente ){
 
 let aobservacao = "";
 let aoleo = '<i class="bi bi-check-lg"></i>';
@@ -132,14 +119,10 @@ let header = {
         filtro_hidraulico: afiltrohidraulico,
         filtro_racor: afiltrosep,
         vdata: adata,
-        realizado: 0,
-        fk_cliente: idcliente,
-        telefone: telefone,
         placao: placao
     })
 }
-let resposta = await fetch('/agender', header);
-resposta = await resposta.json();
+await fetch('/agender', header);
 
 location = "/historico";
 

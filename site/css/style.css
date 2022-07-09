@@ -51,6 +51,8 @@ footer{
 	grid-area: sidenav;
     background-color: lightslategray;
     color: white;
+    position: fixed;
+    max-width: 20vw;
 }
 
 .item {

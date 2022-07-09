@@ -19,20 +19,20 @@ var __dirname = path.dirname(__filename);
 
  app.listen(8080, () => console.log('Servidor rodando!'));
 
-//  venom
-//   .create({
-//     session: 'session-name',
-//     multidevice: true 
-//   })
-//   .then((client) => start(client))
-//   .catch((erro) => {
-//     console.log(erro);
-//   });
+ venom
+  .create({
+    session: 'session-name',
+    multidevice: true 
+  })
+  .then((client) => start(client))
+  .catch((erro) => {
+    console.log(erro);
+  });
 
-// app.use((req, res, next) => {
-//     console.log(req.url);
-//     next();
-// })
+app.use((req, res, next) => {
+    console.log(req.url);
+    next();
+})
 
 app.use(fileupload());
 app.use(express.json());
@@ -290,26 +290,35 @@ app.get('/cardetalhe/:id', isLoggedIn, async(req, res) => {
 
 function start(client) {
 
-    app.post('/agender', async (req, res) => {
-        let {fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente, telefone, placao} = req.body;
-        res.status(201).send(await database.insertAgendamento(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente));
+    app.post('/agender', isLoggedIn, async (req, res) => {
+        let {fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, placao} = req.body;
+        let respostatel = await database.getLogin(req.user.id);
+         if(respostatel.telefone == ""){
+             res.status(201).send(await database.insertAgendamento(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id));
+         }else{
         let gdata = vdata.split("T");
         let hora = gdata[1];
         let auxdata = gdata[0].split("-");
         let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-        let number = "55" + telefone + "@c.us";
-       let menssage = "✔ *AGENDAMENTO REALIZADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase()  + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
-        client.sendText(number, menssage)
+        let number1 = "55" + respostatel[0].telefone + "@c.us";
+        let menssage = "✔ *AGENDAMENTO REALIZADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase()  + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
+        client.sendText(number1, menssage)
         .then((result) => {
           console.log('Result: ', result); //return object success
         })
+        res.status(201).send(await database.insertAgendamento(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id));
     
-    })
-    app.delete('/editagender/:id', async (req, res) => {
-        let {telefone, vdata, placa} = req.body;
+}})
+    app.delete('/editagender/:id', isLoggedIn, async (req, res) => {
+        let {vdata, placa} = req.body;
+        let respostatel1 = await database.getLogin(req.user.id);
+        if(respostatel1[0].telefone == ""){
+            database.deleteAgendamento(req.params.id);
+            res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
+        }else{
         database.deleteAgendamento(req.params.id);
         res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
-        let number = "55" + telefone + "@c.us";
+        let number = "55" + respostatel1[0].telefone + "@c.us";
         let gdata = vdata.split("T");
         let hora = gdata[1];
         let auxdata = gdata[0].split("-");
@@ -319,11 +328,15 @@ function start(client) {
         .then((result) => {
           console.log('Result: ', result); //return object success
         })
-    })
-    app.put('/editagender/:id', async (req, res) => {
-        let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente, placao, telefone} = req.body;
-        res.status(201).send(await database.editAgendamento(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente, req.params.id));
-        let number = "55" + telefone + "@c.us";
+    }})
+    app.put('/editagender/:id', isLoggedIn, async (req, res) => {
+        let respostatel2 = await database.getLogin(req.user.id);
+        let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, placao} = req.body;
+        if(respostatel2[0].telefone == ""){
+        res.status(201).send(await database.editAgendamento(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id, req.params.id));
+        }else{
+        res.status(201).send(await database.editAgendamento(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id, req.params.id));
+        let number = "55" + respostatel2[0].telefone + "@c.us";
         let gdata = vdata.split("T");
         let hora = gdata[1];
         let auxdata = gdata[0].split("-");
@@ -333,7 +346,7 @@ function start(client) {
         .then((result) => {
           console.log('Result: ', result); //return object success
         })
-    })
+    }})
     app.put('/user/', isLoggedIn, async (req, res) => {
         let {nome, telefone, email, foto, endereco} = req.body;
         if(telefone == ""){res.status(201).send(await database.editUser(nome, telefone, email, foto, endereco, req.user.id));

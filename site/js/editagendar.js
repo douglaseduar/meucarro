@@ -78,22 +78,11 @@ function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, 
         document.querySelector(".form-select").appendChild(option);
 
 }
-document.querySelector("#dropagendar").addEventListener("click", drop);
+document.querySelector("#dropagendar").addEventListener("click", enviaracancelamento);
 
-async function drop(event){
+async function enviaracancelamento(event){
     event.preventDefault();
-
-    let idcliente = localStorage.getItem("id");
-    fetch('/user/'+ idcliente)
-    .then((res) => res.json())
-    .then((res) => {
-        for(cliente of res){
-            enviaracancelamento(cliente.telefone);
-        }
-
-    })
-}
-async function enviaracancelamento(telefone){ 
+     
     form = document.querySelector("#agendamento");
     adata = form.vdata.value;
     aplaca = form.select.value;
@@ -103,7 +92,6 @@ async function enviaracancelamento(telefone){
             'Content-Type': 'application/json; charset=UTF-8'
         },
         body: JSON.stringify({           
-            telefone: telefone,
             placa: aplaca,
             vdata: adata
         })
@@ -152,22 +140,12 @@ function sair(){
     location = "/login";
 }
 
-document.querySelector("#agendar").addEventListener("click", editaragendando)
+document.querySelector("#agendar").addEventListener("click", enviaredicao)
+   
+async function enviaredicao(event){ 
+   event.preventDefault() 
+    
 
-async function editaragendando(event){
-    event.preventDefault();
-
-    let idcliente = localStorage.getItem("id");
-    fetch('/user/'+ idcliente)
-    .then((res) => res.json())
-    .then((res) => {
-        for(cliente of res){
-            enviaredicao(cliente.telefone, idcliente);
-        }
-
-    })
-}    
-async function enviaredicao(telefone, idcliente){   
 let aobservacao = "";
 let aoleo = '<i class="bi bi-check-lg"></i>';
 let afiltrooleo = "";
@@ -218,14 +196,10 @@ let header = {
         filtro_hidraulico: afiltrohidraulico,
         filtro_racor: afiltrosep,
         vdata: adata,
-        realizado: 0,
-        fk_cliente: idcliente,
         placao: placao,
-        telefone: telefone
     })
 }
 let resposta = await fetch('/editagender/' + idmesmo, header);
-resposta = await resposta.json();
 
 location = "/historico";
 
