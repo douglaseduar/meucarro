@@ -328,7 +328,7 @@ function start(client) {
         .then((result) => {
           console.log('Result: ', result); //return object success
         })
-    }})
+}})
     app.put('/editagender/:id', isLoggedIn, async (req, res) => {
         let respostatel2 = await database.getLogin(req.user.id);
         let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, placao} = req.body;
@@ -341,12 +341,12 @@ function start(client) {
         let hora = gdata[1];
         let auxdata = gdata[0].split("-");
         let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-        let menssage = "⚠ *AGENDAMENTO ALTERADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase()  + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
+        let menssage = "⚠️ *AGENDAMENTO ALTERADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase()  + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
         client.sendText(number, menssage)
         .then((result) => {
           console.log('Result: ', result); //return object success
         })
-    }})
+}})
     app.put('/user/', isLoggedIn, async (req, res) => {
         let {nome, telefone, email, foto, endereco} = req.body;
         if(telefone == ""){res.status(201).send(await database.editUser(nome, telefone, email, foto, endereco, req.user.id));
@@ -361,20 +361,60 @@ function start(client) {
         }
         
     })
-
-    client.onMessage((message) => {
-      if (message.body === 'oi' && message.isGroupMsg === false) {
-        client
-          .sendText(message.from, 'bot do douglas 🕷')
-          .then((result) => {
-            console.log('Result: ', result); //return object success
-          })
-          .catch((erro) => {
-            console.error('Error when sending: ', erro); //return object error
-          });
+    app.post('/present', isLoggedIn, async (req, res) => {
+      let respostagif = await database.getLogin(req.user.id);
+      if(respostagif[0].fidelidade == 5){
+        let verificarfidelidade = await database.getFidelidade(req.user.id);
+          if(verificarfidelidade == ![]){
+          let auxgift = Math.floor(Math.random() * 999999) + 100000;
+          database.insertFidelidade(req.user.id, auxgift, 0);
+          let menssage = "🎁 *PARABÉNS VOCÊ GANHOU!*\n\nPara reinvindicar seu prêmio vá até a nossa loja e utilize o código abaixo:\n\n*" + auxgift + "*";
+          let number = "55" + respostagif[0].telefone + "@c.us"; 
+          client.sendText(number, menssage)
+        .then((result) => {
+          console.log('Result: ', result); //return object success
+        })
+          res.send([{cod: auxgift}]);
+          }else{
+            res.send([{cod: verificarfidelidade[0].cupom}]);
+          }
       }
-    });
-  }
+    
+    })
+    // client.onMessage((message) => {
+    //   if (message.body === 'oi' && message.isGroupMsg === false) {
+    //     client
+    //       .sendText(message.from, 'bot do douglas 🕷')
+    //       .then((result) => {
+    //         console.log('Result: ', result); //return object success
+    //       })
+    //       .catch((erro) => {
+    //         console.error('Error when sending: ', erro); //return object error
+    //       });
+    //   }
+    // });
+}
+// app.get('/gift/', isLoggedIn, async (req, res) => {
+//   let respostagif = await database.getLogin(req.user.id);
+//   if(respostagif[0].fidelidade == 5){
+//     let verificarfidelidade = await database.getFidelidade(req.user.id);
+//       if(verificarfidelidade == ![]){
+//       let auxgift = Math.floor(Math.random() * 999999) + 100000;
+//       database.insertFidelidade(req.user.id, auxgift, 0);
+//       res.send([{cod: auxgift}]);
+//       let menssage = "🎁 *PARABÉNS VOCÊ GANHOU!*\n\nPara reinvindicar seu prêmio vá até a nossa loja e utilize o código abaixo:\n\n*" + auxgift + "*";
+//       let number = "55" + respostagif[0].telefone + "@c.us"; 
+//       client.sendText(number, menssage)
+//             .then((result) => {
+//               console.log('Result: ', result); //return object success
+//             })    
+//       }else{
+//         res.send([{cod: verificarfidelidade[0].cupom}]);
+//       }
+//   }
+
+// })
+
 app.get('*', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/erro.html');

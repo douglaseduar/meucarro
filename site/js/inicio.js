@@ -61,3 +61,25 @@ document.querySelector("#logout").addEventListener("click", sair)
 function sair(){
     location = "/login";
 }
+
+document.querySelector("#gift").addEventListener("click", reivindicar);
+
+function reivindicar(){
+    let header = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+        }}
+    fetch('/present', header)
+    .then((res) => res.json())
+    .then((res) => {
+        for(fidelidade of res){
+            preencherfidelidade(fidelidade.cod);
+        }
+
+    })
+    
+}
+function preencherfidelidade(cod){
+    document.querySelector(".cupom").textContent = cod;
+}

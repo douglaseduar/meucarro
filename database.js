@@ -102,5 +102,15 @@ database.getLoginsession = async function(email){
 
   return rows;
 }
+database.getFidelidade = async function(id){
+  let [rows, fields]  = await database.con.execute('SELECT * FROM fidelidade WHERE fk_cliente = ? AND utilizado = 0', [id]);
+
+  return rows;
+}
+database.insertFidelidade = async function(id, gift, realizado){
+  let [rows, fields]  = await database.con.execute('INSERT INTO fidelidade (cupom, fk_cliente, utilizado) VALUES (?, ?, ?)', [gift, id, realizado]);
+
+  return rows;
+}
 
 export default database;

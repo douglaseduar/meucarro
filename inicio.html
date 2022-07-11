@@ -23,7 +23,7 @@
                 <img src="fidelidade.png" alt="" srcset="" class="fidelidadelogo">
                     <div class="premios">
                   </div>
-                  <button class="btn btn-outline-success" id="gift">Reivindicar Prêmio</button>
+                  <button class="btn btn-outline-success"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="gift">Reivindicar Prêmio</button>
                 </div>
               </div>
               <footer>
@@ -49,4 +49,18 @@
         </section>
         </div>
 </body>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Parabéns você Ganhou!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Para reinvindicar seu prêmio vá até a nossa loja e utilize o código abaixo:
+        <div class="cupom"></div>
+      </div>
+    </div>
+  </div>
+</div>
 </html>
