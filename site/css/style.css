@@ -154,7 +154,7 @@ font-size: 11pt;
 }
 .premio{
     max-width: 700px;
-    margin-top: 17vh;
+    margin-top: 3vh;
 }
 .reto{
     text-align: -webkit-center;
@@ -242,4 +242,16 @@ padding-left: 40px;
     font-size: 37pt;
     color: #009045;
     font-weight: bold;
+}
+.noticias > h2{
+    color: grey;
+}
+.lista {
+    margin-top: -12px;
+}
+.cartao{
+    max-width: 400px;
+}
+.noticias{
+    margin-top: 55px;
 }

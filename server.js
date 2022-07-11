@@ -141,9 +141,16 @@ app.get('/configuracao', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/configuracao.html');
 })
-app.get('/admin', (req, res) => {
+app.get('/admin', isLoggedIn, async (req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+      res.header('Content-Type', 'text/html');
+      res.sendFile(__dirname + '/admin.html');
+  }else{
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/admin.html');
+    res.sendFile(__dirname + '/erro.html');
+  }
+
 })
 app.get('/editagendamento', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
@@ -219,7 +226,7 @@ app.get('/user/', isLoggedIn, async(req, res) => {
 // })
 app.get('/cardetalhe/:id', isLoggedIn, async(req, res) => {
     let placa = req.params.id;
-    const link1 = `https://www.fipeplaca.com.br/_next/data/XePhZPTecIOvSkzFrJBhg/placa/${placa}.json?placa=${placa}`;
+    const link1 = `https://www.fipeplaca.com.br/_next/data/YKLGFNrXKTCfB2bYV_Pc9/placa/${placa}.json?placa=${placa}`;
     request(link1, (err, response, html) => {
         if (!err) {
          const json1 = JSON.parse(html);
@@ -238,6 +245,22 @@ app.get('/cardetalhe/:id', isLoggedIn, async(req, res) => {
 }});
 
 })
+
+app.get('/news', async (req, res) => {
+  const link = `https://newsdata.io/api/1/news?apikey=pub_9045d02aa3dde8a8642911a1673ef7f21ca9&q=gasolina%20OR%20ipva%20OR%20carros%20OR%20automóveis%20OR%20motor&language=pt`;
+  request(link, (err, response, html) => {
+      if (!err) {
+      
+       const json1 = JSON.parse(html);
+       res.send(json1.results);       
+      
+
+}
+      }
+    );
+  
+})
+
 // app.post('/login', async (req, res) => {
 //     let {email, senha} = req.body;
 //     let resposta = await database.getLogin(email);

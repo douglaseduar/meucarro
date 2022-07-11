@@ -83,3 +83,43 @@ function reivindicar(){
 function preencherfidelidade(cod){
     document.querySelector(".cupom").textContent = cod;
 }
+carregarnoticias();
+
+
+function carregarnoticias(){
+        fetch('/news')
+        .then((res) => res.json())
+        .then((res) => {
+                for(let i = 0; i<3; i++){
+                    criarcard(res[i].title, res[i].description, res[i].link, res[i].dataDePublicacao);
+
+                }
+              
+            }
+    
+        )}
+
+function criarcard(titulo, resumo, link, data){
+
+    var card1 = document.createElement("div");
+    card1.className = "card p-2 cartao";
+   // card1.style.width = "18rem";
+    var titulo1 = document.createElement("h4");
+    titulo1.className = "card-title";
+    titulo1.textContent =  titulo;
+    var resumo1 = document.createElement("p");
+    resumo1.className = "card-text";
+    resumo1.textContent = '"[...]' + resumo + ' [...]"';
+    resumo1.style.fontSize = "12pt";
+    var link1 = document.createElement("a");
+    link1.href = link;
+    link1.textContent = "continue lendo.."
+    link1.style.fontSize = "12pt";
+
+    card1.appendChild(titulo1);
+    card1.appendChild(resumo1);
+    card1.appendChild(link1);
+
+    document.querySelector(".lista").appendChild(card1)
+
+}
