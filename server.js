@@ -94,7 +94,7 @@ app.use(session({
                 res.redirect('/configuracao');
              }else{res.redirect('/erro')}
         }else{
-            res.redirect('/inicio');
+            res.redirect('/admin');
         }});   
         
 
@@ -194,9 +194,11 @@ app.get('/editagender/:id', isLoggedIn, async(req, res) => {
     res.send(await database.geteditAgendamento(req.params.id, req.user.id));
     
 })
-app.get('/agenderadmin/', async(req, res) => {
-    res.send(await database.getAgendamentoadmin(req.params.id));
-})
+app.get('/agenderadmin/', isLoggedIn, async(req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+    res.send(await database.getAgendamentoadmin());
+}})
 app.get('/user/', isLoggedIn, async(req, res) => {
     res.send(await database.getDados(req.user.id));
 })

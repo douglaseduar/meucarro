@@ -39,7 +39,7 @@ database.geteditAgendamento = async function(id, sessionid){
    return rows;
 }
 database.getAgendamentoadmin = async function(){
-  let [rows, fields] = await database.con.execute('SELECT * FROM agendamento');
+  let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente');
    
    return rows;
 }
