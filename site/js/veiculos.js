@@ -67,7 +67,6 @@ function criarLinha (vid, vplaca, vmodelo, vtipo){
 async function chamarModal(){
     document.querySelector(".modal-dialog").style.display = "none";
     let auxid = this.getAttribute("id");
-    console.log(auxid);
     await fetch('/cardetalhe/'+ auxid)
     .then((res) => res.json())
     .then((res) => {

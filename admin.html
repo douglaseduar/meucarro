@@ -25,19 +25,23 @@
               Agendamentos
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-              <li><a class="dropdown-item" href="#">Todos</a></li>
-              <li><a class="dropdown-item" href="#">Amanhã</a></li>
+              <li><a class="dropdown-item" id="hoje">Hoje</a></li>
+              <li><a class="dropdown-item" id="amanha">Amanhã</a></li>
+              <li><a class="dropdown-item" id="vencido">Vencidos</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Vencidos</a></li>
+              <li><a class="dropdown-item" id="todos">Todos</a></li>
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Estatísticas</a>
+            <a class="nav-link" href="/fidelidade">Fidelidade</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/estatistica">Estatísticas</a>
           </li>
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="placa" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+        <form class="d-flex" id="pesq" role="search">
+          <input class="form-control me-2" type="search" placeholder="placa" aria-label="Search" name="placa">
+          <button class="btn btn-outline-success" type="submit" id="pesquisa">Pesquisar</button>
         </form>
       </div>
     </div>
@@ -56,5 +60,17 @@
       <tr>
     </tbody>
   </table>
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="lista">
+          
+        </div>
+      </div>
+    </div>
+  </div>   
 </body>
 </html>

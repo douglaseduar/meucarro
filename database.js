@@ -39,10 +39,32 @@ database.geteditAgendamento = async function(id, sessionid){
    return rows;
 }
 database.getAgendamentoadmin = async function(){
-  let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente');
+  let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome, c.sessionid FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente ORDER BY realizado = 1, ag.data');
    
    return rows;
 }
+database.getAgendamentoespadmin = async function(pesquisa){
+  let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome, c.sessionid FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente AND v.placa = ? ORDER BY realizado = 1, ag.data', [pesquisa]);
+   
+   return rows;
+}
+database.getAgendamentoadminhoje = async function(){
+  let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente ORDER BY ag.data');
+   
+   return rows;
+}
+database.getAgendamentodetalhe = async function(id){
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id = a.fk_placa and a.id = ?', [id]);
+   
+   return rows;
+}
+database.getClientedetalhe = async function(id){
+  let [rows, fields] = await database.con.execute('select * from cliente where sessionid = ?', [id]);
+   
+   return rows;
+}
+
+
 database.getDados = async function(id){
   let [rows, fields] = await database.con.execute('SELECT id, nome, telefone, email, endereco, foto, fidelidade FROM cliente WHERE sessionid = ?', [id]);
    
@@ -107,10 +129,21 @@ database.getFidelidade = async function(id){
 
   return rows;
 }
+database.getFidelidades = async function(id){
+  let [rows, fields]  = await database.con.execute('SELECT f.*, c.nome, c.sessionid FROM fidelidade f, cliente c where f.fk_cliente = c.sessionid');
+
+  return rows;
+}
+
 database.insertFidelidade = async function(id, gift, realizado){
   let [rows, fields]  = await database.con.execute('INSERT INTO fidelidade (cupom, fk_cliente, utilizado) VALUES (?, ?, ?)', [gift, id, realizado]);
 
   return rows;
+}
+database.putFidelidades = async function(idfidelidade){
+  let [data] = await database.con.execute('UPDATE fidelidade SET utilizado = 1 where id = ?', [idfidelidade]);
+
+   return data;
 }
 
 export default database;

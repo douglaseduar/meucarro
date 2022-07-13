@@ -152,6 +152,17 @@ app.get('/admin', isLoggedIn, async (req, res) => {
   }
 
 })
+app.get('/fidelidade', isLoggedIn, async (req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+      res.header('Content-Type', 'text/html');
+      res.sendFile(__dirname + '/fidelidade.html');
+  }else{
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/erro.html');
+  }
+
+})
 app.get('/editagendamento', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/editagendamento.html');
@@ -199,6 +210,39 @@ app.get('/agenderadmin/', isLoggedIn, async(req, res) => {
     if(respostaadmin[0].permicao == 1){
     res.send(await database.getAgendamentoadmin());
 }})
+app.get('/clientedetalhe/:id', isLoggedIn, async(req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+    res.send(await database.getClientedetalhe(req.params.id));
+}})
+app.get('/agenderespadmin/:pesquisa', isLoggedIn, async(req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+    res.send(await database.getAgendamentoespadmin(req.params.pesquisa));
+}})
+app.get('/agenderadminhoje/', isLoggedIn, async(req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+    res.send(await database.getAgendamentoadminhoje());
+}})
+app.get('/agendamentodetalhe/:ida', isLoggedIn, async(req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+    res.send(await database.getAgendamentodetalhe(req.params.ida));
+}})
+app.get('/fidelidades', isLoggedIn, async(req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+    res.send(await database.getFidelidades());
+}})
+app.put('/fidelidades', isLoggedIn, async(req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+    let {idfidelidade} = req.body;
+    res.send(await database.putFidelidades(idfidelidade));
+}})
+
+
 app.get('/user/', isLoggedIn, async(req, res) => {
     res.send(await database.getDados(req.user.id));
 })
