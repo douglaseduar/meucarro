@@ -91,5 +91,8 @@ async function alterar(){
         })
     }
     let resposta = await fetch('/fidelidades/', header);
-    location.reload();
+    var elemento = document.getElementById("lista");
+    while (elemento.firstChild) {
+    elemento.removeChild(elemento.firstChild);}
+    carregarAgendamentoTodos();
 }

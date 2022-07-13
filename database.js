@@ -38,6 +38,21 @@ database.geteditAgendamento = async function(id, sessionid){
    
    return rows;
 }
+database.getaviso = async function(id){
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo, c.telefone from agendamento a, veiculo v, cliente c where v.id = a.fk_placa and a.fk_cliente = c.sessionid and a.id = ?', [id]);
+   
+   return rows;
+}
+database.alteraraviso = async function(idag){
+  let [rows, fields] = await database.con.execute('UPDATE agendamento SET aviso = 1 where id = ?', [idag]);
+   
+   return rows;
+}
+database.geteditAgendamentoadmin = async function(id){
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id = a.fk_placa and a.id = ?', [id]);
+   
+   return rows;
+}
 database.getAgendamentoadmin = async function(){
   let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome, c.sessionid FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente ORDER BY realizado = 1, ag.data');
    

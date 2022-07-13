@@ -167,7 +167,16 @@ app.get('/editagendamento', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/editagendamento.html');
 })
-
+app.get('/editagendamentoadmin', isLoggedIn, async (req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+      res.header('Content-Type', 'text/html');
+      res.sendFile(__dirname + '/editagendamentoadmin.html');
+  }else{
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/erro.html');
+  }
+})
 app.get('/car/', isLoggedIn, async(req, res) => {
     res.send(await database.getVeiculos(req.user.id));
 })
@@ -204,6 +213,10 @@ app.get('/agenderesp/:pesquisa', isLoggedIn, async(req, res) => {
 app.get('/editagender/:id', isLoggedIn, async(req, res) => {
     res.send(await database.geteditAgendamento(req.params.id, req.user.id));
     
+})
+app.get('/editagenderadmin/:id', isLoggedIn, async(req, res) => {
+  res.send(await database.geteditAgendamentoadmin(req.params.id));
+  
 })
 app.get('/agenderadmin/', isLoggedIn, async(req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
@@ -450,6 +463,23 @@ function start(client) {
       }
     
     })
+    app.post('/aviso/', isLoggedIn, async (req, res) => {
+      let {idag} = req.body;
+      let respostaaviso = await database.getaviso(idag);
+      let gdata = respostaaviso[0].data.split("T");
+        let hora = gdata[1];
+        let auxdata = gdata[0].split("-");
+        let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
+        res.send(database.alteraraviso(idag));
+          let menssage = "📢 *NÃO VÁ ESQUECER HEIN*\nVocê tem um agendamento marcado conosco:\n\nDia " + datamesmo + "\n\nSó trazer o " + respostaaviso[0].modelo + " (_" + respostaaviso[0].placa + "_) para Rua Manoel Estevão, 431 - Centro - União da Vitória." ;
+          let number = "55" + respostaaviso[0].telefone + "@c.us"; 
+          client.sendText(number, menssage)
+        .then((result) => {
+          console.log('Result: ', result); //return object success
+        })
+      })
+    
+  
     // client.onMessage((message) => {
     //   if (message.body === 'oi' && message.isGroupMsg === false) {
     //     client

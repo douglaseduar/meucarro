@@ -1,4 +1,4 @@
-function criarLinha (id, observacao, oleo, data1, realizado, placao, cliente, fkcliente){
+function criarLinha (id, observacao, oleo, data1, realizado, placao, cliente, fkcliente, aviso){
     
         let gdata = data1.split("T");
         let hora = gdata[1];
@@ -31,22 +31,62 @@ function criarLinha (id, observacao, oleo, data1, realizado, placao, cliente, fk
     servicostabela.addEventListener("click", getagendamentodetalhe);
     servicostabela.setAttribute("data-bs-toggle", "modal");
     servicostabela.setAttribute("data-bs-target", "#staticBackdrop");
-    botaotabela.innerHTML = '<i class="bi bi-envelope-plus-fill" style="font-size: 14pt; color: orange;" id="' + fkcliente + '"></i>ﾠ<i class="bi bi-check-circle-fill" style="font-size: 14pt; color: #009045" id="' + id + '"></i>';
+    var msg = document.createElement("i");
+    if(aviso == 0){
+    msg.className = "bi bi-envelope-plus-fill";
+    msg.style.color = "orange";
+    msg.style.fontSize = "14pt";
+    msg.style.cursor = "pointer";
+    msg.setAttribute("id", id);
+    msg.addEventListener("click", mandarmsg);
+}
+    var conf = document.createElement("i");
+    conf.className = "bi bi-check-circle-fill";
+    conf.style.color = "#009045";
+    conf.style.fontSize = "14pt";
+    conf.style.cursor = "pointer";
+    conf.style.marginLeft = "10px";
+    conf.setAttribute("id", id);
+    conf.addEventListener("click", editagendamento);
     if(realizado == 1){
         datatabela.style.color = "red";
         clientetabela.style.color = "red";
         placatabela.style.color = "red";
         servicostabela.style.color = "red";
         linha.style.opacity = 0.5;
-        botaotabela.innerHTML = "";
+        msg.className = "";
+        conf.className = "";
     }
     linha.appendChild(datatabela);
     linha.appendChild(clientetabela);
     linha.appendChild(placatabela);
     linha.appendChild(servicostabela);
     linha.appendChild(botaotabela);
+    botaotabela.appendChild(msg);
+    botaotabela.appendChild(conf);
 
-    document.querySelector(".lista1").appendChild(linha);
+    document.querySelector(".lista1").appendChild(linha).appendChild(botaotabela);
+}
+
+async function mandarmsg(){
+    let auxcliente = this.getAttribute("id");
+    let header = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify({           
+            idag: auxcliente
+        })
+    }
+    let resposta = await fetch('/aviso/', header);
+    location.reload();
+}
+
+
+function editagendamento(){
+    auxida = this.getAttribute("id");
+    document.location = "/editagendamentoadmin?id=" + auxida;
 }
 
 function getcliente(){
@@ -188,7 +228,7 @@ function carregarAgendamentoTodos(){
     .then((res) => res.json())
     .then((res) => {
         for(veiculo of res){
-            criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente);
+            criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente, veiculo.aviso);
         }
     })
     
