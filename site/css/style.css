@@ -260,3 +260,7 @@ padding-left: 40px;
     margin-top: -40%;
     width: 75px;
 }
+.fadmin{
+    display: inline;
+    width: auto;
+}

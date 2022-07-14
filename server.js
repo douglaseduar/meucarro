@@ -411,6 +411,55 @@ function start(client) {
           console.log('Result: ', result); //return object success
         })
 }})
+app.delete('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
+  let respostaag = await database.getAgendamentocomcliente(req.params.id);
+  if(respostaag[0].telefone == ""){
+      database.deleteAgendamento(req.params.id);
+      res.send('Agendamento com o id: ' + req.params.id + ' deletado com sucesso')
+  }else{
+  database.deleteAgendamento(req.params.id);
+  res.send('Agendamento com o id: ' + req.params.id + ' deletado com sucesso')
+  let number = "55" + respostaag[0].telefone + "@c.us";
+  let gdata = respostaag[0].data.split("T");
+  let hora = gdata[1];
+  let auxdata = gdata[0].split("-");
+  let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
+  let menssage = "😥 *QUE PENA!*\nVocê não compareceu ao agendamento marcado para o dia " + datamesmo + " do veículo com placa: " + respostaag[0].placa.toUpperCase() + "\n\nPara remarcar entre em contato conosco!";
+  client.sendText(number, menssage)
+  .then((result) => {
+    console.log('Result: ', result); //return object success
+  })
+}})
+app.put('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
+  let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, foto} = req.body;
+  let respostac = await database.getAgendamentocomcliente(req.params.id);
+  var file = req.files.file
+  var filename = file.name;
+  console.log(file.name);
+  var nome = filename.split(".");
+  var nomerealzao = nome[1];
+  var nomerealzaozao = req.user.id + respostac[0].sessionid + "." + nomerealzao; 
+  console.log(nomerealzaozao);
+
+  file.mv('./site/img/agend' + nomerealzaozao, function (err) {
+  if(err){
+      res.send(err)
+  }
+  else {
+      res.send("File Uploaded")
+  }
+  })}
+//   if(respostac[0].telefone == ""){
+//   res.status(201).send(await database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id));
+//   }else{
+//     res.status(201).send(await database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id));
+//   let number = "55" + respostac[0].telefone + "@c.us";
+//   let menssage = "🔧 *SERVIÇO CONCLUÍDO!*\n\nPode vir retirar seu carro placa " + respostac[0].placa + ", ele já está novinho em folha!";
+//   client.sendText(number, menssage)
+//   .then((result) => {
+//     console.log('Result: ', result); //return object success
+//   })
+)
     app.put('/editagender/:id', isLoggedIn, async (req, res) => {
         let respostatel2 = await database.getLogin(req.user.id);
         let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, placao} = req.body;

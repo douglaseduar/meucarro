@@ -22,46 +22,30 @@
                     </div>
                             <select class="form-select" style="text-transform: uppercase;" aria-label="Default select example" name="select">
                               </select>
-                            <h6 style="margin-top: 15px; margin-bottom: 15px;"> O que voce quer trocar? </h6>
-                            <div class="form-check form-check-inline tamanho">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                                <label class="form-check-label tamanho" for="inlineCheckbox1">Filtro de Óleo</label>
-                              </div>
-                              <div class="form-check form-check-inline tamanho">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                                <label class="form-check-label tamanho" for="inlineCheckbox2">Filtro de Ar</label>
-                              </div>
-                              <div class="form-check form-check-inline tamanho">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                                <label class="form-check-label tamanho" for="inlineCheckbox3">Filtro de Combustível</label>
-                              </div>
-                              <div class="form-check form-check-inline tamanho">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4">
-                                <label class="form-check-label tamanho" for="inlineCheckbox3">Filtro de Ar Condicioonado</label>
-                              </div>
-                              <div class="form-check form-check-inline tamanho">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option5">
-                                <label class="form-check-label tamanho" for="inlineCheckbox3">Filtro Separador</label>
-                              </div>
-                              <div class="form-check form-check-inline tamanho">
-                                <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="option6">
-                                <label class="form-check-label tamanho" for="inlineCheckbox3">Filtro Hidráulico</label>
-                              </div>     
-                              <h6 style="margin-top: 15px; margin-bottom: 15px;"> Qual óleo você quer usar?<i> (opcional)</i> </h6>
-                              <input type="text" class="form-control datetime" name="oleo" placeholder="Marca do óleo">                   
+                            <h6 style="margin-top: 15px; margin-bottom: 15px;"> O que foi trocado? </h6>
+                            <input type="text" class="form-control fadmin" name="filtroo" placeholder="Filtro de Óleo"> 
+                            <input type="text" class="form-control fadmin" name="filtroar" placeholder="Filtro de Ar"> 
+                            <input type="text" class="form-control fadmin" name="filtrocomb" placeholder="Filtro de Combustível"> 
+                            <input type="text" class="form-control fadmin" name="filtroarc" placeholder="Filtro de Ar Condicionado"> 
+                            <input type="text" class="form-control fadmin" name="filtroracor" placeholder="Filtro Separador"> 
+                            <input type="text" class="form-control fadmin" name="outrofiltro" placeholder="Outro Filtro"> 
+                              <h6 style="margin-top: 15px; margin-bottom: 15px;"> Qual óleo foi usado?</h6>
+                              <input type="text" class="form-control" name="oleo" placeholder="Marca do óleo">        
+                              <h6 style="margin-top: 15px; margin-bottom: 15px;"> Quantos km?</h6>
+                              <input type="text" class="form-control" name="km" placeholder="Quilometragem do Veículo">              
                             <div class="form-floating" style="margin-top: 20px;">
                               <textarea class="form-control tamanho" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px; font-size: 12pt;" name="observacao"></textarea>
                               <label for="floatingTextarea2" class="tamanho">Faltou alguma coisa?</label>
                             </div>
-                            <h6 style="margin-top: 15px; margin-bottom: 15px;"> Quando você quer trocar? </h6>
-                            <div class="datetime">
-                            <input type="datetime-local" class="form-control datetime" name="vdata" required>
-                          </div>
+                            <h6 style="margin-top: 15px; margin-bottom: 15px;"> Apenas imagens: </h6>
+                            <div class="form-group">
+                              <input type="file" accept='image/*' class="form-control-file" name="foto" id="exampleFormControlFile1">
+                            </div>
                         </div>
 
                       </form>
-                      <button class="btn btn-success btn-block mb-4" id="agendar">Editar Agendamento</button>
-                      <button class="btn btn-danger btn-block mb-4" id="dropagendar" >Cancelar Agendamento</button>   
+                      <button class="btn btn-success btn-block mb-4" id="agendar">Concluir Agendamento</button>
+                      <button class="btn btn-warning btn-block mb-4" id="dropagendar" >Cliente não Apareceu</button>   
         </div></div>
 </body>
 </html>

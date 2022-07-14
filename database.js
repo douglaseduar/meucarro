@@ -59,7 +59,7 @@ database.getAgendamentoadmin = async function(){
    return rows;
 }
 database.getAgendamentoespadmin = async function(pesquisa){
-  let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome, c.sessionid FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente AND v.placa = ? ORDER BY realizado = 1, ag.data', [pesquisa]);
+  let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome, c.sessionid FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente AND v.placa LIKE ? ORDER BY realizado = 1, ag.data', [pesquisa]);
    
    return rows;
 }
@@ -114,10 +114,19 @@ database.editAgendamento = async function(observacao, oleo, filtro_oleo, filtro_
   let [data] = await database.con.execute('UPDATE agendamento SET obeservacao = ?, oleo = ?, filtro_oleo = ?, filtro_ar = ?, filtro_arcondicionado = ?, filtro_gasolina = ?, filtro_hidraulico = ?, filtro_racor = ?, data = ? WHERE id = ? AND realizado = ? and fk_cliente = ?', [observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, id, realizado, fk_cliente]);
     return {'alterado': id}
 }
+database.editAgendamentoadmin = async function(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, realizado, foto, id){
+  let [data] = await database.con.execute('UPDATE agendamento SET obeservacao = ?, oleo = ?, filtro_oleo = ?, filtro_ar = ?, filtro_arcondicionado = ?, filtro_gasolina = ?, filtro_hidraulico = ?, filtro_racor = ?, km = ?, realizado = ?, foto = ? WHERE id = ?', [observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, realizado, foto, id]);
+    return {'alterado': id}
+}
 database.deleteAgendamento = async function(id){
   let [data] = await database.con.execute('DELETE FROM agendamento WHERE id = ?', [id]);
 
   return {'deletado': id}
+}
+database.getAgendamentocomcliente = async function(id){
+  let [rows, fields] = await database.con.execute('SELECT a.*, v.placa, c.telefone, c.sessionid FROM agendamento a, veiculo v, cliente c WHERE a.fk_placa = v.id and a.fk_cliente = c.sessionid and a.id = ?', [id]);
+
+  return rows;
 }
 database.getVeiculosdetalhe = async function(id){
   let [rows, fields] = await database.con.execute('SELECT * FROM veiculo WHERE placa = ?', [id]);

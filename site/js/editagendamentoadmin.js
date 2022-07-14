@@ -9,7 +9,7 @@ function carregarDadosAgendamento(idmesmo){
     .then((res) => res.json())
     .then((res) => {
         for(agendamento of res){
-            preencheformulario(agendamento.id, agendamento.placa, agendamento.oleo, agendamento.obeservacao, agendamento.data, agendamento.filtro_oleo, agendamento.filtro_ar, agendamento.filtro_arcondicionado, agendamento.filtro_gasolina, agendamento.filtro_hidraulico, agendamento.filtro_racor);
+            preencheformulario(agendamento.id, agendamento.placa, agendamento.oleo, agendamento.obeservacao);
         }
 
     })
@@ -24,25 +24,6 @@ function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, 
     if(vobservacao != undefined){
         form.observacao.value = vobservacao;
     }
-    if(filtro_oleo == '<i class="bi bi-check-lg"></i>'){
-        document.querySelector("#inlineCheckbox1").checked = true;
-    }
-    if(filtro_ar == '<i class="bi bi-check-lg"></i>'){
-        document.querySelector("#inlineCheckbox2").checked = true;
-    }
-    if(filtro_gasolina == '<i class="bi bi-check-lg"></i>'){
-        document.querySelector("#inlineCheckbox3").checked = true;
-    }
-    if(filtro_arcondicionado == '<i class="bi bi-check-lg"></i>'){
-        document.querySelector("#inlineCheckbox4").checked = true;
-    }
-    if(filtro_racor == '<i class="bi bi-check-lg"></i>'){
-        document.querySelector("#inlineCheckbox5").checked = true;
-    }
-    if(filtro_hidraulico == '<i class="bi bi-check-lg"></i>'){
-        document.querySelector("#inlineCheckbox6").checked = true;
-    }
-    form.vdata.value = vdata;
     var option = document.createElement("option");
         option.setAttribute("id", vplaca)
         option.textContent = vplaca
@@ -50,5 +31,68 @@ function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, 
         
     
         document.querySelector(".form-select").appendChild(option);
+
+}
+
+document.querySelector("#agendar").addEventListener("click", concluir);
+document.querySelector("#dropagendar").addEventListener("click", ausente);
+
+async function ausente(event){ 
+    event.preventDefault();
+    let header = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+        }
+    }
+    let resposta = await fetch('/editagenderadmin/' + idmesmo, header);
+    location = "/admin";
+
+        
+}
+
+
+
+async function concluir(event){ 
+    event.preventDefault();
+
+    var form = document.querySelector("#agendamento");
+
+    let ffoleo = form.filtroo.value;
+    let far = form.filtroar.value;
+    let fcomb = form.filtrocomb.value;
+    let farc = form.filtroarc.value;
+    let fseparador = form.filtroracor.value;
+    let foutro = form.outrofiltro.value;
+    let foleo = form.oleo.value;
+    let fkm = form.km.value;
+    let fob = form.observacao.value;
+    var formao = new FormData()
+    formao.append('files', form.foto.files[0]);
+    formao.append('observacao', fob)
+
+    let header = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: formao//JSON.stringify({           
+        //     observacao: fob,
+        //     oleo: foleo,
+        //     filtro_oleo: ffoleo,
+        //     filtro_ar: far,
+        //     filtro_arcondicionado: farc,
+        //     filtro_gasolina: fcomb,
+        //     filtro_hidraulico: foutro,
+        //     filtro_racor: fseparador,
+        //     km: fkm,
+        //     foto: ffoto
+        // })
+    }
+console.log(formao)
+
+
+    let resposta9 = await fetch('/editagenderadmin/' + idmesmo, header);
+    location = "/admin";
 
 }
