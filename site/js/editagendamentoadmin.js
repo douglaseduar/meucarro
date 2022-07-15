@@ -17,6 +17,7 @@ function carregarDadosAgendamento(idmesmo){
 }
 function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor ){
     let form = document.querySelector("#agendamento");
+    document.querySelector("#agendamento").action = "/editagenderadmin/" + idmesmo;
   
     if(voleo != undefined){
         form.oleo.value = voleo;
@@ -34,7 +35,6 @@ function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, 
 
 }
 
-document.querySelector("#agendar").addEventListener("click", concluir);
 document.querySelector("#dropagendar").addEventListener("click", ausente);
 
 async function ausente(event){ 
@@ -68,31 +68,25 @@ async function concluir(event){
     let fkm = form.km.value;
     let fob = form.observacao.value;
     var formao = new FormData()
-    formao.append('files', form.foto.files[0]);
-    formao.append('observacao', fob)
+    formao.append('foto', form.foto.files[0]);
+    formao.append('observacao', fob);
+    formao.append('oleo', foleo);
+    formao.append('filtro_oleo', ffoleo);
+    formao.append('filtro_ar', far);
+    formao.append('filtro_arcondicionado', farc);
+    formao.append('filtro_gasolina', fcomb);
+    formao.append('filtro_hidraulico', foutro);
+    formao.append('filtro_racor', fseparador);
+    formao.append('km', fkm);
 
     let header = {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json; charset=UTF-8'
-        },
-        body: formao//JSON.stringify({           
-        //     observacao: fob,
-        //     oleo: foleo,
-        //     filtro_oleo: ffoleo,
-        //     filtro_ar: far,
-        //     filtro_arcondicionado: farc,
-        //     filtro_gasolina: fcomb,
-        //     filtro_hidraulico: foutro,
-        //     filtro_racor: fseparador,
-        //     km: fkm,
-        //     foto: ffoto
-        // })
+        body: formao
     }
 console.log(formao)
 
 
     let resposta9 = await fetch('/editagenderadmin/' + idmesmo, header);
-    location = "/admin";
+  //  location = "/admin";
 
 }

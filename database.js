@@ -43,6 +43,16 @@ database.getaviso = async function(id){
    
    return rows;
 }
+database.getvencido = async function(id){
+  let [rows, fields] = await database.con.execute('select v.placa, v.modelo, c.telefone from veiculo v, cliente c, ultimosagendamentos ul where v.placa = ul.fk_placa and ul.fk_cliente = c.sessionid and ul.id = ?', [id]);
+   
+   return rows;
+}
+database.alterarvencido = async function(id){
+  let [rows, fields] = await database.con.execute('UPDATE ultimosagendamentos SET avisado = 1 where id = ?', [id]);
+   
+   return rows;
+}
 database.alteraraviso = async function(idag){
   let [rows, fields] = await database.con.execute('UPDATE agendamento SET aviso = 1 where id = ?', [idag]);
    
@@ -64,7 +74,17 @@ database.getAgendamentoespadmin = async function(pesquisa){
    return rows;
 }
 database.getAgendamentoadminhoje = async function(){
-  let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente ORDER BY ag.data');
+  let [rows, fields] = await database.con.execute("SELECT ag.*, v.placa, v.modelo, c.nome, c.sessionid FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente AND DATE_FORMAT((ag.data), '%Y-%m-%d') = DATE_FORMAT((NOW( )), '%Y-%m-%d') ORDER BY realizado = 1, ag.data");
+   
+   return rows;
+}
+database.getAgendamentoadminamanha = async function(){
+  let [rows, fields] = await database.con.execute("SELECT ag.*, v.placa, v.modelo, c.nome, c.sessionid FROM agendamento ag, veiculo v, cliente c WHERE v.id = ag.fk_placa AND c.sessionid = ag.fk_cliente AND DATE_FORMAT((ag.data), '%Y-%m-%d') = DATE_FORMAT(DATE_ADD(NOW( ), INTERVAL 1 DAY), '%Y-%m-%d') ORDER BY realizado = 1, ag.data");
+   
+   return rows;
+}
+database.getAgendamentoadminvencido = async function(){
+  let [rows, fields] = await database.con.execute("SELECT v.placa, v.modelo, c.nome, c.sessionid, ul.* FROM veiculo v, cliente c, ultimosagendamentos ul WHERE v.placa = ul.fk_placa AND c.sessionid = ul.fk_cliente AND DATE_FORMAT((ul.dataultimo), '%Y-%m-%d') <= DATE_FORMAT(DATE_ADD(NOW( ), INTERVAL -1 YEAR), '%Y-%m-%d') ORDER BY ul.dataultimo;");
    
    return rows;
 }
@@ -124,7 +144,7 @@ database.deleteAgendamento = async function(id){
   return {'deletado': id}
 }
 database.getAgendamentocomcliente = async function(id){
-  let [rows, fields] = await database.con.execute('SELECT a.*, v.placa, c.telefone, c.sessionid FROM agendamento a, veiculo v, cliente c WHERE a.fk_placa = v.id and a.fk_cliente = c.sessionid and a.id = ?', [id]);
+  let [rows, fields] = await database.con.execute('SELECT a.*, v.placa, v.modelo, c.telefone, c.sessionid FROM agendamento a, veiculo v, cliente c WHERE a.fk_placa = v.id and a.fk_cliente = c.sessionid and a.id = ?', [id]);
 
   return rows;
 }
@@ -161,6 +181,21 @@ database.getFidelidades = async function(id){
 
 database.insertFidelidade = async function(id, gift, realizado){
   let [rows, fields]  = await database.con.execute('INSERT INTO fidelidade (cupom, fk_cliente, utilizado) VALUES (?, ?, ?)', [gift, id, realizado]);
+
+  return rows;
+}
+database.insertUltimo = async function(sessionid, placa){
+  let [rows, fields]  = await database.con.execute('INSERT INTO ultimosagendamentos (fk_cliente, fk_placa, dataultimo) VALUES (?, ?, NOW())', [sessionid, placa]);
+
+  return rows;
+}
+database.getUltimo = async function(sessionid, placa){
+  let [rows, fields]  = await database.con.execute('SELECT * FROM ultimosagendamentos WHERE fk_cliente = ? AND fk_placa = ?', [sessionid, placa]);
+
+  return rows;
+}
+database.putUltimo = async function(id){
+  let [rows, fields]  = await database.con.execute('UPDATE ultimosagendamentos SET dataultimo = NOW() WHERE id = ?', [id]);
 
   return rows;
 }

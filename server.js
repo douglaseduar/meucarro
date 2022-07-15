@@ -94,7 +94,7 @@ app.use(session({
                 res.redirect('/configuracao');
              }else{res.redirect('/erro')}
         }else{
-            res.redirect('/admin');
+            res.redirect('/inicio');
         }});   
         
 
@@ -146,6 +146,17 @@ app.get('/admin', isLoggedIn, async (req, res) => {
     if(respostaadmin[0].permicao == 1){
       res.header('Content-Type', 'text/html');
       res.sendFile(__dirname + '/admin.html');
+  }else{
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/erro.html');
+  }
+
+})
+app.get('/vencidos', isLoggedIn, async (req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+      res.header('Content-Type', 'text/html');
+      res.sendFile(__dirname + '/vencidos.html');
   }else{
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/erro.html');
@@ -237,6 +248,16 @@ app.get('/agenderadminhoje/', isLoggedIn, async(req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
     if(respostaadmin[0].permicao == 1){
     res.send(await database.getAgendamentoadminhoje());
+}})
+app.get('/agenderadminamanha/', isLoggedIn, async(req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+    res.send(await database.getAgendamentoadminamanha());
+}})
+app.get('/agenderadminvencido/', isLoggedIn, async(req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+    res.send(await database.getAgendamentoadminvencido());
 }})
 app.get('/agendamentodetalhe/:ida', isLoggedIn, async(req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
@@ -430,36 +451,52 @@ app.delete('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
     console.log('Result: ', result); //return object success
   })
 }})
-app.put('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
-  let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, foto} = req.body;
+app.post('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
+  let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km} = req.body;
+  let nomerealzaozao = "";
   let respostac = await database.getAgendamentocomcliente(req.params.id);
-  var file = req.files.file
+  if (req.files) {
+  var file = req.files.foto;
   var filename = file.name;
-  console.log(file.name);
   var nome = filename.split(".");
   var nomerealzao = nome[1];
-  var nomerealzaozao = req.user.id + respostac[0].sessionid + "." + nomerealzao; 
-  console.log(nomerealzaozao);
+  nomerealzaozao = req.params.id + respostac[0].sessionid + "." + nomerealzao; 
 
-  file.mv('./site/img/agend' + nomerealzaozao, function (err) {
+  file.mv('./site/img/agend/' + nomerealzaozao, function (err) {
   if(err){
       res.send(err)
   }
   else {
-      res.send("File Uploaded")
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/sucesso.html');
   }
   })}
-//   if(respostac[0].telefone == ""){
-//   res.status(201).send(await database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id));
-//   }else{
-//     res.status(201).send(await database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id));
-//   let number = "55" + respostac[0].telefone + "@c.us";
-//   let menssage = "🔧 *SERVIÇO CONCLUÍDO!*\n\nPode vir retirar seu carro placa " + respostac[0].placa + ", ele já está novinho em folha!";
-//   client.sendText(number, menssage)
-//   .then((result) => {
-//     console.log('Result: ', result); //return object success
-//   })
-)
+
+  if(respostac[0].telefone == ""){
+    let respostaultimo = await database.getUltimo(respostac[0].sessionid, respostac[0].placa);
+      if(respostaultimo == ![]){
+      database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id); 
+      database.insertUltimo(respostac[0].sessionid, respostac[0].placa);
+      }else{
+        database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id); 
+        database.putUltimo(respostaultimo[0].id);
+      }
+  }else{
+    let respostaultimo = await database.getUltimo(respostac[0].sessionid, respostac[0].placa);
+      if(respostaultimo == ![]){
+        database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id); 
+        database.insertUltimo(respostac[0].sessionid, respostac[0].placa);
+      }else{
+        database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id); 
+        database.putUltimo(respostaultimo[0].id);
+      }
+  let number = "55" + respostac[0].telefone + "@c.us";
+  let menssage = "🔧 *SERVIÇO CONCLUÍDO!*\n\nPode vir retirar seu carro " + respostac[0].modelo + ", ele já está novinho em folha!\n\nPara verificar os detalhes da troca acesse: meucarro.com.br/historico";
+  client.sendText(number, menssage)
+  .then((result) => {
+    console.log('Result: ', result); //return object success
+   })
+  }})
     app.put('/editagender/:id', isLoggedIn, async (req, res) => {
         let respostatel2 = await database.getLogin(req.user.id);
         let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, placao} = req.body;
@@ -527,6 +564,17 @@ app.put('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
           console.log('Result: ', result); //return object success
         })
       })
+      app.put('/vencidos/', isLoggedIn, async (req, res) => {
+        let {idvencido} = req.body;
+        let respostavencido = await database.getvencido(idvencido);
+          res.send(database.alterarvencido(idvencido));
+            let menssage = "📅 *FAZ UM TEMPINHO!*\n\n Que você não aparece para trocar o óleo do carro: " + respostavencido[0].modelo + " - " + respostavencido[0].placa.toUpperCase() + "\n\n Agende sua troca conosco para preservar a vida útil do seu motor!";
+            let number = "55" + respostavencido[0].telefone + "@c.us"; 
+            client.sendText(number, menssage)
+          .then((result) => {
+            console.log('Result: ', result); //return object success
+          })
+        })
     
   
     // client.onMessage((message) => {

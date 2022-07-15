@@ -4,13 +4,13 @@ function carregarAgendamento(){
     .then((res) => res.json())
     .then((res) => {
         for(veiculo of res){
-            criarLinha(veiculo.id, veiculo.fk_placa, veiculo.obeservacao, veiculo.km, veiculo.oleo, veiculo.filtro_oleo, veiculo.filtro_ar, veiculo.filtro_arcondicionado, veiculo.filtro_gasolina, veiculo.filtro_hidraulico, veiculo.filtro_racor, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.modelo);
+            criarLinha(veiculo.id, veiculo.fk_placa, veiculo.obeservacao, veiculo.km, veiculo.oleo, veiculo.filtro_oleo, veiculo.filtro_ar, veiculo.filtro_arcondicionado, veiculo.filtro_gasolina, veiculo.filtro_hidraulico, veiculo.filtro_racor, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.modelo, veiculo.foto);
         }
     })
     
 }
 
-function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data1, realizado, vplaca, vmodelo){
+function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data1, realizado, vplaca, vmodelo, foto){
     var card = document.createElement("div");
     card.className = "col";
     var card1 = document.createElement("div");
@@ -46,6 +46,8 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     var observando = document.createElement("div");
     observando.className = "observacao";
     observando.textContent = observacao;
+    let linkimagem = document.createElement("a");
+    let imagemtabela = document.createElement("img");
     var data = document.createElement("div");
     data.className = "data";
     fdata = data1.split("T");
@@ -67,6 +69,15 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
         status.style.color = "red";
         status.innerHTML = "<i>Fechado</i>"
         card.style.opacity = 0.6;
+        if(foto == ""){
+            imagemtabela.className = "fotoag1";
+            imagemtabela.src = "sem-foto.jpg";
+        }else{
+        imagemtabela.className = "fotoag1";
+        imagemtabela.src = "agend/" + foto;
+        linkimagem.href = "agend/" + foto;
+        linkimagem.target = "_blank";
+        }
     }
 
     placa1.appendChild(modelo); 
@@ -81,6 +92,8 @@ function criarLinha (id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar,
     more.appendChild(observando);
     more.appendChild(data);
     more.appendChild(status);
+    linkimagem.appendChild(imagemtabela);
+    more.appendChild(linkimagem);
     // more.appendChild(tag);
 
 

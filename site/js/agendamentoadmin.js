@@ -168,12 +168,12 @@ function getagendamentodetalhe(){
     .then((res) => res.json())
     .then((res) => {
         for(veiculo1 of res){
-            modalagendamento(veiculo1.id, veiculo1.fk_placa, veiculo1.obeservacao, veiculo1.km, veiculo1.oleo, veiculo1.filtro_oleo, veiculo1.filtro_ar, veiculo1.filtro_arcondicionado, veiculo1.filtro_gasolina, veiculo1.filtro_hidraulico, veiculo1.filtro_racor, veiculo1.data, veiculo1.realizado, veiculo1.placa, veiculo1.modelo);
+            modalagendamento(veiculo1.id, veiculo1.fk_placa, veiculo1.obeservacao, veiculo1.km, veiculo1.oleo, veiculo1.filtro_oleo, veiculo1.filtro_ar, veiculo1.filtro_arcondicionado, veiculo1.filtro_gasolina, veiculo1.filtro_hidraulico, veiculo1.filtro_racor, veiculo1.data, veiculo1.realizado, veiculo1.placa, veiculo1.modelo, veiculo1.foto);
         }
     })
 }
 
-function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data1, realizado, vplaca, vmodelo){
+function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data1, realizado, vplaca, vmodelo, foto){
 
 
     var placa = document.createElement("div");
@@ -206,7 +206,17 @@ function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtr
     var observando = document.createElement("div");
     observando.className = "observacao";
     observando.textContent = observacao;
-
+    let linkimagem = document.createElement("a");
+    let imagemtabela = document.createElement("img");
+    if(foto == ""){
+        imagemtabela.className = "fotoag";
+        imagemtabela.src = "sem-foto.jpg";
+    }else{
+    imagemtabela.className = "fotoag";
+    imagemtabela.src = "agend/" + foto;
+    linkimagem.href = "agend/" + foto;
+    linkimagem.target = "_blank";
+    }
     placa1.appendChild(modelo); 
     more.appendChild(oleoando);
     more.appendChild(kmando);
@@ -217,13 +227,17 @@ function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtr
     more.appendChild(filtroracor);
     more.appendChild(outrofiltro);
     more.appendChild(observando);
+    linkimagem.appendChild(imagemtabela);
 
-
-    document.querySelector("#lista").appendChild(placa).appendChild(placa1).appendChild(more);
+    document.querySelector("#lista").appendChild(placa).appendChild(placa1).appendChild(more).appendChild(linkimagem);
 }
 
 
 function carregarAgendamentoTodos(){
+    var elemento = document.querySelector(".lista1");
+    while (elemento.firstChild) {
+  elemento.removeChild(elemento.firstChild);
+    }
     fetch('/agenderadmin/')
     .then((res) => res.json())
     .then((res) => {
@@ -237,13 +251,29 @@ function carregarAgendamentoTodos(){
 
 
 function carregarAgendamentoHoje(){
-    let now = new Date;
-    let auxnow = now.getFullYear + "-" + now.getMonth + "-" + now.getDate + "T";
+    var elemento = document.querySelector(".lista1");
+    while (elemento.firstChild) {
+  elemento.removeChild(elemento.firstChild);
+    }
     fetch('/agenderadminhoje/')
     .then((res) => res.json())
     .then((res) => {
         for(veiculo of res){
-            criarLinha(veiculo.id, veiculo.obeservacao, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome);
+            criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente);
+        }
+    })
+    
+}
+function carregarAgendamentoAmanha(){
+    var elemento = document.querySelector(".lista1");
+    while (elemento.firstChild) {
+  elemento.removeChild(elemento.firstChild);
+    }
+    fetch('/agenderadminamanha/')
+    .then((res) => res.json())
+    .then((res) => {
+        for(veiculo of res){
+            criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente);
         }
     })
     
@@ -276,3 +306,7 @@ function pesquisarag(event){
 
     })}
 }
+
+document.querySelector("#todos").addEventListener("click", carregarAgendamentoTodos);
+document.querySelector("#hoje").addEventListener("click", carregarAgendamentoHoje);
+document.querySelector("#amanha").addEventListener("click", carregarAgendamentoAmanha);
