@@ -43,6 +43,85 @@ database.getaviso = async function(id){
    
    return rows;
 }
+database.getestatisticac = async function(){
+  let [rows, fields] = await database.con.execute('select id from cliente');
+   
+   return rows;
+}
+database.getestatisticatipos = async function(){
+  let [rows, fields] = await database.con.execute('select tipo from veiculo where tipo = 1');
+   
+   return rows;
+}
+database.getestatisticatiposs = async function(){
+  let [rows, fields] = await database.con.execute('select tipo from veiculo where tipo = 2');
+   
+   return rows;
+}
+database.getestatisticatiposss = async function(){
+  let [rows, fields] = await database.con.execute('select tipo from veiculo where tipo = 3');
+   
+   return rows;
+}
+database.getestatisticatipossss = async function(){
+  let [rows, fields] = await database.con.execute('select tipo from veiculo where tipo = 4');
+   
+   return rows;
+}
+database.getestatisticaclientes = async function(){
+  let [rows, fields] = await database.con.execute('select c.nome, COUNT(a.fk_cliente) AS numero FROM agendamento a, cliente c WHERE realizado = 1 AND C.sessionid = a.fk_cliente GROUP BY fk_cliente ORDER BY COUNT(fk_cliente) DESC LIMIT 1');
+   
+   return rows;
+}
+database.getestatisticacar = async function(){
+  let [rows, fields] = await database.con.execute('select id from veiculo');
+   
+   return rows;
+}
+database.getestatisticafide = async function(){
+  let [rows, fields] = await database.con.execute('select id from fidelidade');
+   
+   return rows;
+}
+database.getestatisticafides = async function(){
+  let [rows, fields] = await database.con.execute('select id from fidelidade where utilizado = 1');
+   
+   return rows;
+}
+database.getestatisticaag = async function(){
+  let [rows, fields] = await database.con.execute('select id from agendamento where realizado = 1');
+   
+   return rows;
+}
+database.getestatisticaagsc = async function(){
+  let [rows, fields] = await database.con.execute('select * from cancelado');
+   
+   return rows;
+}
+database.getestatisticaags = async function(){
+  let [rows, fields] = await database.con.execute('select id from agendamento where realizado = 0');
+   
+   return rows;
+}
+database.getestatisticaagp = async function(vdata, vdata1){
+  let [rows, fields] = await database.con.execute("select id from agendamento where realizado = 1 AND DATE_FORMAT((data), '%Y-%m-%d') BETWEEN ? AND ?", [vdata, vdata1]);
+   
+   return rows;
+}
+database.getestatisticaagscp = async function(vdata, vdata1){
+  let [rows, fields] = await database.con.execute("select * from cancelado WHERE DATE_FORMAT((data), '%Y-%m-%d') BETWEEN ? AND ?", [vdata, vdata1]);   
+   return rows;
+}
+database.getestatisticaagsp = async function(vdata, vdata1){
+  let [rows, fields] = await database.con.execute("select id from agendamento where realizado = 0 AND DATE_FORMAT((data), '%Y-%m-%d') BETWEEN ? AND ?", [vdata, vdata1]);
+   
+   return rows;
+}
+database.getestatisticaclientesp = async function(vdata, vdata1){
+  let [rows, fields] = await database.con.execute("select c.nome, COUNT(a.fk_cliente) AS numero FROM agendamento a, cliente c WHERE realizado = 1 AND C.sessionid = a.fk_cliente AND DATE_FORMAT((a.data), '%Y-%m-%d') BETWEEN ? AND ? GROUP BY fk_cliente ORDER BY COUNT(fk_cliente) DESC LIMIT 1", [vdata, vdata1]);
+   
+   return rows;
+}
 database.getvencido = async function(id){
   let [rows, fields] = await database.con.execute('select v.placa, v.modelo, c.telefone from veiculo v, cliente c, ultimosagendamentos ul where v.placa = ul.fk_placa and ul.fk_cliente = c.sessionid and ul.id = ?', [id]);
    

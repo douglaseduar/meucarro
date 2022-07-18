@@ -16,7 +16,10 @@ async function cadastrando(event){
     }else if(document.querySelector("#inlineRadio2").checked){
         aux = 2;
     }
-    else{aux = 3};
+    else if(document.querySelector("#inlineRadio3").checked){
+        aux = 3;
+    }
+    else{aux = 4};
     
     let header = {
                 method: 'POST',

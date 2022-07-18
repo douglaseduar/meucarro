@@ -94,7 +94,7 @@ app.use(session({
                 res.redirect('/configuracao');
              }else{res.redirect('/erro')}
         }else{
-            res.redirect('/inicio');
+            res.redirect('/admin');
         }});   
         
 
@@ -157,6 +157,17 @@ app.get('/vencidos', isLoggedIn, async (req, res) => {
     if(respostaadmin[0].permicao == 1){
       res.header('Content-Type', 'text/html');
       res.sendFile(__dirname + '/vencidos.html');
+  }else{
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/erro.html');
+  }
+
+})
+app.get('/estatistica', isLoggedIn, async (req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+      res.header('Content-Type', 'text/html');
+      res.sendFile(__dirname + '/estatistica.html');
   }else{
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/erro.html');
@@ -227,6 +238,97 @@ app.get('/editagender/:id', isLoggedIn, async(req, res) => {
 })
 app.get('/editagenderadmin/:id', isLoggedIn, async(req, res) => {
   res.send(await database.geteditAgendamentoadmin(req.params.id));
+  
+})
+app.get('/estatisticac', isLoggedIn, async(req, res) => {
+  let respostaestatisticac = await database.getestatisticac();
+  res.send([{quantidade: respostaestatisticac.length}]);
+  
+})
+app.get('/estatisticatipos', isLoggedIn, async(req, res) => {
+  let respostaestatisticatipos = await database.getestatisticatipos();
+  res.send([{quantidade: respostaestatisticatipos.length}]);
+  
+})
+app.get('/estatisticatiposs', isLoggedIn, async(req, res) => {
+  let respostaestatisticatiposs = await database.getestatisticatiposs();
+  res.send([{quantidade: respostaestatisticatiposs.length}]);
+  
+})
+app.get('/estatisticatiposss', isLoggedIn, async(req, res) => {
+  let respostaestatisticatiposss = await database.getestatisticatiposss();
+  res.send([{quantidade: respostaestatisticatiposss.length}]);
+  
+})
+app.get('/estatisticatipossss', isLoggedIn, async(req, res) => {
+  let respostaestatisticatipossss = await database.getestatisticatipossss();
+  res.send([{quantidade: respostaestatisticatipossss.length}]);
+  
+})
+app.get('/estatisticaclientes', isLoggedIn, async(req, res) => {
+  let estatisticaclientes = await database.getestatisticaclientes();
+  if(estatisticaclientes == ![]){
+    res.send([{nome: "--", numero: "--"}])
+  }else{
+    res.send(estatisticaclientes);
+  }
+  
+  
+})
+app.get('/estatisticacar', isLoggedIn, async(req, res) => {
+  let respostaestatisticacar = await database.getestatisticacar();
+  res.send([{quantidade: respostaestatisticacar.length}]);
+  
+})
+app.get('/estatisticafides', isLoggedIn, async(req, res) => {
+  let respostaestatisticafides = await database.getestatisticafides();
+  res.send([{quantidade: respostaestatisticafides.length}]);
+  
+})
+app.get('/estatisticafide', isLoggedIn, async(req, res) => {
+  let respostaestatisticafide = await database.getestatisticafide();
+  res.send([{quantidade: respostaestatisticafide.length}]);
+  
+})
+app.get('/estatisticaag', isLoggedIn, async(req, res) => {
+  let respostaestatisticaag = await database.getestatisticaag();
+  res.send([{quantidade: respostaestatisticaag.length}]);
+  
+})
+app.get('/estatisticaags', isLoggedIn, async(req, res) => {
+  let respostaestatisticaags = await database.getestatisticaags();
+  res.send([{quantidade: respostaestatisticaags.length}]);
+  
+})
+app.get('/estatisticaagsc', isLoggedIn, async(req, res) => {
+  let respostaestatisticaagsc = await database.getestatisticaagsc();
+  res.send([{quantidade: respostaestatisticaagsc.length}]);
+})
+app.post('/estatisticaagp', isLoggedIn, async(req, res) => {
+  let {vdata, vdata1} = req.body;
+  let respostaestatisticaagp = await database.getestatisticaagp(vdata, vdata1);
+  res.send([{quantidade: respostaestatisticaagp.length}]);
+  
+})
+app.post('/estatisticaagsp', isLoggedIn, async(req, res) => {
+  let {vdata, vdata1} = req.body;
+  let respostaestatisticaagsp = await database.getestatisticaagsp(vdata, vdata1);
+  res.send([{quantidade: respostaestatisticaagsp.length}]);
+  
+})
+app.post('/estatisticaagscp', isLoggedIn, async(req, res) => {
+  let {vdata, vdata1} = req.body;
+  let respostaestatisticaagsc = await database.getestatisticaagscp(vdata, vdata1);
+  res.send([{quantidade: respostaestatisticaagsc.length}]);
+  
+})
+app.post('/estatisticaclientesp', isLoggedIn, async(req, res) => {
+  let {vdata, vdata1} = req.body;
+  let estatisticaclientesp = await database.getestatisticaclientesp(vdata, vdata1);
+  if(estatisticaclientesp == ![]){
+  res.send([{nome: "--", numero: "--"}])
+  }else{ res.send(estatisticaclientesp);}
+ 
   
 })
 app.get('/agenderadmin/', isLoggedIn, async(req, res) => {

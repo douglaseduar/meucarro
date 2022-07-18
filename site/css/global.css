@@ -21,4 +21,8 @@
     /* Small: 450px;
     /*
     **/
+    
+}
+a{
+  color: var(--cor-verde)!important;
 }
