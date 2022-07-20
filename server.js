@@ -152,6 +152,17 @@ app.get('/admin', isLoggedIn, async (req, res) => {
   }
 
 })
+app.get('/adminagendar', isLoggedIn, async (req, res) => {
+  let respostaadmin = await database.getLogin(req.user.id);
+    if(respostaadmin[0].permicao == 1){
+      res.header('Content-Type', 'text/html');
+      res.sendFile(__dirname + '/adminagendar.html');
+  }else{
+    res.header('Content-Type', 'text/html');
+    res.sendFile(__dirname + '/erro.html');
+  }
+
+})
 app.get('/vencidos', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
     if(respostaadmin[0].permicao == 1){
@@ -677,7 +688,57 @@ app.post('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
             console.log('Result: ', result); //return object success
           })
         })
-    
+        app.post('/adminagendar/', isLoggedIn, async(req, res) => {
+          let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, placao, email, nome, telefone, endereco, tipo} = req.body;
+          let respostaadmin = await database.getLogin(req.user.id);
+            if(respostaadmin[0].permicao == 1){
+              console.log("entrou aqui");
+            let verificacadastro = await database.getClientecomemail(email);
+                if(verificacadastro == ![]){
+                  console.log("entrou aqui1");
+                database.insertCliente(email, telefone, endereco, nome, 0, 0, "");
+                console.log("entrou aqui2");
+                //const link = `https://www.fipeplaca.com.br/_next/data/YKLGFNrXKTCfB2bYV_Pc9/placa/${placao}.json?placa=${placao}`;
+                //let numeroplaca = request(link, (err, response, html) => {
+                // if (!err) {
+                // const json = JSON.parse(html);     
+                // let marca = json.pageProps.vehicleData.Marca;
+                // let modelo = json.pageProps.vehicleData.Modelo;
+        
+                // let aux = marca + " " + modelo;
+                 let numeroplaca = await database.insertVeiculo(placao, "aux", email, tipo);
+                
+                database.insertAgendamento(numeroplaca.numero, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, email); 
+                let gdata = vdata.split("T");
+              let hora = gdata[1];
+              let auxdata = gdata[0].split("-");
+              let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
+              let number1 = "55" + telefone + "@c.us";
+              let menssage = "✔ *AGENDAMENTO REALIZADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase()  + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
+              client.sendText(number1, menssage)
+              .then((result) => {
+                console.log('Result: ', result); //return object success
+              })
+              }else{
+                let verificaveiculo = await database.getVeiculo(verificacadastro[0].sessionid, placao);
+                if(verificaveiculo == ![]){
+                  let numeroplaca1 = await database.insertVeiculo(placao, "aux", verificacadastro[0].sessionid, tipo);
+                  database.insertAgendamento(numeroplaca1.numero, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].sessionid); 
+                }else{
+                  database.insertAgendamento(verificaveiculo[0].id, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].sessionid); 
+                }
+              }if(verificacadastro[0].telefone != ""){
+              let gdata = vdata.split("T");
+              let hora = gdata[1];
+              let auxdata = gdata[0].split("-");
+              let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
+              let number1 = "55" + verificacadastro[0].telefone + "@c.us";
+              let menssage = "✔ *AGENDAMENTO REALIZADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase()  + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
+              client.sendText(number1, menssage)
+              .then((result) => {
+                console.log('Result: ', result); //return object success
+              })
+}}})
   
     // client.onMessage((message) => {
     //   if (message.body === 'oi' && message.isGroupMsg === false) {

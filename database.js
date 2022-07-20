@@ -18,6 +18,11 @@ database.getVeiculos = async function(id){
     
     return rows;
 }
+database.getVeiculo = async function(id, placa){
+  let [rows, fields] = await database.con.execute('SELECT * FROM veiculo WHERE fk_cliente = ? AND placa = ?', [id, placa]);
+   
+   return rows;
+}
 database.deleteVeiculo = async function(id){
     let [data] = await database.con.execute('DELETE FROM veiculo WHERE id = ?', [id]);
 
@@ -197,9 +202,15 @@ database.insertAgendamento = async function(fk_placa, observacao, oleo, filtro_o
  
    return {'numero': data.insertId}
  }
-database.insertUser = async function(nome, telefone, permicao, sessionid, email, endereco, foto, fidelidade, ){
+database.insertUser = async function(nome, telefone, permicao, sessionid, email, endereco, foto, fidelidade){
   let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, sessionid, email, endereco, foto, fidelidade) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
      [nome, telefone, permicao, sessionid, email, endereco, foto, fidelidade]);
+ 
+   return {'numero': data.insertId}
+ }
+ database.insertCliente = async function(email, telefone, endereco, nome, permicao, fidelidade, foto){
+  let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, sessionid, email, endereco, fidelidade, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
+     [nome, telefone, permicao, email, email, endereco, fidelidade, foto]);
  
    return {'numero': data.insertId}
  }
@@ -237,6 +248,11 @@ database.getLogin = async function(sessionid){
    
    return rows;
 }
+database.getClientecomemail = async function(email){
+  let [rows, fields] = await database.con.execute('SELECT * FROM cliente WHERE email = ?', [email]);
+   
+   return rows;
+}
 database.setLogin = async function(email, hash){
   let [data] = await database.con.execute('UPDATE cliente SET sessionid = ? WHERE email = ?', [hash, email]);
 
@@ -253,7 +269,7 @@ database.getFidelidade = async function(id){
   return rows;
 }
 database.getFidelidades = async function(id){
-  let [rows, fields]  = await database.con.execute('SELECT f.*, c.nome, c.sessionid FROM fidelidade f, cliente c where f.fk_cliente = c.sessionid');
+  let [rows, fields]  = await database.con.execute('SELECT f.*, c.nome, c.sessionid FROM fidelidade f, cliente c where f.fk_cliente = c.sessionid ORDER BY f.utilizado = 1');
 
   return rows;
 }

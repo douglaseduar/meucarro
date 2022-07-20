@@ -264,6 +264,9 @@ padding-left: 40px;
     display: inline;
     width: auto;
 }
+.fadmin1{
+    width: auto;
+}
 .fotoag{
     margin-left: 73%;
     margin-top: -88%;
@@ -273,4 +276,12 @@ padding-left: 40px;
     margin-left: 73%;
     margin-top: -130%;
     width: 95px;
+}
+.veiculo{
+    text-align: -webkit-center;
+}
+.check{
+    position: absolute;
+    margin-top: -31px;
+    left: 80%;
 }
