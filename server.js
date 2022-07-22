@@ -11,11 +11,12 @@ import FacebookStrategy from 'passport-facebook';
 import session from 'express-session';
 import passport from 'passport';
 import dotenv from 'dotenv'; 
+import puppeteer from 'puppeteer';
 
 dotenv.config();
 const app = express();
 var __filename = url.fileURLToPath(import.meta.url);
-var __dirname = path.dirname(__filename);
+var __dirname = path.dirname(__filename) + "/views";
 
  app.listen(8080, () => console.log('Servidor rodando!'));
 
@@ -36,9 +37,10 @@ app.use((req, res, next) => {
 
 app.use(fileupload());
 app.use(express.json());
-app.use(express.static('site/css'));
-app.use(express.static('site/js'));
-app.use(express.static('site/img'));
+app.use(express.static('assets/css'));
+app.use(express.static('assets/js'));
+app.use(express.static('assets/img'));
+app.use(express.static('views'));
 app.use(cors());
 app.use(session({
     resave:false,
@@ -220,23 +222,14 @@ app.delete('/car/:id', isLoggedIn, async (req, res) => {
 app.post('/car', isLoggedIn, async (req, res) => {
     let {placa, tipo} = req.body;
     let cliente = req.user.id;
-    const link = `https://www.fipeplaca.com.br/_next/data/XePhZPTecIOvSkzFrJBhg/placa/${placa}.json?placa=${placa}`;
-    request(link, (err, response, html) => {
-        if (!err) {
-         const json = JSON.parse(html);
-         if(json.pageProps.vehicleData.Marca){
-         let marca = json.pageProps.vehicleData.Marca;
-         let modelo = json.pageProps.vehicleData.Modelo;
-
-
-         let aux = marca + " " + modelo;
+          let respostarobo = robo(placa)
+         let aux = respostarobo.marca + " " + respostarobo.modelo;
          res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo));
-         }
-         else{res.status(201).send(database.insertVeiculo(placa, " ", cliente, tipo));}
-        }
-      });
+         
+       //  else{res.status(201).send(database.insertVeiculo(placa, " ", cliente, tipo));}
+        
+  });
     
-})
 app.get('/agender/', isLoggedIn, async(req, res) => {
     res.send(await database.getAgendamento(req.user.id));
 })
@@ -419,25 +412,10 @@ app.get('/user/', isLoggedIn, async(req, res) => {
 // })
 app.get('/cardetalhe/:id', isLoggedIn, async(req, res) => {
     let placa = req.params.id;
-    const link1 = `https://www.fipeplaca.com.br/_next/data/YKLGFNrXKTCfB2bYV_Pc9/placa/${placa}.json?placa=${placa}`;
-    request(link1, (err, response, html) => {
-        if (!err) {
-         const json1 = JSON.parse(html);
-         let marca = json1.pageProps.vehicleData.Marca;
-         let modelo = json1.pageProps.vehicleData.Modelo;
-         let AnoModelo = json1.pageProps.vehicleData.AnoModelo;
-         let Combustivel = json1.pageProps.vehicleData.Combustivel;
-         let cilindradas = json1.pageProps.vehicleData.cilindradas;
-         let potencia = json1.pageProps.vehicleData.potencia;
-         let cor = json1.pageProps.vehicleData.cor;
-         let fipe = json1.pageProps.vehicleData.CodigoFipe;
-         let ipva = json1.pageProps.vehicleData.ipva;
-         let valor = json1.pageProps.vehicleData.Valor;
-    res.send([{placa: placa, marca: marca, modelo: modelo, AnoModelo: AnoModelo, Combustivel: Combustivel, cilindradas: cilindradas, potencia: potencia, cor: cor, fipe: fipe, ipva: ipva, valor: valor}]);
+    let respostarobo = await robo(placa);
+    res.send([{placa: placa, marca: respostarobo.marca, modelo: respostarobo.modelo, AnoModelo: respostarobo.AnoModelo, Combustivel: respostarobo.Combustivel, cilindradas: respostarobo.cilindradas, potencia: respostarobo.potencia, cor: respostarobo.cor, fipe: respostarobo.fipe, ipva: respostarobo.ipva, valor: respostarobo.valor, logo: respostarobo.logo}]);
 
-}});
-
-})
+});
 
 app.get('/news', async (req, res) => {
   const link = `https://newsdata.io/api/1/news?apikey=pub_9045d02aa3dde8a8642911a1673ef7f21ca9&q=gasolina%20OR%20ipva%20OR%20carros%20OR%20automóveis%20OR%20motor&language=pt`;
@@ -575,7 +553,7 @@ app.post('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
   var nomerealzao = nome[1];
   nomerealzaozao = req.params.id + respostac[0].sessionid + "." + nomerealzao; 
 
-  file.mv('./site/img/agend/' + nomerealzaozao, function (err) {
+  file.mv('./assets/img/agend/' + nomerealzaozao, function (err) {
   if(err){
       res.send(err)
   }
@@ -694,19 +672,11 @@ app.post('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
             if(respostaadmin[0].permicao == 1){
               console.log("entrou aqui");
             let verificacadastro = await database.getClientecomemail(email);
+            let respostarobo = await robo(placao);
                 if(verificacadastro == ![]){
-                  console.log("entrou aqui1");
                 database.insertCliente(email, telefone, endereco, nome, 0, 0, "");
-                console.log("entrou aqui2");
-                //const link = `https://www.fipeplaca.com.br/_next/data/YKLGFNrXKTCfB2bYV_Pc9/placa/${placao}.json?placa=${placao}`;
-                //let numeroplaca = request(link, (err, response, html) => {
-                // if (!err) {
-                // const json = JSON.parse(html);     
-                // let marca = json.pageProps.vehicleData.Marca;
-                // let modelo = json.pageProps.vehicleData.Modelo;
-        
-                // let aux = marca + " " + modelo;
-                 let numeroplaca = await database.insertVeiculo(placao, "aux", email, tipo);
+                let aux = respostarobo.marca + " " + respostarobo.modelo;
+                 let numeroplaca = await database.insertVeiculo(placao, aux, email, tipo);
                 
                 database.insertAgendamento(numeroplaca.numero, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, email); 
                 let gdata = vdata.split("T");
@@ -722,7 +692,7 @@ app.post('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
               }else{
                 let verificaveiculo = await database.getVeiculo(verificacadastro[0].sessionid, placao);
                 if(verificaveiculo == ![]){
-                  let numeroplaca1 = await database.insertVeiculo(placao, "aux", verificacadastro[0].sessionid, tipo);
+                  let numeroplaca1 = await database.insertVeiculo(placao, aux, verificacadastro[0].sessionid, tipo);
                   database.insertAgendamento(numeroplaca1.numero, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].sessionid); 
                 }else{
                   database.insertAgendamento(verificaveiculo[0].id, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].sessionid); 
@@ -778,3 +748,40 @@ app.get('*', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/erro.html');
 })
+
+async function robo(placa) {
+  var regex = '[A-Z]{3}[0-9][0-9A-Z][0-9]{2}';
+  var placa = 'AAA0A00';
+  if (placa.match(regex)) {
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 5.1; rv:5.0) Gecko/20100101 Firefox/5.0');
+    await page.setViewport({ width: 1280, height: 1800 })
+    await page.goto("https://www.tabelafipebrasil.com/placa/" + placa);
+     const resultado = await page.evaluate(() => {
+        let rmarca = document.querySelectorAll("td")[1].textContent;
+        let rmodelo = document.querySelectorAll("td")[3].textContent;
+        let rAnoModelo = document.querySelectorAll("td")[5].textContent;
+        let rcor = document.querySelectorAll("td")[9].textContent;
+        let rcilindradas = document.querySelectorAll("td")[11].textContent;
+        let rpotencia = document.querySelectorAll("td")[13].textContent;
+        let rCombustivel = document.querySelectorAll("td")[15].textContent;
+        let rfipe = document.querySelectorAll("td")[91].textContent;
+        let ripva = document.querySelectorAll("td.tableNumber")[2].textContent;
+        let rvalor = document.querySelectorAll("td")[93].textContent;
+        let rlogo = document.querySelector("img.fipeLogoDIV.fipeLogoIMG.lazyloaded").src;
+    
+        var campos = {"marca": rmarca, "modelo": rmodelo, "AnoModelo": rAnoModelo, "cor": rcor, "cilindradas": rcilindradas, "potencia": rpotencia, "Combustivel": rCombustivel, "fipe": rfipe, "ipva": ripva, "valor": rvalor, "logo": rlogo};
+
+        return campos;
+       
+    });
+    await browser.close();
+    return resultado;
+  }else{
+    var campos = {"marca": "---", "modelo": "---", "AnoModelo": "---", "cor": "---", "cilindradas": "---", "potencia": "---", "Combustivel": "---", "fipe": "---", "ipva": "---", "valor": "---", "logo": " "};
+
+    return campos;
+  }
+    
+    }

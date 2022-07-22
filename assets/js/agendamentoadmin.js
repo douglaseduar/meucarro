@@ -132,31 +132,36 @@ function getacarrodetalhe(){
     .then((res) => res.json())
     .then((res) => {
         for(veiculo2 of res){
-            modalcarro(veiculo2.placa, veiculo2.marca, veiculo2.modelo, veiculo2.AnoModelo, veiculo2.Combustivel, veiculo2.cilindradas, veiculo2.potencia, veiculo2.cor, veiculo2.fipe, veiculo2.ipva, veiculo2.valor)
+            modalcarro(veiculo2.placa, veiculo2.marca, veiculo2.modelo, veiculo2.AnoModelo, veiculo2.Combustivel, veiculo2.cilindradas, veiculo2.potencia, veiculo2.cor, veiculo2.fipe, veiculo2.ipva, veiculo2.valor, veiculo2.logo)
       
         }
 
     })
 }
-function modalcarro(placa, marca, modelo, ano, comb, cc, potencia, cor, fipe, ipva, valor){
+function modalcarro(placa, marca, modelo, ano, comb, cc, potencia, cor, fipe, ipva, valor, logo){
 
     var detalhe = document.createElement("div");
     detalhe.innerHTML = "<b> PLACA:</b> " + placa + 
     "<br><b>MODELO:</b> " + marca + " - " + modelo +
     "<br><b>ANO:</b> " + ano +
     "<br><b>COMBUSTÍVEL:</b> " + comb +
-    "<br><b>CILINDRADAS:</b> " + cc + " cc" +
-    "<br><b>POTÊNCIA:</b> " + potencia + " cv" +
+    "<br><b>CILINDRADAS:</b> " + cc +
+    "<br><b>POTÊNCIA:</b> " + potencia +
     "<br><b>COR:</b> " + cor +
     "<br><b>FIPE:</b> " + fipe +
     "<br><b>IPVA:</b> " + ipva +
     "<br><b>VALOR:</b> " + valor;
     var creditos = document.createElement("div");
-    creditos.innerHTML = "<br><br><i>Valores fornecidos por https://www.fipeplaca.com.br/</i>";
+    creditos.innerHTML = "<br><br><i>Valores fornecidos por https://www.tabelafipebrasil.com/";
     creditos.style.textTransform = "none";
     detalhe.style.textTransform = "uppercase";
+    let imagemtabela = document.createElement("img");
 
-    document.querySelector("#lista").appendChild(detalhe).appendChild(creditos);
+     imagemtabela.className = "fotoag";
+     imagemtabela.src = logo;
+    
+
+    document.querySelector("#lista").appendChild(detalhe).appendChild(creditos).appendChild(imagemtabela);
 }
 
 function getagendamentodetalhe(){

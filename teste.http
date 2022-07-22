@@ -1,0 +1,6 @@
+POST https://geradorbrasileiro.com/api/validate/
+{
+  "placa": [
+    "ava5566"
+  ]
+}
