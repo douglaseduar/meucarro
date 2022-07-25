@@ -6,7 +6,6 @@ import fileupload from 'express-fileupload'
 import cors from 'cors';
 import request from 'request';
 import venom from 'venom-bot';
-import bcrypt from 'bcryptjs';
 import FacebookStrategy from 'passport-facebook';
 import session from 'express-session';
 import passport from 'passport';
@@ -20,15 +19,15 @@ var __dirname = path.dirname(__filename) + "/views";
 
  app.listen(8080, () => console.log('Servidor rodando!'));
 
- venom
-  .create({
-    session: 'session-name',
-    multidevice: true 
-  })
-  .then((client) => start(client))
-  .catch((erro) => {
-    console.log(erro);
-  });
+//  venom
+//   .create({
+//     session: 'session-name',
+//     multidevice: true 
+//   })
+//   .then((client) => start(client))
+//   .catch((erro) => {
+//     console.log(erro);
+//   });
 
 app.use((req, res, next) => {
     console.log(req.url);
@@ -40,7 +39,6 @@ app.use(express.json());
 app.use(express.static('assets/css'));
 app.use(express.static('assets/js'));
 app.use(express.static('assets/img'));
-app.use(express.static('views'));
 app.use(cors());
 app.use(session({
     resave:false,
@@ -62,6 +60,8 @@ app.use(session({
      }
    ));
 
+//Autenticação com o Facebook
+   
    function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
     return next();
@@ -91,21 +91,30 @@ app.use(session({
         let idfacebook = req.user.id;
         let resposta = await database.getLogin(idfacebook);
         if(resposta == ![]){
-          let insert = await database.insertUser(nome, "", 0, idfacebook, email, "", foto, 0);
-             if(insert.numero =! 0){
+          let respostaemail = await database.getLogin(email);
+            if(respostaemail == ![]){
+            let insert = await database.insertUser(nome, "", 0, idfacebook, email, "", foto, 0);
+              if(insert.numero =! 0){
                 res.redirect('/configuracao');
              }else{res.redirect('/erro')}
+            }else{
+              await database.setLogin(idfacebook, respostaemail[0].sessionid);
+              await database.setCarro(idfacebook, respostaemail[0].sessionid)
+              await database.setAg(idfacebook, respostaemail[0].sessionid);
+              res.redirect('/configuracao');
+            }
         }else{
             res.redirect('/admin');
         }});   
         
-
-     app.get('/logout', (req, res) =>{
+      app.get('/logout', (req, res) =>{
         req.logout(function(err){
         if(err) {return next (err);}
         res.redirect('/');
         });
        });
+
+//Renderização das páginas dos clientes.
 
  app.get('/', (req, res) => {
      res.header('Content-Type', 'text/html');
@@ -115,10 +124,7 @@ app.use(session({
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/login.html');
 })
-// app.get('/register', (req, res) => {
-//     res.header('Content-Type', 'text/html');
-//     res.sendFile(__dirname + '/register.html');
-// })
+
 app.get('/inicio', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/inicio.html');
@@ -129,7 +135,7 @@ app.get('/veiculos', isLoggedIn, (req, res) => {
 })
 app.get('/cadastro-de-veiculo', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/cadastro-de-veiculo.html');
+    res.sendFile(__dirname + '/cadastrar.html');
 })
 app.get('/historico', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
@@ -143,6 +149,13 @@ app.get('/configuracao', isLoggedIn, (req, res) => {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/configuracao.html');
 })
+app.get('/editagendamento', isLoggedIn, (req, res) => {
+  res.header('Content-Type', 'text/html');
+  res.sendFile(__dirname + '/editar.html');
+})
+
+//Renderização das páginas dos Administradores com verificação.
+
 app.get('/admin', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
     if(respostaadmin[0].permicao == 1){
@@ -158,7 +171,7 @@ app.get('/adminagendar', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
     if(respostaadmin[0].permicao == 1){
       res.header('Content-Type', 'text/html');
-      res.sendFile(__dirname + '/adminagendar.html');
+      res.sendFile(__dirname + '/admin-agendar.html');
   }else{
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/erro.html');
@@ -169,7 +182,7 @@ app.get('/vencidos', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
     if(respostaadmin[0].permicao == 1){
       res.header('Content-Type', 'text/html');
-      res.sendFile(__dirname + '/vencidos.html');
+      res.sendFile(__dirname + '/admin-vencidos.html');
   }else{
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/erro.html');
@@ -180,7 +193,7 @@ app.get('/estatistica', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
     if(respostaadmin[0].permicao == 1){
       res.header('Content-Type', 'text/html');
-      res.sendFile(__dirname + '/estatistica.html');
+      res.sendFile(__dirname + '/admin-estatistica.html');
   }else{
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/erro.html');
@@ -191,27 +204,26 @@ app.get('/fidelidade', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
     if(respostaadmin[0].permicao == 1){
       res.header('Content-Type', 'text/html');
-      res.sendFile(__dirname + '/fidelidade.html');
+      res.sendFile(__dirname + '/admin-fidelidade.html');
   }else{
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/erro.html');
   }
 
 })
-app.get('/editagendamento', isLoggedIn, (req, res) => {
-    res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/editagendamento.html');
-})
 app.get('/editagendamentoadmin', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
     if(respostaadmin[0].permicao == 1){
       res.header('Content-Type', 'text/html');
-      res.sendFile(__dirname + '/editagendamentoadmin.html');
+      res.sendFile(__dirname + '/admin-editar.html');
   }else{
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/erro.html');
   }
 })
+
+//Chamadas e envio de dados dos Clientes.
+
 app.get('/car/', isLoggedIn, async(req, res) => {
     res.send(await database.getVeiculos(req.user.id));
 })
@@ -222,12 +234,9 @@ app.delete('/car/:id', isLoggedIn, async (req, res) => {
 app.post('/car', isLoggedIn, async (req, res) => {
     let {placa, tipo} = req.body;
     let cliente = req.user.id;
-          let respostarobo = robo(placa)
-         let aux = respostarobo.marca + " " + respostarobo.modelo;
-         res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo));
-         
-       //  else{res.status(201).send(database.insertVeiculo(placa, " ", cliente, tipo));}
-        
+    let respostarobo = await robo(placa);
+    let aux = respostarobo.marca + " " + respostarobo.modelo;
+    res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo));      
   });
     
 app.get('/agender/', isLoggedIn, async(req, res) => {
@@ -240,6 +249,9 @@ app.get('/editagender/:id', isLoggedIn, async(req, res) => {
     res.send(await database.geteditAgendamento(req.params.id, req.user.id));
     
 })
+
+//Chamadas e envio de dados dos Administradores.
+
 app.get('/editagenderadmin/:id', isLoggedIn, async(req, res) => {
   res.send(await database.geteditAgendamentoadmin(req.params.id));
   
@@ -276,8 +288,6 @@ app.get('/estatisticaclientes', isLoggedIn, async(req, res) => {
   }else{
     res.send(estatisticaclientes);
   }
-  
-  
 })
 app.get('/estatisticacar', isLoggedIn, async(req, res) => {
   let respostaestatisticacar = await database.getestatisticacar();
@@ -387,29 +397,6 @@ app.get('/user/', isLoggedIn, async(req, res) => {
     res.send(await database.getDados(req.user.id));
 })
 
-// app.get('/cardetalhe/:id', async(req, res) => {
-//     res.send(await database.getVeiculosdetalhe(req.params.id));
-// })
-
-// app.post('/user', async (req, res) => {
-//     let {nome, telefone, permicao, email, senha, fidelidade} = req.body;
-//     const salt = bcrypt.genSaltSync(10);
-//     const hash = bcrypt.hashSync(senha, salt);   
-//     res.status(201).send(await database.insertUser(nome, telefone, permicao, email, hash, fidelidade));
-
-// })
-// app.post('/agender', async (req, res) => {
-//     let {fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente} = req.body;
-//     res.status(201).send(await database.insertAgendamento(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente));
-// })
-// app.put('/editagender/:id', async (req, res) => {
-//     let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente} = req.body;
-//     res.status(201).send(await database.editAgendamento(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente, req.params.id));
-// })
-// app.delete('/editagender/:id', async (req, res) => {
-//     database.deleteAgendamento(req.params.id);
-//     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
-// })
 app.get('/cardetalhe/:id', isLoggedIn, async(req, res) => {
     let placa = req.params.id;
     let respostarobo = await robo(placa);
@@ -417,70 +404,22 @@ app.get('/cardetalhe/:id', isLoggedIn, async(req, res) => {
 
 });
 
+//Request das noticias para a página "inicio".
+
 app.get('/news', async (req, res) => {
   const link = `https://newsdata.io/api/1/news?apikey=pub_9045d02aa3dde8a8642911a1673ef7f21ca9&q=gasolina%20OR%20ipva%20OR%20carros%20OR%20automóveis%20OR%20motor&language=pt`;
   request(link, (err, response, html) => {
       if (!err) {
-      
        const json1 = JSON.parse(html);
        res.send(json1.results);       
       
-
 }
       }
     );
   
 })
 
-// app.post('/login', async (req, res) => {
-//     let {email, senha} = req.body;
-//     let resposta = await database.getLogin(email);
-//     if(bcrypt.compareSync(senha, resposta[0].senha)){
-//         var hash1 = bcrypt.hashSync(resposta[0].nome, 8);
-//         await database.setLogin(email, hash1);
-//         res.send(await database.getLoginsession(email));
-        
-
-    
-//     }else{console.log("diferente");}
-// })
-
-//  app.get('/produtos', async(req, res) => {
-//     res.send(await database.getProdutos());
-// })
-// app.get('/produt/:id', async(req, res) => {
-//     res.send(await database.getProdutosSelecionado(req.params.id));
-// })
-
-
-// app.delete('/produtos/:id', async (req, res) => {
-//     database.deleteProduto(req.params.id);
-//     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
-// })
-
-// app.post('/produtos', async (req, res) => {
-//     let {titulo, descricao, img, preco} = req.body;
-//     res.status(201).send(await database.insertProduto(titulo, descricao, img, preco));
-// })
-
-// app.put('/produtos/:id', async (req, res) => {
-//     let {titulo, descricao, img, preco} = req.body;
-//     res.status(201).send(await database.editProduto(titulo, descricao, img, preco, req.params.id));
-// })
-// app.get("/post/:placa", (req, res) => {
-//     const { placa } = req?.params;
-//     if (placa) {
-//         const link = `https://www.fipeplaca.com.br/_next/data/WGPJkdDfWv_2lHAboCzpJ/placa/${placa}.json?placa=${placa}`;
-//         request(link, (err, response, html) => {
-//             if (!err) {
-//               const json = JSON.parse(html);
-//              let marca = json.pageProps.vehicleData.Marca;
-//              let modelo = json.pageProps.vehicleData.Modelo;
-//              let aux = marca + modelo;
-//               console.log(aux);  
-//     }
-//   });
-// }})
+//Função para envio das mensagens no WhatsApp.
 
 function start(client) {
 
@@ -670,7 +609,6 @@ app.post('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
           let {observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, placao, email, nome, telefone, endereco, tipo} = req.body;
           let respostaadmin = await database.getLogin(req.user.id);
             if(respostaadmin[0].permicao == 1){
-              console.log("entrou aqui");
             let verificacadastro = await database.getClientecomemail(email);
             let respostarobo = await robo(placao);
                 if(verificacadastro == ![]){
@@ -710,48 +648,12 @@ app.post('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
               })
 }}})
   
-    // client.onMessage((message) => {
-    //   if (message.body === 'oi' && message.isGroupMsg === false) {
-    //     client
-    //       .sendText(message.from, 'bot do douglas 🕷')
-    //       .then((result) => {
-    //         console.log('Result: ', result); //return object success
-    //       })
-    //       .catch((erro) => {
-    //         console.error('Error when sending: ', erro); //return object error
-    //       });
-    //   }
-    // });
 }
-// app.get('/gift/', isLoggedIn, async (req, res) => {
-//   let respostagif = await database.getLogin(req.user.id);
-//   if(respostagif[0].fidelidade == 5){
-//     let verificarfidelidade = await database.getFidelidade(req.user.id);
-//       if(verificarfidelidade == ![]){
-//       let auxgift = Math.floor(Math.random() * 999999) + 100000;
-//       database.insertFidelidade(req.user.id, auxgift, 0);
-//       res.send([{cod: auxgift}]);
-//       let menssage = "🎁 *PARABÉNS VOCÊ GANHOU!*\n\nPara reinvindicar seu prêmio vá até a nossa loja e utilize o código abaixo:\n\n*" + auxgift + "*";
-//       let number = "55" + respostagif[0].telefone + "@c.us"; 
-//       client.sendText(number, menssage)
-//             .then((result) => {
-//               console.log('Result: ', result); //return object success
-//             })    
-//       }else{
-//         res.send([{cod: verificarfidelidade[0].cupom}]);
-//       }
-//   }
 
-// })
-
-app.get('*', isLoggedIn, (req, res) => {
-    res.header('Content-Type', 'text/html');
-    res.sendFile(__dirname + '/erro.html');
-})
+//Função para retornar dados das Placas.
 
 async function robo(placa) {
   var regex = '[A-Z]{3}[0-9][0-9A-Z][0-9]{2}';
-  var placa = 'AAA0A00';
   if (placa.match(regex)) {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
@@ -782,6 +684,12 @@ async function robo(placa) {
     var campos = {"marca": "---", "modelo": "---", "AnoModelo": "---", "cor": "---", "cilindradas": "---", "potencia": "---", "Combustivel": "---", "fipe": "---", "ipva": "---", "valor": "---", "logo": " "};
 
     return campos;
-  }
-    
-    }
+  }}
+
+
+//Renderização da página de erro.
+
+app.get('*', isLoggedIn, (req, res) => {
+  res.header('Content-Type', 'text/html');
+  res.sendFile(__dirname + '/erro.html');
+})

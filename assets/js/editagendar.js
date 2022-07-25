@@ -137,7 +137,7 @@ async function enviaracancelamento(event){
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
-    location = "/login";
+    location = "/logout";
 }
 
 document.querySelector("#agendar").addEventListener("click", enviaredicao)

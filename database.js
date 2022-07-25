@@ -99,7 +99,7 @@ database.getestatisticaag = async function(){
    return rows;
 }
 database.getestatisticaagsc = async function(){
-  let [rows, fields] = await database.con.execute('select * from cancelado');
+  let [rows, fields] = await database.con.execute('select id from agendamento where cancelado = 1');
    
    return rows;
 }
@@ -197,7 +197,7 @@ database.insertVeiculo = async function(placa, resposta, cliente, tipo){
   return {'numero': data.insertId}
 }
 database.insertAgendamento = async function(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente){
-  let [data] = await database.con.execute('INSERT INTO agendamento (fk_placa, obeservacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data, realizado, fk_cliente) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+  let [data] = await database.con.execute('INSERT INTO agendamento (fk_placa, obeservacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data, realizado, aviso, foto, cancelado, fk_cliente) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, " ", 0, ?)', 
      [fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente]);
  
    return {'numero': data.insertId}
@@ -229,7 +229,7 @@ database.editAgendamentoadmin = async function(observacao, oleo, filtro_oleo, fi
     return {'alterado': id}
 }
 database.deleteAgendamento = async function(id){
-  let [data] = await database.con.execute('DELETE FROM agendamento WHERE id = ?', [id]);
+  let [data] = await database.con.execute('UPDATE agendamento SET cancelado = 1 WHERE id = ?', [id]);
 
   return {'deletado': id}
 }
@@ -253,11 +253,22 @@ database.getClientecomemail = async function(email){
    
    return rows;
 }
-database.setLogin = async function(email, hash){
-  let [data] = await database.con.execute('UPDATE cliente SET sessionid = ? WHERE email = ?', [hash, email]);
+database.setLogin = async function(id, email){
+  let [data] = await database.con.execute('UPDATE cliente SET sessionid = ? WHERE sessionid = ?', [id, email]);
 
     return {'alterado': "asd"}
 }
+database.setCarro = async function(id, email){
+  let [data] = await database.con.execute('UPDATE agendamento SET fk_cliente = ? WHERE fk_cliente = ?', [id, email]);
+
+    return {'alterado': "asd"}
+}
+database.setAg = async function(id, email){
+  let [data] = await database.con.execute('UPDATE veiculo SET fk_cliente = ? WHERE Fk_cliente = ?', [id, email]);
+
+    return {'alterado': "asd"}
+}
+
 database.getLoginsession = async function(email){
   let [rows, fields]  = await database.con.execute('SELECT id, sessionid FROM cliente WHERE email = ?', [email]);
 

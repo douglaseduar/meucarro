@@ -150,7 +150,7 @@ carregarDadosMenu();
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
-    location = "/login";
+    location = "/logout";
 }
 document.querySelector("#button-addon2").addEventListener("click", pesquisar)
 

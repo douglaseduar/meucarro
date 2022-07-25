@@ -59,7 +59,7 @@ carregarDadosMenu();
 document.querySelector("#logout").addEventListener("click", sair)
 
 function sair(){
-    location = "/login";
+    location = "/logout";
 }
 
 document.querySelector("#gift").addEventListener("click", reivindicar);
