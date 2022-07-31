@@ -1,51 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administração</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="global.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-    <script src="editagendamentoadmin.js" defer></script>
-    <link rel="shortcut icon" href="carro.png" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administração</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  <script src="editagendamentoadmin.js" defer></script>
+  <link rel="shortcut icon" href="carro.png" type="image/x-icon">
 </head>
+
 <body>
-    <form action="" id="agendamento" method="post" enctype="multipart/form-data">
-        <div class="container-sm agender">
-            <div class="card">
-                <div class="card-body">
-                    <div class="logo"><img src="LOGO.png" alt="" srcset="" width="200px">
-                    </div>
-                            <select class="form-select" style="text-transform: uppercase;" aria-label="Default select example" name="select">
-                              </select>
-                            <h6 style="margin-top: 15px; margin-bottom: 15px;"> O que foi trocado? </h6>
-                            <input type="text" class="form-control fadmin" name="filtro_oleo" placeholder="Filtro de Óleo"> 
-                            <input type="text" class="form-control fadmin" name="filtro_ar" placeholder="Filtro de Ar"> 
-                            <input type="text" class="form-control fadmin" name="filtro_gasolina" placeholder="Filtro de Combustível"> 
-                            <input type="text" class="form-control fadmin" name="filtro_arcondicionado" placeholder="Filtro de Ar Condicionado"> 
-                            <input type="text" class="form-control fadmin" name="filtro_racor" placeholder="Filtro Separador"> 
-                            <input type="text" class="form-control fadmin" name="filtro_hidraulico" placeholder="Outro Filtro"> 
-                              <h6 style="margin-top: 15px; margin-bottom: 15px;"> Qual óleo foi usado?</h6>
-                              <input type="text" class="form-control" name="oleo" placeholder="Marca do óleo">        
-                              <h6 style="margin-top: 15px; margin-bottom: 15px;"> Quantos km?</h6>
-                              <input type="text" class="form-control" name="km" placeholder="Quilometragem do Veículo">              
-                            <div class="form-floating" style="margin-top: 20px;">
-                              <textarea class="form-control tamanho" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px; font-size: 12pt;" name="observacao"></textarea>
-                              <label for="floatingTextarea2" class="tamanho">Faltou alguma coisa?</label>
-                            </div>
-                            <h6 style="margin-top: 15px; margin-bottom: 15px;"> Apenas imagens: </h6>
-                            <div class="form-group">
-                              <input type="file" accept='image/*' class="form-control-file" name="foto" id="exampleFormControlFile1">
-                            </div>
-                        </div>
-                        <button class="btn btn-success btn-block mb-4" type="submit" id="agendar">Concluir Agendamento</button>
-                      </form>
-                      
-                      <button class="btn btn-warning btn-block mb-4" id="dropagendar" >Cliente não Apareceu</button>   
-        </div></div>
+  <form action="" id="agendamento" method="post" enctype="multipart/form-data">
+    <div class="container-sm agender">
+      <div class="card">
+        <div class="card-body">
+          <div class="logo"><img src="LOGO.png" alt="" srcset="" width="200px">
+          </div>
+          <select class="form-select" style="text-transform: uppercase;" aria-label="Default select example"
+            name="select">
+          </select>
+          <h6 style="margin-top: 15px; margin-bottom: 15px;"> O que foi trocado? </h6>
+          <input type="text" class="form-control fadmin" name="filtro_oleo" placeholder="Filtro de Óleo">
+          <input type="text" class="form-control fadmin" name="filtro_ar" placeholder="Filtro de Ar">
+          <input type="text" class="form-control fadmin" name="filtro_gasolina" placeholder="Filtro de Combustível">
+          <input type="text" class="form-control fadmin" name="filtro_arcondicionado"
+            placeholder="Filtro de Ar Condicionado">
+          <input type="text" class="form-control fadmin" name="filtro_racor" placeholder="Filtro Separador">
+          <input type="text" class="form-control fadmin" name="filtro_hidraulico" placeholder="Outro Filtro">
+          <h6 style="margin-top: 15px; margin-bottom: 15px;"> Qual óleo foi usado?</h6>
+          <input type="text" class="form-control" name="oleo" placeholder="Marca do óleo">
+          <h6 style="margin-top: 15px; margin-bottom: 15px;"> Quantos km?</h6>
+          <input type="text" class="form-control" name="km" placeholder="Quilometragem do Veículo">
+          <div class="form-floating" style="margin-top: 20px;">
+            <textarea class="form-control tamanho" placeholder="Leave a comment here" id="floatingTextarea"
+              style="height: 100px; font-size: 12pt;" name="observacao"></textarea>
+            <label for="floatingTextarea2" class="tamanho">Faltou alguma coisa?</label>
+          </div>
+          <h6 style="margin-top: 15px; margin-bottom: 15px;"> Apenas imagens: </h6>
+          <div class="form-group">
+            <input type="file" accept='image/*' class="form-control-file" name="foto" id="exampleFormControlFile1">
+          </div>
+        </div>
+        <button class="btn btn-success btn-block mb-4" type="submit" id="agendar">Concluir Agendamento</button>
+  </form>
+
+  <button class="btn btn-warning btn-block mb-4" id="dropagendar">Cliente não Apareceu</button>
+  </div>
+  </div>
 </body>
+
 </html>

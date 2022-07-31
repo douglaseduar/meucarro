@@ -1,20 +1,18 @@
-
-
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
 
-function carregarVeiculos(){
+function carregarVeiculos() {
     fetch('/car/')
-    .then((res) => res.json())
-    .then((res) => {
-        for(veiculo of res){
-            criarLinha(veiculo.id, veiculo.placa, veiculo.modelo, veiculo.tipo);
-        }
-    })
-    
+        .then((res) => res.json())
+        .then((res) => {
+            for (veiculo of res) {
+                criarLinha(veiculo.id, veiculo.placa, veiculo.modelo, veiculo.tipo);
+            }
+        })
+
 }
 
-function criarLinha (vid, vplaca, vmodelo, vtipo){
+function criarLinha(vid, vplaca, vmodelo, vtipo) {
     var card = document.createElement("div");
     card.className = "col";
     var card1 = document.createElement("div");
@@ -22,13 +20,13 @@ function criarLinha (vid, vplaca, vmodelo, vtipo){
     var card2 = document.createElement("div");
     card2.className = "card-body";
     var fotoc = document.createElement("i")
-    if(vtipo == 1){
+    if (vtipo == 1) {
         fotoc.className = "bi bi-speedometer2";
-    }
-    else if(vtipo == 2){
+    } else if (vtipo == 2) {
         fotoc.className = "bi bi-truck";
+    } else {
+        fotoc.className = "bi bi-cone-striped";
     }
-    else {fotoc.className = "bi bi-cone-striped";}
     fotoc.style.fontSize = "70pt";
     var placa = document.createElement("div");
     placa.className = "placa";
@@ -41,7 +39,7 @@ function criarLinha (vid, vplaca, vmodelo, vtipo){
     apagar.setAttribute("id", vid);
     apagar.style.color = "red";
     apagar.addEventListener("click", apagando);
-    
+
 
     titulo.innerHTML = "<b>" + vplaca + "</b>" + " " + '<i class="bi bi-search"></i>';
     titulo.setAttribute("id", vplaca);
@@ -53,7 +51,7 @@ function criarLinha (vid, vplaca, vmodelo, vtipo){
     titulo1.textContent = vmodelo;
     titulo.style.textTransform = "uppercase";
     titulo1.style.textTransform = "uppercase";
-    
+
     card2.appendChild(fotoc);
     card2.appendChild(placa);
     card2.appendChild(titulo);
@@ -64,38 +62,37 @@ function criarLinha (vid, vplaca, vmodelo, vtipo){
     document.querySelector(".lista").appendChild(card).appendChild(card1).appendChild(card2);
 }
 
-async function chamarModal(){
+async function chamarModal() {
     document.querySelector(".modal-dialog").style.display = "none";
     let auxid = this.getAttribute("id");
-    await fetch('/cardetalhe/'+ auxid)
-    .then((res) => res.json())
-    .then((res) => {
-        for(veiculo1 of res){
-            document.querySelector(".modal-title").textContent = veiculo1.placa;
-            document.querySelector(".modal-title").style.textTransform = "uppercase";
-            document.querySelector(".modelo1").textContent = "VEÍCULO: " + veiculo1.modelo;
-            document.querySelector(".ano").textContent = "ANO/MODELO: " + veiculo1.AnoModelo;
-            document.querySelector(".combustivel").textContent = "COMBUSTÍVEL: " + veiculo1.Combustivel;
-            document.querySelector(".cc").textContent = "MOTOR: " + veiculo1.cilindradas;
-            document.querySelector(".potencia").textContent = "POTÊNCIA: " + veiculo1.potencia + "cv";
-            document.querySelector(".cor").textContent = "COR: " + veiculo1.cor;
-            document.querySelector(".fipe").textContent = "CÓDIGO FIPE: " + veiculo1.fipe;
-            document.querySelector(".valor").textContent = "VALOR: " + veiculo1.valor;
-            document.querySelector(".ipva").textContent = "IPVA: " + veiculo1.ipva;
-            document.querySelector(".modal-dialog").style.display = "block"
-
-      
-        }
-
-    })
-    
- } 
+    await fetch('/cardetalhe/' + auxid)
+        .then((res) => res.json())
+        .then((res) => {
+            for (veiculo1 of res) {
+                document.querySelector(".modal-title").textContent = veiculo1.placa;
+                document.querySelector(".modal-title").style.textTransform = "uppercase";
+                document.querySelector(".modelo1").textContent = "VEÍCULO: " + veiculo1.modelo;
+                document.querySelector(".ano").textContent = "ANO/MODELO: " + veiculo1.AnoModelo;
+                document.querySelector(".combustivel").textContent = "COMBUSTÍVEL: " + veiculo1.Combustivel;
+                document.querySelector(".cc").textContent = "MOTOR: " + veiculo1.cilindradas;
+                document.querySelector(".potencia").textContent = "POTÊNCIA: " + veiculo1.potencia + "cv";
+                document.querySelector(".cor").textContent = "COR: " + veiculo1.cor;
+                document.querySelector(".fipe").textContent = "CÓDIGO FIPE: " + veiculo1.fipe;
+                document.querySelector(".valor").textContent = "VALOR: " + veiculo1.valor;
+                document.querySelector(".ipva").textContent = "IPVA: " + veiculo1.ipva;
+                document.querySelector(".modal-dialog").style.display = "block"
 
 
+            }
 
-async function apagando(){
+        })
+
+}
+
+
+
+async function apagando() {
     let idaux = this.getAttribute("id");
-   // console.log("Produto com id  deletado com sucesso!")
 
     let header = {
         method: 'DELETE',
@@ -105,8 +102,7 @@ async function apagando(){
     }
     let resposta = await fetch('/car/' + idaux, header);
 
-   // console.log("Produto com id " + idaux + " deletado com sucesso!")
-   document.location.reload(true);
+    document.location.reload(true);
 }
 
 
@@ -114,20 +110,20 @@ async function apagando(){
 
 carregarVeiculos();
 
-function carregarDadosMenu(){
+function carregarDadosMenu() {
     fetch('/user/')
-    .then((res) => res.json())
-    .then((res) => {
-        for(cliente of res){
-            preencherMenu( cliente.nome, cliente.foto);
-        }
+        .then((res) => res.json())
+        .then((res) => {
+            for (cliente of res) {
+                preencherMenu(cliente.nome, cliente.foto);
+            }
 
-    })
-    
+        })
+
 }
 
-function preencherMenu(nome, foto){
-    if(foto != ""){
+function preencherMenu(nome, foto) {
+    if (foto != "") {
         document.querySelector("#fotomenu").src = foto
     }
     document.querySelector("#nomemenu").textContent = nome;
@@ -138,6 +134,6 @@ carregarDadosMenu();
 
 document.querySelector("#logout").addEventListener("click", sair);
 
-function sair(){
+function sair() {
     location = "/logout";
 }

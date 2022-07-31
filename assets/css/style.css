@@ -1,54 +1,62 @@
-.login{
-max-width: 500px;
-margin-top: 150px;
+.login {
+    max-width: 500px;
+    margin-top: 150px;
 }
-.register{
-max-width: 500px;
-margin-top: 30px;
+
+.register {
+    max-width: 500px;
+    margin-top: 30px;
 }
-a{
-    color: var(--cor-verde)!important;
+
+a {
+    color: var(--cor-verde) !important;
 }
-.select{
+
+.select {
     background-color: var(--cor-verde);
-    color: white!important;
+    color: white !important;
     border-radius: 30px;
     border: 0px solid transparent
 }
-footer{
+
+footer {
     margin-top: 100px;
 }
-.footer{
+
+.footer {
     display: flex;
     justify-content: center;
 }
+
 .logo {
     text-align: center;
     margin-bottom: 30px;
 }
-.check{
+
+.check {
     float: right;
 }
-.form-check-input:checked{
+
+.form-check-input:checked {
     background-color: var(--cor-verde);
     border-color: var(--cor-verde);
 }
+
 .grid {
-	display: grid;
+    display: grid;
 }
 
 .grid-template-2 {
-	grid-template:
-    "sidenav content" 100%
-    / 20% 1fr 0px
+    grid-template:
+        "sidenav content"100% / 20% 1fr 0px
 }
 
 .content {
-	grid-area: content;
+    grid-area: content;
 }
 
 .sidenav {
-	grid-area: sidenav;
+    grid-area: sidenav;
     background-color: lightslategray;
     color: white;
     position: fixed;
@@ -56,154 +64,188 @@ footer{
 }
 
 .item {
-	text-align: center;
-	font-size: 1.5em;
+    text-align: center;
+    font-size: 1.5em;
     height: 100vh;
 }
-.sidenav > img {
+
+.sidenav>img {
     border-radius: 300px;
     width: 100px;
     margin-top: 30px;
     margin-bottom: 20px;
 }
-.botoes{
+
+.botoes {
     margin-top: 100px;
-    
+
 }
-.botoes > a > button{
+
+.botoes>a>button {
     width: 100%;
     color: var(--cor-verde);
     margin-top: -6px;
-    border-radius: 0px!important;
+    border-radius: 0px !important;
 }
-.botoes > a > button:hover{
+
+.botoes>a>button:hover {
     background-color: var(--cor-verde);
     color: white;
 }
-button > a{
-    text-decoration: none!important;
+
+button>a {
+    text-decoration: none !important;
     color: white;
 }
-button > a:hover {
-    color: white!important;
+
+button>a:hover {
+    color: white !important;
 }
-.loja{
+
+.loja {
     margin-top: 30px;
 }
-.logoinit{
-    width: 205px;
+
+.logoinit {
+    max-width: 100%;
     margin-top: 64px;
 }
-.info{
-width: 100%;
-background-color: ghostwhite;
-text-align: end;
-padding-right: 5px;
-height: 30px;
-font-size: 12pt;
+
+.info {
+    width: 100%;
+    background-color: ghostwhite;
+    text-align: end;
+    padding-right: 5px;
+    height: 30px;
+    font-size: 12pt;
 }
-.lista{
+
+.lista {
     margin-top: 30px;
     padding: 10px;
 }
-.card-body > .bi-truck{
+
+.card-body>.bi-truck {
     font-size: 70pt;
 }
-.bi-plus-circle{
+
+.bi-plus-circle {
     font-size: 100pt;
     text-align: center;
     color: gainsboro;
 }
-.cadastro{
+
+.cadastro {
     max-width: 340px;
     margin-top: 150px;
 }
-.more > div {
-font-size: 11pt;
+
+.more>div {
+    font-size: 11pt;
 }
-.more{
+
+.more {
     text-align: left;
     margin-top: 20px;
     line-height: 1.5;
 }
-.observacao{
+
+.observacao {
     background-color: gainsboro;
     padding: 5px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
-.data{
-    text-align: right!important;
+
+.data {
+    text-align: right !important;
 }
-.apagar{
+
+.apagar {
     text-align: right;
     font-size: 12pt;
     padding-right: 5px;
     cursor: pointer;
 }
-#formedit{
+
+#formedit {
     font-size: 12pt;
 }
-#formedit > div > label{
+
+#formedit>div>label {
     float: left;
     margin-bottom: 20px;
 }
-.fidelidadelogo{
-    
+
+.fidelidadelogo {
+
     width: 600px;
 }
-.premio{
+
+.premio {
     max-width: 700px;
     margin-top: 3vh;
 }
-.reto{
+
+.reto {
     text-align: -webkit-center;
 }
-.premios{
+
+.premios {
     margin-top: 30px;
     font-size: 50pt;
     color: grey;
 }
-.premios > i {
+
+.premios>i {
     padding: 5px;
 }
-.premios > i:nth-child(6){
-padding-left: 40px;
+
+.premios>i:nth-child(6) {
+    padding-left: 40px;
 }
-#gift{
+
+#gift {
     display: none;
 }
-.tamanho{
+
+.tamanho {
     font-size: 14pt;
 }
-.agender{
 
-        max-width: 690px;
-        margin-top: 30px;
+.agender {
+
+    max-width: 690px;
+    margin-top: 30px;
 
 }
-#logout{
+
+#logout {
     background-color: white;
     border-radius: 0px 30px 30px 0px;
     float: left;
     margin-top: 20px;
 }
-#logout:hover{
+
+#logout:hover {
     background-color: #009045;
 }
-.bi-search{
+
+.bi-search {
     font-size: 12pt;
     cursor: pointer;
 }
-.nave{
+
+.nave {
     padding: 10px 0px 0px 10px;
     justify-content: center;
 }
+
 .tag {
     position: absolute;
     top: 2%;
     left: 88%;
-    font-size: 7pt!important;
+    font-size: 7pt !important;
     text-align: center;
     color: orange;
 }
@@ -216,7 +258,7 @@ padding-left: 40px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: white!important;
+    color: white !important;
 }
 
 .btn-social:hover {
@@ -231,57 +273,81 @@ padding-left: 40px;
     width: 40px;
     font-size: 1.6em;
     text-align: center;
-    border-right: 1px solid rgba(0,0,0,0.2);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
 }
-.termo{
+
+.termo {
     margin-top: 30px;
     text-align-last: center;
 }
-.cupom{
+
+.cupom {
     text-align-last: center;
     font-size: 37pt;
     color: #009045;
     font-weight: bold;
 }
-.noticias > h2{
+
+.noticias>h2 {
     color: grey;
 }
+
 .lista {
     margin-top: -12px;
 }
-.cartao{
+
+.cartao {
     max-width: 400px;
 }
-.noticias{
+
+.noticias {
     margin-top: 55px;
 }
-.fotoperfil{
+
+.fotoperfil {
     margin-left: 80%;
     margin-top: -40%;
     width: 75px;
 }
-.fadmin{
+
+.fadmin {
     display: inline;
     width: auto;
 }
-.fadmin1{
+
+.fadmin1 {
     width: auto;
 }
-.fotoag{
+
+.fotoag {
     margin-left: 73%;
     margin-top: -88%;
     width: 100px;
 }
-.fotoag1{
+
+.fotoag1 {
     margin-left: 73%;
     margin-top: -130%;
     width: 95px;
 }
-.veiculo{
+
+.veiculo {
     text-align: -webkit-center;
 }
-.check{
+
+.check {
     position: absolute;
     margin-top: -31px;
     left: 80%;
+}
+
+@media screen and (max-width: 679px) {
+    .grid-template-2 {
+        grid-template:
+            " content"100% / 100% 1fr 0px
+    }
+
+    .sidenav {
+        display: none;
+    }
 }

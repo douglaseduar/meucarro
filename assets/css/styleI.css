@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+.card:hover {
+  cursor: pointer;
+  background-color: ghostwhite;
+}
+
+.jumbotron {
+  background: url(bannerpc.png) no-repeat center center;
+  height: 90vh;
+  background-size: cover;
+  clip-path: ellipse(150% 100% at 30% 0);
+  color: white;
+}
+
+.jumbotron .container-fluid {
+  margin-top: 30vh;
+}
+
+.bi-arrow-down-circle-fill::before {
+  animation: moving1 1.5s infinite;
+  animation-fill-mode: forwards;
+  font-size: 50pt;
+}
+
+@keyframes moving1 {
+  0% {
+    transform: translateY(0px);
+  }
+
+  70% {
+    transform: translateY(15px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+footer {
+  background-color: #009045;
+  color: white;
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+  font-family: 'Lobster', cursive;
+  font-size: 30pt;
+}
+
+footer h6 {
+  margin-top: -18px;
+}
+
+footer a:hover {
+  color: white;
+}
+
+.wpp {
+  background-image: url(dl.beatsnoop.com-high-2f3ab66bbe87984be5.jpg);
+  background-size: cover;
+
+}
+
+.titulo {
+  background-color: #0090454d;
+}
+
+@media screen and (max-width: 679px) {
+  .jumbotron {
+    height: 40vh;
+  }
+
+  .jumbotron .container-fluid {
+    margin-top: 0vh;
+  }
+}

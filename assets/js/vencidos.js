@@ -1,15 +1,15 @@
-function carregarVencidos(){
+function carregarVencidos() {
     fetch('/agenderadminvencido/')
-    .then((res) => res.json())
-    .then((res) => {
-        for(vencido of res){
-            criarLinha(vencido.id, vencido.dataultimo, vencido.nome, vencido.placa, vencido.modelo, vencido.fk_cliente, vencido.avisado);
-        }
-    })
-    
+        .then((res) => res.json())
+        .then((res) => {
+            for (vencido of res) {
+                criarLinha(vencido.id, vencido.dataultimo, vencido.nome, vencido.placa, vencido.modelo, vencido.fk_cliente, vencido.avisado);
+            }
+        })
+
 }
 
-function criarLinha(id, data, nome, placa, modelo, fkcliente, avisado){
+function criarLinha(id, data, nome, placa, modelo, fkcliente, avisado) {
     let auxdata = data.split("T");
     let auxdata1 = auxdata[0].split("-");
 
@@ -37,7 +37,7 @@ function criarLinha(id, data, nome, placa, modelo, fkcliente, avisado){
     botaotabela.addEventListener("click", alterar);
     botaotabela.style.cursor = "pointer";
 
-    if(avisado == 1){
+    if (avisado == 1) {
         botaotabela.innerHTML = "";
         linha.style.opacity = 0.5;
     }
@@ -46,8 +46,8 @@ function criarLinha(id, data, nome, placa, modelo, fkcliente, avisado){
     linha.appendChild(clientetabela);
     linha.appendChild(placatabela);
     linha.appendChild(modelotabela);
-    if(avisado == 0){
-    linha.appendChild(botaotabela);
+    if (avisado == 0) {
+        linha.appendChild(botaotabela);
     }
     document.querySelector(".lista1").appendChild(linha);
 }
@@ -55,31 +55,33 @@ function criarLinha(id, data, nome, placa, modelo, fkcliente, avisado){
 
 carregarVencidos();
 
-function getcliente(){
+function getcliente() {
     let auxcliente = this.getAttribute("id");
     var elemento = document.getElementById("lista");
     while (elemento.firstChild) {
-  elemento.removeChild(elemento.firstChild);}
-  fetch('/clientedetalhe/'+ auxcliente)
-    .then((res) => res.json())
-    .then((res) => {
-        for(cliente of res){
-            modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.fidelidade)
-      
-        }
+        elemento.removeChild(elemento.firstChild);
+    }
+    fetch('/clientedetalhe/' + auxcliente)
+        .then((res) => res.json())
+        .then((res) => {
+            for (cliente of res) {
+                modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.fidelidade)
 
-    })
+            }
+
+        })
 
 
 }
-function modalcliente(nome, endereco, telefone, email, foto, fidelidade){
-    
+
+function modalcliente(nome, endereco, telefone, email, foto, fidelidade) {
+
     var detalhe = document.createElement("div");
-    detalhe.innerHTML = "<b> NOME:</b> " + nome + 
-    "<br><b>ENDERECO:</b> " + endereco +
-    "<br><b>TELEFONE:</b> " + telefone +
-    "<br><b>EMAIL:</b> " + email +
-    "<br><b>FIDELIDADE:</b> " + fidelidade;
+    detalhe.innerHTML = "<b> NOME:</b> " + nome +
+        "<br><b>ENDERECO:</b> " + endereco +
+        "<br><b>TELEFONE:</b> " + telefone +
+        "<br><b>EMAIL:</b> " + email +
+        "<br><b>FIDELIDADE:</b> " + fidelidade;
 
     var imagem = document.createElement("img");
     imagem.src = foto;
@@ -88,15 +90,15 @@ function modalcliente(nome, endereco, telefone, email, foto, fidelidade){
     document.querySelector("#lista").appendChild(detalhe).appendChild(imagem);
 }
 
-async function alterar(){
+async function alterar() {
     let auxid = this.getAttribute("id");
-    
+
     let header = {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: JSON.stringify({           
+        body: JSON.stringify({
             idvencido: auxid
         })
     }

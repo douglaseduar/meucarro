@@ -4,40 +4,41 @@ let idmesmo = idaux[1];
 
 carregarDadosAgendamento(idmesmo);
 
-function carregarDadosAgendamento(idmesmo){
-    fetch('/editagenderadmin/'+ idmesmo)
-    .then((res) => res.json())
-    .then((res) => {
-        for(agendamento of res){
-            preencheformulario(agendamento.id, agendamento.placa, agendamento.oleo, agendamento.obeservacao);
-        }
+function carregarDadosAgendamento(idmesmo) {
+    fetch('/editagenderadmin/' + idmesmo)
+        .then((res) => res.json())
+        .then((res) => {
+            for (agendamento of res) {
+                preencheformulario(agendamento.id, agendamento.placa, agendamento.oleo, agendamento.obeservacao);
+            }
 
-    })
-    
+        })
+
 }
-function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor ){
+
+function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor) {
     let form = document.querySelector("#agendamento");
     document.querySelector("#agendamento").action = "/editagenderadmin/" + idmesmo;
-  
-    if(voleo != undefined){
+
+    if (voleo != undefined) {
         form.oleo.value = voleo;
     }
-    if(vobservacao != undefined){
+    if (vobservacao != undefined) {
         form.observacao.value = vobservacao;
     }
     var option = document.createElement("option");
-        option.setAttribute("id", vplaca)
-        option.textContent = vplaca
-        option.style.textTransform = "uppercase";
-        
-    
-        document.querySelector(".form-select").appendChild(option);
+    option.setAttribute("id", vplaca)
+    option.textContent = vplaca
+    option.style.textTransform = "uppercase";
+
+
+    document.querySelector(".form-select").appendChild(option);
 
 }
 
 document.querySelector("#dropagendar").addEventListener("click", ausente);
 
-async function ausente(event){ 
+async function ausente(event) {
     event.preventDefault();
     let header = {
         method: 'DELETE',
@@ -48,12 +49,12 @@ async function ausente(event){
     let resposta = await fetch('/editagenderadmin/' + idmesmo, header);
     location = "/admin";
 
-        
+
 }
 
 
 
-async function concluir(event){ 
+async function concluir(event) {
     event.preventDefault();
 
     var form = document.querySelector("#agendamento");
@@ -83,10 +84,8 @@ async function concluir(event){
         method: 'PUT',
         body: formao
     }
-console.log(formao)
 
 
     let resposta9 = await fetch('/editagenderadmin/' + idmesmo, header);
-  //  location = "/admin";
 
 }

@@ -1,15 +1,15 @@
-function carregarFidelidade(){
+function carregarFidelidade() {
     fetch('/fidelidades/')
-    .then((res) => res.json())
-    .then((res) => {
-        for(fidelidade of res){
-            criarLinha(fidelidade.nome, fidelidade.cupom, fidelidade.utilizado, fidelidade.fk_cliente, fidelidade.id);
-        }
-    })
-    
+        .then((res) => res.json())
+        .then((res) => {
+            for (fidelidade of res) {
+                criarLinha(fidelidade.nome, fidelidade.cupom, fidelidade.utilizado, fidelidade.fk_cliente, fidelidade.id);
+            }
+        })
+
 }
 
-function criarLinha(nome, cupom, utilizado, fkcliente, id){
+function criarLinha(nome, cupom, utilizado, fkcliente, id) {
 
     let linha = document.createElement("tr");
     let clientetabela = document.createElement("td");
@@ -28,7 +28,7 @@ function criarLinha(nome, cupom, utilizado, fkcliente, id){
     botaotabela.addEventListener("click", alterar);
     botaotabela.style.cursor = "pointer";
 
-    if(utilizado == 1){
+    if (utilizado == 1) {
         botaotabela.innerHTML = "";
         clientetabela.style.textDecoration = "line-through";
         cupomtabela.style.textDecoration = "line-through";
@@ -45,31 +45,33 @@ function criarLinha(nome, cupom, utilizado, fkcliente, id){
 
 carregarFidelidade();
 
-function getcliente(){
+function getcliente() {
     let auxcliente = this.getAttribute("id");
     var elemento = document.getElementById("lista");
     while (elemento.firstChild) {
-  elemento.removeChild(elemento.firstChild);}
-  fetch('/clientedetalhe/'+ auxcliente)
-    .then((res) => res.json())
-    .then((res) => {
-        for(cliente of res){
-            modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.fidelidade)
-      
-        }
+        elemento.removeChild(elemento.firstChild);
+    }
+    fetch('/clientedetalhe/' + auxcliente)
+        .then((res) => res.json())
+        .then((res) => {
+            for (cliente of res) {
+                modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.fidelidade)
 
-    })
+            }
+
+        })
 
 
 }
-function modalcliente(nome, endereco, telefone, email, foto, fidelidade){
-    
+
+function modalcliente(nome, endereco, telefone, email, foto, fidelidade) {
+
     var detalhe = document.createElement("div");
-    detalhe.innerHTML = "<b> NOME:</b> " + nome + 
-    "<br><b>ENDERECO:</b> " + endereco +
-    "<br><b>TELEFONE:</b> " + telefone +
-    "<br><b>EMAIL:</b> " + email +
-    "<br><b>FIDELIDADE:</b> " + fidelidade;
+    detalhe.innerHTML = "<b> NOME:</b> " + nome +
+        "<br><b>ENDERECO:</b> " + endereco +
+        "<br><b>TELEFONE:</b> " + telefone +
+        "<br><b>EMAIL:</b> " + email +
+        "<br><b>FIDELIDADE:</b> " + fidelidade;
 
     var imagem = document.createElement("img");
     imagem.src = foto;
@@ -78,15 +80,15 @@ function modalcliente(nome, endereco, telefone, email, foto, fidelidade){
     document.querySelector("#lista").appendChild(detalhe).appendChild(imagem);
 }
 
-async function alterar(){
+async function alterar() {
     let auxid = this.getAttribute("id");
-    
+
     let header = {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: JSON.stringify({           
+        body: JSON.stringify({
             idfidelidade: auxid
         })
     }

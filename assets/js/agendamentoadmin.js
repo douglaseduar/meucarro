@@ -1,9 +1,9 @@
-function criarLinha (id, observacao, oleo, data1, realizado, placao, cliente, fkcliente, aviso){
-    
-        let gdata = data1.split("T");
-        let hora = gdata[1];
-        let auxdata = gdata[0].split("-");
-        let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
+function criarLinha(id, observacao, oleo, data1, realizado, placao, cliente, fkcliente, aviso) {
+
+    let gdata = data1.split("T");
+    let hora = gdata[1];
+    let auxdata = gdata[0].split("-");
+    let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
 
     let linha = document.createElement("tr");
     let datatabela = document.createElement("td");
@@ -25,21 +25,21 @@ function criarLinha (id, observacao, oleo, data1, realizado, placao, cliente, fk
     placatabela.style.cursor = "pointer";
     placatabela.setAttribute("id", placao);
     placatabela.addEventListener("click", getacarrodetalhe);
-    servicostabela.innerHTML = oleo + " | " + observacao +  ' <i class="bi bi-search" style="font-size: 9pt"></i>';
+    servicostabela.innerHTML = oleo + " | " + observacao + ' <i class="bi bi-search" style="font-size: 9pt"></i>';
     servicostabela.style.cursor = "pointer";
     servicostabela.setAttribute("id", id);
     servicostabela.addEventListener("click", getagendamentodetalhe);
     servicostabela.setAttribute("data-bs-toggle", "modal");
     servicostabela.setAttribute("data-bs-target", "#staticBackdrop");
     var msg = document.createElement("i");
-    if(aviso == 0){
-    msg.className = "bi bi-envelope-plus-fill";
-    msg.style.color = "orange";
-    msg.style.fontSize = "14pt";
-    msg.style.cursor = "pointer";
-    msg.setAttribute("id", id);
-    msg.addEventListener("click", mandarmsg);
-}
+    if (aviso == 0) {
+        msg.className = "bi bi-envelope-plus-fill";
+        msg.style.color = "orange";
+        msg.style.fontSize = "14pt";
+        msg.style.cursor = "pointer";
+        msg.setAttribute("id", id);
+        msg.addEventListener("click", mandarmsg);
+    }
     var conf = document.createElement("i");
     conf.className = "bi bi-check-circle-fill";
     conf.style.color = "#009045";
@@ -48,7 +48,7 @@ function criarLinha (id, observacao, oleo, data1, realizado, placao, cliente, fk
     conf.style.marginLeft = "10px";
     conf.setAttribute("id", id);
     conf.addEventListener("click", editagendamento);
-    if(realizado == 1){
+    if (realizado == 1) {
         datatabela.style.color = "red";
         clientetabela.style.color = "red";
         placatabela.style.color = "red";
@@ -68,14 +68,14 @@ function criarLinha (id, observacao, oleo, data1, realizado, placao, cliente, fk
     document.querySelector(".lista1").appendChild(linha).appendChild(botaotabela);
 }
 
-async function mandarmsg(){
+async function mandarmsg() {
     let auxcliente = this.getAttribute("id");
     let header = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: JSON.stringify({           
+        body: JSON.stringify({
             idag: auxcliente
         })
     }
@@ -84,37 +84,38 @@ async function mandarmsg(){
 }
 
 
-function editagendamento(){
+function editagendamento() {
     auxida = this.getAttribute("id");
     document.location = "/editagendamentoadmin?id=" + auxida;
 }
 
-function getcliente(){
+function getcliente() {
     let auxcliente = this.getAttribute("id");
     var elemento = document.getElementById("lista");
     while (elemento.firstChild) {
-  elemento.removeChild(elemento.firstChild);}
-  fetch('/clientedetalhe/'+ auxcliente)
-    .then((res) => res.json())
-    .then((res) => {
-        for(cliente of res){
-            modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.fidelidade)
-      
-        }
+        elemento.removeChild(elemento.firstChild);
+    }
+    fetch('/clientedetalhe/' + auxcliente)
+        .then((res) => res.json())
+        .then((res) => {
+            for (cliente of res) {
+                modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.fidelidade)
 
-    })
+            }
+
+        })
 
 
 }
 
-function modalcliente(nome, endereco, telefone, email, foto, fidelidade){
-    
+function modalcliente(nome, endereco, telefone, email, foto, fidelidade) {
+
     var detalhe = document.createElement("div");
-    detalhe.innerHTML = "<b> NOME:</b> " + nome + 
-    "<br><b>ENDERECO:</b> " + endereco +
-    "<br><b>TELEFONE:</b> " + telefone +
-    "<br><b>EMAIL:</b> " + email +
-    "<br><b>FIDELIDADE:</b> " + fidelidade;
+    detalhe.innerHTML = "<b> NOME:</b> " + nome +
+        "<br><b>ENDERECO:</b> " + endereco +
+        "<br><b>TELEFONE:</b> " + telefone +
+        "<br><b>EMAIL:</b> " + email +
+        "<br><b>FIDELIDADE:</b> " + fidelidade;
 
     var imagem = document.createElement("img");
     imagem.src = foto;
@@ -123,62 +124,65 @@ function modalcliente(nome, endereco, telefone, email, foto, fidelidade){
     document.querySelector("#lista").appendChild(detalhe).appendChild(imagem);
 }
 
-function getacarrodetalhe(){
+function getacarrodetalhe() {
     let auxplacao = this.getAttribute("id");
     var elemento = document.getElementById("lista");
     while (elemento.firstChild) {
-  elemento.removeChild(elemento.firstChild);}
-  fetch('/cardetalhe/'+ auxplacao)
-    .then((res) => res.json())
-    .then((res) => {
-        for(veiculo2 of res){
-            modalcarro(veiculo2.placa, veiculo2.marca, veiculo2.modelo, veiculo2.AnoModelo, veiculo2.Combustivel, veiculo2.cilindradas, veiculo2.potencia, veiculo2.cor, veiculo2.fipe, veiculo2.ipva, veiculo2.valor, veiculo2.logo)
-      
-        }
+        elemento.removeChild(elemento.firstChild);
+    }
+    fetch('/cardetalhe/' + auxplacao)
+        .then((res) => res.json())
+        .then((res) => {
+            for (veiculo2 of res) {
+                modalcarro(veiculo2.placa, veiculo2.marca, veiculo2.modelo, veiculo2.AnoModelo, veiculo2.Combustivel, veiculo2.cilindradas, veiculo2.potencia, veiculo2.cor, veiculo2.fipe, veiculo2.ipva, veiculo2.valor, veiculo2.logo)
 
-    })
+            }
+
+        })
 }
-function modalcarro(placa, marca, modelo, ano, comb, cc, potencia, cor, fipe, ipva, valor, logo){
+
+function modalcarro(placa, marca, modelo, ano, comb, cc, potencia, cor, fipe, ipva, valor, logo) {
 
     var detalhe = document.createElement("div");
-    detalhe.innerHTML = "<b> PLACA:</b> " + placa + 
-    "<br><b>MODELO:</b> " + marca + " - " + modelo +
-    "<br><b>ANO:</b> " + ano +
-    "<br><b>COMBUSTÍVEL:</b> " + comb +
-    "<br><b>CILINDRADAS:</b> " + cc +
-    "<br><b>POTÊNCIA:</b> " + potencia +
-    "<br><b>COR:</b> " + cor +
-    "<br><b>FIPE:</b> " + fipe +
-    "<br><b>IPVA:</b> " + ipva +
-    "<br><b>VALOR:</b> " + valor;
+    detalhe.innerHTML = "<b> PLACA:</b> " + placa +
+        "<br><b>MODELO:</b> " + marca + " - " + modelo +
+        "<br><b>ANO:</b> " + ano +
+        "<br><b>COMBUSTÍVEL:</b> " + comb +
+        "<br><b>CILINDRADAS:</b> " + cc +
+        "<br><b>POTÊNCIA:</b> " + potencia +
+        "<br><b>COR:</b> " + cor +
+        "<br><b>FIPE:</b> " + fipe +
+        "<br><b>IPVA:</b> " + ipva +
+        "<br><b>VALOR:</b> " + valor;
     var creditos = document.createElement("div");
     creditos.innerHTML = "<br><br><i>Valores fornecidos por https://www.tabelafipebrasil.com/";
     creditos.style.textTransform = "none";
     detalhe.style.textTransform = "uppercase";
     let imagemtabela = document.createElement("img");
 
-     imagemtabela.className = "fotoag";
-     imagemtabela.src = logo;
-    
+    imagemtabela.className = "fotoag";
+    imagemtabela.src = logo;
+
 
     document.querySelector("#lista").appendChild(detalhe).appendChild(creditos).appendChild(imagemtabela);
 }
 
-function getagendamentodetalhe(){
+function getagendamentodetalhe() {
     var elemento = document.getElementById("lista");
     while (elemento.firstChild) {
-  elemento.removeChild(elemento.firstChild);}
+        elemento.removeChild(elemento.firstChild);
+    }
     let auxid = this.getAttribute("id");
     fetch('/agendamentodetalhe/' + auxid)
-    .then((res) => res.json())
-    .then((res) => {
-        for(veiculo1 of res){
-            modalagendamento(veiculo1.id, veiculo1.fk_placa, veiculo1.obeservacao, veiculo1.km, veiculo1.oleo, veiculo1.filtro_oleo, veiculo1.filtro_ar, veiculo1.filtro_arcondicionado, veiculo1.filtro_gasolina, veiculo1.filtro_hidraulico, veiculo1.filtro_racor, veiculo1.data, veiculo1.realizado, veiculo1.placa, veiculo1.modelo, veiculo1.foto);
-        }
-    })
+        .then((res) => res.json())
+        .then((res) => {
+            for (veiculo1 of res) {
+                modalagendamento(veiculo1.id, veiculo1.fk_placa, veiculo1.obeservacao, veiculo1.km, veiculo1.oleo, veiculo1.filtro_oleo, veiculo1.filtro_ar, veiculo1.filtro_arcondicionado, veiculo1.filtro_gasolina, veiculo1.filtro_hidraulico, veiculo1.filtro_racor, veiculo1.data, veiculo1.realizado, veiculo1.placa, veiculo1.modelo, veiculo1.foto);
+            }
+        })
 }
 
-function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data1, realizado, vplaca, vmodelo, foto){
+function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data1, realizado, vplaca, vmodelo, foto) {
 
 
     var placa = document.createElement("div");
@@ -213,16 +217,16 @@ function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtr
     observando.textContent = observacao;
     let linkimagem = document.createElement("a");
     let imagemtabela = document.createElement("img");
-    if(foto == ""){
+    if (foto == "") {
         imagemtabela.className = "fotoag";
         imagemtabela.src = "sem-foto.jpg";
-    }else{
-    imagemtabela.className = "fotoag";
-    imagemtabela.src = "agend/" + foto;
-    linkimagem.href = "agend/" + foto;
-    linkimagem.target = "_blank";
+    } else {
+        imagemtabela.className = "fotoag";
+        imagemtabela.src = "agend/" + foto;
+        linkimagem.href = "agend/" + foto;
+        linkimagem.target = "_blank";
     }
-    placa1.appendChild(modelo); 
+    placa1.appendChild(modelo);
     more.appendChild(oleoando);
     more.appendChild(kmando);
     more.appendChild(filtrooleo);
@@ -238,50 +242,51 @@ function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtr
 }
 
 
-function carregarAgendamentoTodos(){
+function carregarAgendamentoTodos() {
     var elemento = document.querySelector(".lista1");
     while (elemento.firstChild) {
-  elemento.removeChild(elemento.firstChild);
+        elemento.removeChild(elemento.firstChild);
     }
     fetch('/agenderadmin/')
-    .then((res) => res.json())
-    .then((res) => {
-        for(veiculo of res){
-            criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente, veiculo.aviso);
-        }
-    })
-    
+        .then((res) => res.json())
+        .then((res) => {
+            for (veiculo of res) {
+                criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente, veiculo.aviso);
+            }
+        })
+
 }
 
 
 
-function carregarAgendamentoHoje(){
+function carregarAgendamentoHoje() {
     var elemento = document.querySelector(".lista1");
     while (elemento.firstChild) {
-  elemento.removeChild(elemento.firstChild);
+        elemento.removeChild(elemento.firstChild);
     }
     fetch('/agenderadminhoje/')
-    .then((res) => res.json())
-    .then((res) => {
-        for(veiculo of res){
-            criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente);
-        }
-    })
-    
+        .then((res) => res.json())
+        .then((res) => {
+            for (veiculo of res) {
+                criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente);
+            }
+        })
+
 }
-function carregarAgendamentoAmanha(){
+
+function carregarAgendamentoAmanha() {
     var elemento = document.querySelector(".lista1");
     while (elemento.firstChild) {
-  elemento.removeChild(elemento.firstChild);
+        elemento.removeChild(elemento.firstChild);
     }
     fetch('/agenderadminamanha/')
-    .then((res) => res.json())
-    .then((res) => {
-        for(veiculo of res){
-            criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente);
-        }
-    })
-    
+        .then((res) => res.json())
+        .then((res) => {
+            for (veiculo of res) {
+                criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente);
+            }
+        })
+
 }
 
 
@@ -290,26 +295,27 @@ carregarAgendamentoTodos();
 
 document.querySelector("#pesquisa").addEventListener("click", pesquisarag);
 
-function pesquisarag(event){
+function pesquisarag(event) {
     event.preventDefault();
 
     var elemento = document.querySelector(".lista1");
     while (elemento.firstChild) {
-  elemento.removeChild(elemento.firstChild);
+        elemento.removeChild(elemento.firstChild);
     }
     var form = document.querySelector("#pesq");
     let auxpesquisa = form.placa.value;
-    if(auxpesquisa == ""){
+    if (auxpesquisa == "") {
         carregarAgendamentoTodos();
-    }else{
-    fetch('/agenderespadmin/' + auxpesquisa)
-    .then((res) => res.json())
-    .then((res) => {
-        for(agender of res){
-            criarLinha(agender.id, agender.obeservacao, agender.oleo, agender.data, agender.realizado, agender.placa, agender.nome, agender.fk_cliente);
-        }
+    } else {
+        fetch('/agenderespadmin/' + auxpesquisa)
+            .then((res) => res.json())
+            .then((res) => {
+                for (agender of res) {
+                    criarLinha(agender.id, agender.obeservacao, agender.oleo, agender.data, agender.realizado, agender.placa, agender.nome, agender.fk_cliente);
+                }
 
-    })}
+            })
+    }
 }
 
 document.querySelector("#todos").addEventListener("click", carregarAgendamentoTodos);
