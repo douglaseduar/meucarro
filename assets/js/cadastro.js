@@ -14,8 +14,10 @@ async function cadastrando(event) {
         aux = 2;
     } else if (document.querySelector("#inlineRadio3").checked) {
         aux = 3;
-    } else {
-        aux = 4
+    } else if (document.querySelector("#inlineRadio4").checked){
+        aux = 4;
+    }else{
+        aux = 5;
     };
 
     let header = {
@@ -60,3 +62,15 @@ document.querySelector("#logout").addEventListener("click", sair)
 function sair() {
     location = "/logout";
 }
+document.querySelector(".menu").addEventListener("click", mn);
+
+function mn(){
+    if(document.querySelector(".sidenav").style.display == "block"){
+        document.querySelector(".sidenav").style.display = "none";
+        document.querySelector(".sidenav").style.maxWidth = "20vw";
+        document.querySelector(".content").style.display = "block";   
+    }else{
+    document.querySelector(".sidenav").style.display = "block";
+    document.querySelector(".sidenav").style.maxWidth = "100vw";
+    document.querySelector(".content").style.display = "none";
+}}

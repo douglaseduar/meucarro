@@ -117,3 +117,15 @@ async function enviaragendamento(event) {
     location = "/historico";
 
 }
+document.querySelector(".menu").addEventListener("click", mn);
+
+function mn(){
+    if(document.querySelector(".sidenav").style.display == "block"){
+        document.querySelector(".sidenav").style.display = "none";
+        document.querySelector(".sidenav").style.maxWidth = "20vw";
+        document.querySelector(".content").style.display = "block";   
+    }else{
+    document.querySelector(".sidenav").style.display = "block";
+    document.querySelector(".sidenav").style.maxWidth = "100vw";
+    document.querySelector(".content").style.display = "none";
+}}

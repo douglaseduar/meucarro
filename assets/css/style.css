@@ -341,6 +341,7 @@ button>a:hover {
     left: 80%;
 }
 
+
 @media screen and (max-width: 679px) {
     .grid-template-2 {
         grid-template:
@@ -350,4 +351,22 @@ button>a:hover {
     .sidenav {
         display: none;
     }
+    marquee{
+        margin-left: 37px;
+    }
+    .menu{
+        display: block!important;
+    }
+}
+.menu{
+    color: white;
+    background-color: #009045;
+    border-radius: 9px;
+    padding: 0px 5px 0px 5px;
+    font-size: 20pt;
+    max-width: min-content;
+    position: absolute;
+    display: none;
+    cursor: pointer;
+    z-index: 1;
 }

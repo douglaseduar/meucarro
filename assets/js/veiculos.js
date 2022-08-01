@@ -21,11 +21,15 @@ function criarLinha(vid, vplaca, vmodelo, vtipo) {
     card2.className = "card-body";
     var fotoc = document.createElement("i")
     if (vtipo == 1) {
-        fotoc.className = "bi bi-speedometer2";
+        fotoc.className = "bi bi-car-front-fill";
     } else if (vtipo == 2) {
         fotoc.className = "bi bi-truck";
-    } else {
+    } else if (vtipo == 3){
         fotoc.className = "bi bi-cone-striped";
+    } else if (vtipo == 4){
+        fotoc.className = "bi bi-speedometer";
+    }else{
+        fotoc.className = "bi bi-truck-front-fill";
     }
     fotoc.style.fontSize = "70pt";
     var placa = document.createElement("div");
@@ -137,3 +141,16 @@ document.querySelector("#logout").addEventListener("click", sair);
 function sair() {
     location = "/logout";
 }
+
+document.querySelector(".menu").addEventListener("click", mn);
+
+function mn(){
+    if(document.querySelector(".sidenav").style.display == "block"){
+        document.querySelector(".sidenav").style.display = "none";
+        document.querySelector(".sidenav").style.maxWidth = "20vw";
+        document.querySelector(".content").style.display = "block";   
+    }else{
+    document.querySelector(".sidenav").style.display = "block";
+    document.querySelector(".sidenav").style.maxWidth = "100vw";
+    document.querySelector(".content").style.display = "none";
+}}
