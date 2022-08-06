@@ -6,7 +6,7 @@ database.con = await mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'meucarro',
+  database: 'meuca',
   port: '3306'
 })
 
