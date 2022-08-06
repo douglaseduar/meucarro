@@ -12,17 +12,18 @@
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
   </script>
   <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="styleI.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
   <script src="estatistica.js" defer></script>
   <link rel="shortcut icon" href="carro.png" type="image/x-icon">
 </head>
 
 <body style="color:grey">
-  <nav class="navbar navbar-expand-lg bg-light">
+  <nav class="navbar navbar-expand bg-light">
     <div class="container-fluid">
 
-      <div class="collapse navbar-collapse" id="navbarScroll">
-        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+      <div class="collapse navbar-collapse nave" id="navbarScroll">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll nave">
           <h4 class="navbar-brand"><img src="carro.png" width="25px" alt="" srcset=""> MEU CARRO</h4>
           <li class="nav-item dropdown">
             <a class="nav-link " href="/admin">
@@ -46,7 +47,7 @@
   <div class="conteudo d-flex flex-wrap justify-content-center">
     <div class="cartao p-4">
       <h1 class="text-center">AGENDAMENTOS</h1>
-      <div class="card d-flex flex-row p-4">
+      <div class="card d-flex flex-md-row p-4">
         <div class="card-body text-center">
           <h4 style="color: #009045"> CONCLUÍDOS</h4>
           <h1 style="font-size: 40pt;" id="ag"><i class="bi bi-caret-up-fill"></i>15</h1>
@@ -65,14 +66,14 @@
           <h5 style="margin-top: -10px;" id="cl"><i class="bi bi-caret-up-fill"></i></h5>
         </div>
         <form action="" id="form">
-          <div class="date" style="position: absolute;top: 77%;left: 20%;max-width: 179px;margin-top: 25px;">
+          <div class="date fdata" style="position: absolute;max-width: 179px;margin-top: 25px;">
             <input type="date" class="form-control date" name="vdata" id="vdata" required>
           </div>
-          <div class="date" style="position: absolute;top: 77%;left: 42%;max-width: 179px;margin-top: 25px;">
+          <div class="date fdata1" style="position: absolute;max-width: 179px;margin-top: 25px;">
             <input type="date" class="form-control date" name="vdata1" id="vdata1" required>
           </div>
-          <button class="btn btn-success"
-            style="position: absolute;top: 77%;left: 70%;max-width: 179px;margin-top: 25px;"
+          <button class="btn btn-success fdata2"
+            style="position: absolute;max-width: 179px;margin-top: 25px;"
             id="selecionar">Selecionar</button>
       </div>
       </form>
@@ -90,7 +91,7 @@
     <div class="conteudo d-flex flex-wrap justify-content-center">
       <div class="cartao p-4">
         <h1 class="text-center">CARROS</h1>
-        <div class="card d-flex flex-row p-4">
+        <div class="card d-flex flex-md-row p-4">
           <div class="card-body text-center">
             <h4 style="color: #009045">CADASTRADOS</h4>
             <h1 style="font-size: 40pt;" id="car"><i class="bi bi-caret-up-fill"></i></h1>
@@ -108,7 +109,7 @@
               <h1 style="font-size: 15pt;" id="tiposss"><i class="bi bi-caret-up-fill"></i></h1>
           </div>
           <div class="card-body text-center align-self-center">
-            <h6 style="color: cornflowerblue">TRATOR</h4>
+            <h6 style="color: cornflowerblue">OUTROS</h4>
               <h1 style="font-size: 15pt;" id="tipossss"><i class="bi bi-caret-up-fill"></i></h1>
           </div>
         </div>

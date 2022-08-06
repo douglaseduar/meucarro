@@ -66,6 +66,18 @@ footer a:hover {
 .titulo {
   background-color: #0090454d;
 }
+.fdata{
+  top: 77%;
+  left: 20%;
+}
+.fdata1{
+  top: 77%;
+  left: 42%;
+}
+.fdata2{
+  top: 77%;
+  left: 70%;
+}
 
 @media screen and (max-width: 679px) {
   .jumbotron {
@@ -75,4 +87,22 @@ footer a:hover {
   .jumbotron .container-fluid {
     margin-top: 0vh;
   }
+  .fdata{
+    top: 90%;
+    left: -10%;
 }
+.fdata1{
+    top: 90%;
+    left: 50%;
+}
+.fdata2{
+    top: 96%;
+    left: 32%;
+}
+.nave{
+  flex-direction: column!important;
+  align-items: center!important;
+  width: -webkit-fill-available;
+}
+}
+
