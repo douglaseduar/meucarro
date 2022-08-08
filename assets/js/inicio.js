@@ -5,7 +5,7 @@ function carregarDadosMenu() {
         .then((res) => res.json())
         .then((res) => {
             for (cliente of res) {
-                preencherMenu(cliente.nome, cliente.foto, cliente.fidelidade);
+                preencherMenu(cliente.nome, cliente.foto, cliente.qtd_fidelidade);
             }
 
         })

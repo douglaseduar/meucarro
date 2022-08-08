@@ -3,7 +3,7 @@ function carregarAgendamento() {
         .then((res) => res.json())
         .then((res) => {
             for (veiculo of res) {
-                criarLinha(veiculo.id, veiculo.fk_placa, veiculo.obeservacao, veiculo.km, veiculo.oleo, veiculo.filtro_oleo, veiculo.filtro_ar, veiculo.filtro_arcondicionado, veiculo.filtro_gasolina, veiculo.filtro_hidraulico, veiculo.filtro_racor, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.modelo, veiculo.foto);
+                criarLinha(veiculo.id_agendamento, veiculo.FK_VEICULO_id_placa, veiculo.observacao, veiculo.km, veiculo.oleo, veiculo.filtro_oleo, veiculo.filtro_ar, veiculo.filtro_arcondicionado, veiculo.filtro_combustivel, veiculo.outro_filtro, veiculo.filtro_racor, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.modelo, veiculo.foto);
             }
         })
 

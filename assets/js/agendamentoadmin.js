@@ -99,7 +99,7 @@ function getcliente() {
         .then((res) => res.json())
         .then((res) => {
             for (cliente of res) {
-                modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.fidelidade)
+                modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.qtd_fidelidade)
 
             }
 
@@ -177,12 +177,12 @@ function getagendamentodetalhe() {
         .then((res) => res.json())
         .then((res) => {
             for (veiculo1 of res) {
-                modalagendamento(veiculo1.id, veiculo1.fk_placa, veiculo1.obeservacao, veiculo1.km, veiculo1.oleo, veiculo1.filtro_oleo, veiculo1.filtro_ar, veiculo1.filtro_arcondicionado, veiculo1.filtro_gasolina, veiculo1.filtro_hidraulico, veiculo1.filtro_racor, veiculo1.data, veiculo1.realizado, veiculo1.placa, veiculo1.modelo, veiculo1.foto);
+                modalagendamento(veiculo1.id_agendamento, veiculo1.FK_VEICULO_id_placa, veiculo1.observacao, veiculo1.km, veiculo1.oleo, veiculo1.filtro_oleo, veiculo1.filtro_ar, veiculo1.filtro_arcondicionado, veiculo1.filtro_combustivel, veiculo1.outro_filtro, veiculo1.filtro_racor, veiculo1.data, veiculo1.realizado, veiculo1.placa, veiculo1.modelo, veiculo1.foto);
             }
         })
 }
 
-function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, data1, realizado, vplaca, vmodelo, foto) {
+function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_combustivel, outro_filtro, filtro_racor, data1, realizado, vplaca, vmodelo, foto) {
 
 
     var placa = document.createElement("div");
@@ -203,7 +203,7 @@ function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtr
     var filtrooleo = document.createElement("div");
     filtrooleo.innerHTML = "<b>FILTRO DE ÓLEO: </b>" + filtro_oleo;
     var filtrocomb = document.createElement("div");
-    filtrocomb.innerHTML = "<b>FILTRO DE COMBUSTÍVEL: </b>" + filtro_gasolina;
+    filtrocomb.innerHTML = "<b>FILTRO DE COMBUSTÍVEL: </b>" + filtro_combustivel;
     var filtroar = document.createElement("div");
     filtroar.innerHTML = "<b>FILTRO DE AR: </b>" + filtro_ar;
     var filtroarc = document.createElement("div");
@@ -211,13 +211,13 @@ function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtr
     var filtroracor = document.createElement("div");
     filtroracor.innerHTML = "<b>FILTRO SEPARADOR: </b>" + filtro_racor;
     var outrofiltro = document.createElement("div");
-    outrofiltro.innerHTML = "<b>OUTRO FILTRO: </b>" + filtro_hidraulico;
+    outrofiltro.innerHTML = "<b>OUTRO FILTRO: </b>" + outro_filtro;
     var observando = document.createElement("div");
     observando.className = "observacao";
     observando.textContent = observacao;
     let linkimagem = document.createElement("a");
     let imagemtabela = document.createElement("img");
-    if (foto == "") {
+    if (foto == " ") {
         imagemtabela.className = "fotoag";
         imagemtabela.src = "sem-foto.jpg";
     } else {
@@ -251,7 +251,7 @@ function carregarAgendamentoTodos() {
         .then((res) => res.json())
         .then((res) => {
             for (veiculo of res) {
-                criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente, veiculo.aviso);
+                criarLinha(veiculo.id_agendamento, veiculo.observacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.FK_CLIENTE_id_cliente, veiculo.aviso);
             }
         })
 
@@ -268,7 +268,7 @@ function carregarAgendamentoHoje() {
         .then((res) => res.json())
         .then((res) => {
             for (veiculo of res) {
-                criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente);
+                criarLinha(veiculo.id_agendamento, veiculo.observacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.FK_CLIENTE_id_cliente);
             }
         })
 
@@ -283,7 +283,7 @@ function carregarAgendamentoAmanha() {
         .then((res) => res.json())
         .then((res) => {
             for (veiculo of res) {
-                criarLinha(veiculo.id, veiculo.obeservacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.fk_cliente);
+                criarLinha(veiculo.id_agendamento, veiculo.observacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.FK_CLIENTE_id_cliente);
             }
         })
 

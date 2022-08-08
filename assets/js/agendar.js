@@ -22,12 +22,12 @@ function preencherMenu(nome, foto) {
 
 carregarDadosMenu();
 
-function carregarVeiculos(id) {
+function carregarVeiculos() {
     fetch('/car/')
         .then((res) => res.json())
         .then((res) => {
             for (veiculo of res) {
-                criarLinha(veiculo.placa, veiculo.id);
+                criarLinha(veiculo.placa, veiculo.id_placa);
             }
         })
 

@@ -6,7 +6,7 @@ function carregarVeiculos() {
         .then((res) => res.json())
         .then((res) => {
             for (veiculo of res) {
-                criarLinha(veiculo.id, veiculo.placa, veiculo.modelo, veiculo.tipo);
+                criarLinha(veiculo.id_placa, veiculo.placa, veiculo.modelo, veiculo.FK_TIPOS_VEICULO_id_tipo);
             }
         })
 

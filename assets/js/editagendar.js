@@ -33,7 +33,7 @@ function carregarDadosAgendamento(idmesmo) {
         .then((res) => res.json())
         .then((res) => {
             for (agendamento of res) {
-                preencheformulario(agendamento.id, agendamento.placa, agendamento.oleo, agendamento.obeservacao, agendamento.data, agendamento.filtro_oleo, agendamento.filtro_ar, agendamento.filtro_arcondicionado, agendamento.filtro_gasolina, agendamento.filtro_hidraulico, agendamento.filtro_racor);
+                preencheformulario(agendamento.id_agendamento, agendamento.placa, agendamento.oleo, agendamento.observacao, agendamento.data, agendamento.filtro_oleo, agendamento.filtro_ar, agendamento.filtro_arcondicionado, agendamento.filtro_gasolina, agendamento.filtro_hidraulico, agendamento.filtro_racor);
             }
 
         })

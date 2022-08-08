@@ -20,15 +20,15 @@ var __dirname = path.dirname(__filename) + "/views";
 
 app.listen(8080, () => console.log('Servidor rodando!'));
 
-//  venom
-//   .create({
-//     session: 'session-name',
-//     multidevice: true 
-//   })
-//   .then((client) => start(client))
-//   .catch((erro) => {
-//     console.log(erro);
-//   });
+ venom
+  .create({
+    session: 'session-name',
+    multidevice: true 
+  })
+  .then((client) => start(client))
+  .catch((erro) => {
+    console.log(erro);
+  });
 
 app.use((req, res, next) => {
   console.log(req.url);
@@ -99,7 +99,7 @@ app.get('/verificacao', isLoggedIn, async (req, res) => {
   if (resposta == ![]) {
     let respostaemail = await database.getLogin(email);
     if (respostaemail == ![]) {
-      let insert = await database.insertUser(nome, "", 0, idfacebook, email, "", foto, 0);
+      let insert = await database.insertUser(idfacebook, nome, "", 0, email, "", foto, 0);
       if (insert.numero = !0) {
         res.redirect('/configuracao');
       } else {
@@ -112,7 +112,7 @@ app.get('/verificacao', isLoggedIn, async (req, res) => {
       res.redirect('/configuracao');
     }
   } else {
-    res.redirect('/admin');
+    res.redirect('/inicio');
   }
 });
 
@@ -169,7 +169,7 @@ app.get('/editagendamento', isLoggedIn, (req, res) => {
 
 app.get('/admin', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/admin.html');
   } else {
@@ -180,7 +180,7 @@ app.get('/admin', isLoggedIn, async (req, res) => {
 })
 app.get('/adminagendar', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/admin-agendar.html');
   } else {
@@ -191,7 +191,7 @@ app.get('/adminagendar', isLoggedIn, async (req, res) => {
 })
 app.get('/vencidos', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/admin-vencidos.html');
   } else {
@@ -202,7 +202,7 @@ app.get('/vencidos', isLoggedIn, async (req, res) => {
 })
 app.get('/estatistica', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/admin-estatistica.html');
   } else {
@@ -213,7 +213,7 @@ app.get('/estatistica', isLoggedIn, async (req, res) => {
 })
 app.get('/fidelidade', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/admin-fidelidade.html');
   } else {
@@ -224,7 +224,7 @@ app.get('/fidelidade', isLoggedIn, async (req, res) => {
 })
 app.get('/editagendamentoadmin', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.header('Content-Type', 'text/html');
     res.sendFile(__dirname + '/admin-editar.html');
   } else {
@@ -252,7 +252,6 @@ app.post('/car', isLoggedIn, async (req, res) => {
   let aux = respostarobo.marca + " " + respostarobo.modelo;
   res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo));
 });
-
 app.get('/agender/', isLoggedIn, async (req, res) => {
   res.send(await database.getAgendamento(req.user.id));
 })
@@ -268,13 +267,13 @@ app.get('/editagender/:id', isLoggedIn, async (req, res) => {
 
 app.get('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   res.send(await database.geteditAgendamentoadmin(req.params.id));
 
 }})
 app.get('/estatisticac', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticac = await database.getestatisticac();
   res.send([{
     quantidade: respostaestatisticac.length
@@ -283,7 +282,7 @@ app.get('/estatisticac', isLoggedIn, async (req, res) => {
 })
 app.get('/estatisticatipos', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticatipos = await database.getestatisticatipos();
   res.send([{
     quantidade: respostaestatisticatipos.length
@@ -292,7 +291,7 @@ app.get('/estatisticatipos', isLoggedIn, async (req, res) => {
 }})
 app.get('/estatisticatiposs', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticatiposs = await database.getestatisticatiposs();
   res.send([{
     quantidade: respostaestatisticatiposs.length
@@ -301,7 +300,7 @@ app.get('/estatisticatiposs', isLoggedIn, async (req, res) => {
 }})
 app.get('/estatisticatiposss', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticatiposss = await database.getestatisticatiposss();
   res.send([{
     quantidade: respostaestatisticatiposss.length
@@ -310,7 +309,7 @@ app.get('/estatisticatiposss', isLoggedIn, async (req, res) => {
 }})
 app.get('/estatisticatipossss', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticatipossss = await database.getestatisticatipossss();
   res.send([{
     quantidade: respostaestatisticatipossss.length
@@ -319,7 +318,7 @@ app.get('/estatisticatipossss', isLoggedIn, async (req, res) => {
 }})
 app.get('/estatisticaclientes', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let estatisticaclientes = await database.getestatisticaclientes();
   if (estatisticaclientes == ![]) {
     res.send([{
@@ -332,7 +331,7 @@ app.get('/estatisticaclientes', isLoggedIn, async (req, res) => {
 }})
 app.get('/estatisticacar', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticacar = await database.getestatisticacar();
   res.send([{
     quantidade: respostaestatisticacar.length
@@ -341,7 +340,7 @@ app.get('/estatisticacar', isLoggedIn, async (req, res) => {
 }})
 app.get('/estatisticafides', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticafides = await database.getestatisticafides();
   res.send([{
     quantidade: respostaestatisticafides.length
@@ -350,7 +349,7 @@ app.get('/estatisticafides', isLoggedIn, async (req, res) => {
 }})
 app.get('/estatisticafide', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticafide = await database.getestatisticafide();
   res.send([{
     quantidade: respostaestatisticafide.length
@@ -359,7 +358,7 @@ app.get('/estatisticafide', isLoggedIn, async (req, res) => {
 }})
 app.get('/estatisticaag', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticaag = await database.getestatisticaag();
   res.send([{
     quantidade: respostaestatisticaag.length
@@ -368,7 +367,7 @@ app.get('/estatisticaag', isLoggedIn, async (req, res) => {
 }})
 app.get('/estatisticaags', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticaags = await database.getestatisticaags();
   res.send([{
     quantidade: respostaestatisticaags.length
@@ -377,7 +376,7 @@ app.get('/estatisticaags', isLoggedIn, async (req, res) => {
 }})
 app.get('/estatisticaagsc', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticaagsc = await database.getestatisticaagsc();
   res.send([{
     quantidade: respostaestatisticaagsc.length
@@ -389,7 +388,7 @@ app.post('/estatisticaagp', isLoggedIn, async (req, res) => {
     vdata1
   } = req.body;
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticaagp = await database.getestatisticaagp(vdata, vdata1);
   res.send([{
     quantidade: respostaestatisticaagp.length
@@ -402,7 +401,7 @@ app.post('/estatisticaagsp', isLoggedIn, async (req, res) => {
     vdata1
   } = req.body;
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticaagsp = await database.getestatisticaagsp(vdata, vdata1);
   res.send([{
     quantidade: respostaestatisticaagsp.length
@@ -415,7 +414,7 @@ app.post('/estatisticaagscp', isLoggedIn, async (req, res) => {
     vdata1
   } = req.body;
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let respostaestatisticaagsc = await database.getestatisticaagscp(vdata, vdata1);
   res.send([{
     quantidade: respostaestatisticaagsc.length
@@ -428,7 +427,7 @@ app.post('/estatisticaclientesp', isLoggedIn, async (req, res) => {
     vdata1
   } = req.body;
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
   let estatisticaclientesp = await database.getestatisticaclientesp(vdata, vdata1);
   if (estatisticaclientesp == ![]) {
     res.send([{
@@ -443,55 +442,55 @@ app.post('/estatisticaclientesp', isLoggedIn, async (req, res) => {
 }})
 app.get('/agenderadmin/', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.send(await database.getAgendamentoadmin());
   }
 })
 app.get('/clientedetalhe/:id', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.send(await database.getClientedetalhe(req.params.id));
   }
 })
 app.get('/agenderespadmin/:pesquisa', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.send(await database.getAgendamentoespadmin(req.params.pesquisa));
   }
 })
 app.get('/agenderadminhoje/', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.send(await database.getAgendamentoadminhoje());
   }
 })
 app.get('/agenderadminamanha/', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.send(await database.getAgendamentoadminamanha());
   }
 })
 app.get('/agenderadminvencido/', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.send(await database.getAgendamentoadminvencido());
   }
 })
 app.get('/agendamentodetalhe/:ida', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.send(await database.getAgendamentodetalhe(req.params.ida));
   }
 })
 app.get('/fidelidades', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     res.send(await database.getFidelidades());
   }
 })
 app.put('/fidelidades', isLoggedIn, async (req, res) => {
   let respostaadmin = await database.getLogin(req.user.id);
-  if (respostaadmin[0].permicao == 1) {
+  if (respostaadmin[0].permissao == 1) {
     let {
       idfidelidade
     } = req.body;
@@ -728,7 +727,7 @@ function start(client) {
   })
   app.post('/present', isLoggedIn, async (req, res) => {
     let respostagif = await database.getLogin(req.user.id);
-    if (respostagif[0].fidelidade == 5) {
+    if (respostagif[0].qtd_fidelidade == 5) {
       let verificarfidelidade = await database.getFidelidade(req.user.id);
       if (verificarfidelidade == ![]) {
         let auxgift = Math.floor(Math.random() * 999999) + 100000;
@@ -760,7 +759,7 @@ function start(client) {
     let auxdata = gdata[0].split("-");
     let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
     res.send(database.alteraraviso(idag));
-    let menssage = "📢 *NÃO VÁ ESQUECER HEIN*\nVocê tem um agendamento marcado conosco:\n\nDia " + datamesmo + "\n\nSó trazer o " + respostaaviso[0].modelo + " (_" + respostaaviso[0].placa + "_) para Rua Manoel Estevão, 431 - Centro - União da Vitória.";
+    let menssage = "📢 *NÃO VÁ ESQUECER HEIN*\nVocê tem um agendamento marcado conosco:\n\nDia " + datamesmo + "\n\nSó trazer o " + respostaaviso[0].placa + " para Rua Manoel Estevão, 431 - Centro - União da Vitória.";
     let number = "55" + respostaaviso[0].telefone + "@c.us";
     client.sendText(number, menssage)
       .then((result) => {
@@ -799,7 +798,7 @@ function start(client) {
       tipo
     } = req.body;
     let respostaadmin = await database.getLogin(req.user.id);
-    if (respostaadmin[0].permicao == 1) {
+    if (respostaadmin[0].permissao == 1) {
       let verificacadastro = await database.getClientecomemail(email);
       let respostarobo = await robo(placao);
       if (verificacadastro == ![]) {
