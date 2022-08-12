@@ -14,17 +14,20 @@ function carregarDadosMenu() {
 
 function preencherMenu(nome, foto, fidelidade) {
     var aux = 5;
+    var aux1 = 0;
     if (foto != "") {
         document.querySelector("#fotomenu").src = foto
     }
     document.querySelector("#nomemenu").textContent = nome;
     for (var i = 0; i < fidelidade; i++) {
+        if(aux1 < 5){
         var check = document.createElement("i");
         check.className = 'bi bi-check-circle-fill';
         check.style.color = "green";
         document.querySelector(".premios").appendChild(check)
         aux--;
-    }
+        aux1++;
+    }}
     for (var i = 0; i < aux; i++) {
         var checkn = document.createElement("i");
         checkn.className = 'bi bi-dash-circle-fill';
@@ -34,7 +37,7 @@ function preencherMenu(nome, foto, fidelidade) {
     var gift = document.createElement("i");
     gift.className = "bi bi-gift-fill";
     gift.style.color = "grey";
-    if (fidelidade == 5) {
+    if (fidelidade >= 5) {
         gift.style.color = "cyan";
         document.querySelector("#gift").style.display = "block";
 

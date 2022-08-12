@@ -106,9 +106,9 @@ app.get('/verificacao', isLoggedIn, async (req, res) => {
         res.redirect('/erro')
       }
     } else {
-      await database.setLogin(idfacebook, respostaemail[0].sessionid);
-      await database.setCarro(idfacebook, respostaemail[0].sessionid)
-      await database.setAg(idfacebook, respostaemail[0].sessionid);
+      await database.setLogin(idfacebook, respostaemail[0].id_cliente);
+      await database.setCarro(idfacebook, respostaemail[0].id_cliente)
+      await database.setAg(idfacebook, respostaemail[0].id_cliente);
       res.redirect('/configuracao');
     }
   } else {
@@ -497,8 +497,6 @@ app.put('/fidelidades', isLoggedIn, async (req, res) => {
     res.send(await database.putFidelidades(idfidelidade));
   }
 })
-
-
 app.get('/user/', isLoggedIn, async (req, res) => {
   res.send(await database.getDados(req.user.id));
 })
@@ -636,7 +634,7 @@ function start(client) {
       var filename = file.name;
       var nome = filename.split(".");
       var nomerealzao = nome[1];
-      nomerealzaozao = req.params.id + respostac[0].sessionid + "." + nomerealzao;
+      nomerealzaozao = req.params.id + respostac[0].id_cliente + "." + nomerealzao;
 
       file.mv('./assets/img/agend/' + nomerealzaozao, function (err) {
         if (err) {
@@ -649,23 +647,10 @@ function start(client) {
     }
 
     if (respostac[0].telefone == "") {
-      let respostaultimo = await database.getUltimo(respostac[0].sessionid, respostac[0].placa);
-      if (respostaultimo == ![]) {
         database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
-        database.insertUltimo(respostac[0].sessionid, respostac[0].placa);
-      } else {
-        database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
-        database.putUltimo(respostaultimo[0].id);
-      }
     } else {
-      let respostaultimo = await database.getUltimo(respostac[0].sessionid, respostac[0].placa);
-      if (respostaultimo == ![]) {
         database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
-        database.insertUltimo(respostac[0].sessionid, respostac[0].placa);
-      } else {
-        database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
-        database.putUltimo(respostaultimo[0].id);
-      }
+      
       let number = "55" + respostac[0].telefone + "@c.us";
       let menssage = "🔧 *SERVIÇO CONCLUÍDO!*\n\nPode vir retirar seu carro " + respostac[0].modelo + ", ele já está novinho em folha!\n\nPara verificar os detalhes da troca acesse: meucarro.com.br/historico";
       client.sendText(number, menssage)
@@ -727,7 +712,7 @@ function start(client) {
   })
   app.post('/present', isLoggedIn, async (req, res) => {
     let respostagif = await database.getLogin(req.user.id);
-    if (respostagif[0].qtd_fidelidade == 5) {
+    if (respostagif[0].qtd_fidelidade >= 5) {
       let verificarfidelidade = await database.getFidelidade(req.user.id);
       if (verificarfidelidade == ![]) {
         let auxgift = Math.floor(Math.random() * 999999) + 100000;
@@ -818,12 +803,12 @@ function start(client) {
             console.log('Result: ', result); //return object success
           })
       } else {
-        let verificaveiculo = await database.getVeiculo(verificacadastro[0].sessionid, placao);
+        let verificaveiculo = await database.getVeiculo(verificacadastro[0].id_cliente, placao);
         if (verificaveiculo == ![]) {
-          let numeroplaca1 = await database.insertVeiculo(placao, aux, verificacadastro[0].sessionid, tipo);
-          database.insertAgendamento(numeroplaca1.numero, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].sessionid);
+          let numeroplaca1 = await database.insertVeiculo(placao, aux, verificacadastro[0].id_cliente, tipo);
+          database.insertAgendamento(numeroplaca1.numero, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].id_cliente);
         } else {
-          database.insertAgendamento(verificaveiculo[0].id, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].sessionid);
+          database.insertAgendamento(verificaveiculo[0].id, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].id_cliente);
         }
       }
       if (verificacadastro[0].telefone != "") {
@@ -908,7 +893,6 @@ async function robo(placa) {
     return campos;
   }
 }
-
 
 //Renderização da página de erro.
 

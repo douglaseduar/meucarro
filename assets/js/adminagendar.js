@@ -45,8 +45,10 @@ async function marcar(event) {
         atipo = 2;
     } else if (document.querySelector("#inlineRadio3").checked) {
         atipo = 3;
-    } else {
-        atipo = 4
+    } else if (document.querySelector("#inlineRadio4").checked){
+        atipo = 4;
+    }else{
+        atipo = 5;
     };
 
     let header = {

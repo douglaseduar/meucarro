@@ -3,7 +3,7 @@ function carregarVencidos() {
         .then((res) => res.json())
         .then((res) => {
             for (vencido of res) {
-                criarLinha(vencido.id, vencido.dataultimo, vencido.nome, vencido.placa, vencido.modelo, vencido.fk_cliente, vencido.avisado);
+                criarLinha(vencido.id_agendamento, vencido.data, vencido.nome, vencido.placa, vencido.modelo, vencido.FK_CLIENTE_id_cliente, vencido.lembrete);
             }
         })
 
@@ -65,7 +65,7 @@ function getcliente() {
         .then((res) => res.json())
         .then((res) => {
             for (cliente of res) {
-                modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.fidelidade)
+                modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.qtd_fidelidade)
 
             }
 

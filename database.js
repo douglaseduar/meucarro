@@ -19,7 +19,7 @@ database.getVeiculos = async function (id) {
   return rows;
 }
 database.getVeiculo = async function (id, placa) {
-  let [rows, fields] = await database.con.execute('SELECT * FROM veiculo WHERE fk_cliente = ? AND placa = ?', [id, placa]);
+  let [rows, fields] = await database.con.execute('SELECT * FROM veiculo WHERE FK_CLIENTE_id_cliente = ? AND placa = ?', [id, placa]);
 
   return rows;
 }
@@ -130,12 +130,12 @@ database.getestatisticaclientesp = async function (vdata, vdata1) {
   return rows;
 }
 database.getvencido = async function (id) {
-  let [rows, fields] = await database.con.execute('select v.placa, v.modelo, c.telefone from veiculo v, cliente c, ultimosagendamentos ul where v.placa = ul.fk_placa and ul.fk_cliente = c.sessionid and ul.id = ?', [id]);
+  let [rows, fields] = await database.con.execute('select v.placa, v.modelo, c.telefone from veiculo v, cliente c, agendamento a where v.id_placa = a.FK_VEICULO_id_placa AND c.id_cliente = a.FK_CLIENTE_id_cliente and a.id_agendamento = ?', [id]);
 
   return rows;
 }
 database.alterarvencido = async function (id) {
-  let [rows, fields] = await database.con.execute('UPDATE ultimosagendamentos SET avisado = 1 where id = ?', [id]);
+  let [rows, fields] = await database.con.execute('UPDATE agendamento SET lembrete = 1 where id_agendamento = ?', [id]);
 
   return rows;
 }
@@ -145,7 +145,7 @@ database.alteraraviso = async function (idag) {
   return rows;
 }
 database.geteditAgendamentoadmin = async function (id) {
-  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id = a.fk_placa and a.id = ?', [id]);
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id_placa = a.FK_VEICULO_id_placa and a.id_agendamento = ?', [id]);
 
   return rows;
 }
@@ -170,7 +170,7 @@ database.getAgendamentoadminamanha = async function () {
   return rows;
 }
 database.getAgendamentoadminvencido = async function () {
-  let [rows, fields] = await database.con.execute("SELECT v.placa, v.modelo, c.nome, c.sessionid, ul.* FROM veiculo v, cliente c, ultimosagendamentos ul WHERE v.placa = ul.fk_placa AND c.sessionid = ul.fk_cliente AND DATE_FORMAT((ul.dataultimo), '%Y-%m-%d') <= DATE_FORMAT(DATE_ADD(NOW( ), INTERVAL -1 YEAR), '%Y-%m-%d') ORDER BY ul.dataultimo;");
+  let [rows, fields] = await database.con.execute("SELECT v.*, a.*, c.* FROM veiculo v, cliente c, agendamento a WHERE v.id_placa = a.FK_VEICULO_id_placa AND c.id_cliente = a.FK_CLIENTE_id_cliente AND DATE_FORMAT((a.data), '%Y-%m-%d') <= DATE_FORMAT(DATE_ADD(NOW( ), INTERVAL -1 YEAR), '%Y-%m-%d') ORDER BY a.data desc LIMIT 1");
 
   return rows;
 }
@@ -199,7 +199,7 @@ database.insertVeiculo = async function (placa, resposta, tipo, cliente) {
   }
 }
 database.insertAgendamento = async function (fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente) {
-  let [data] = await database.con.execute('INSERT INTO agendamento (FK_VEICULO_id_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_combustivel, outro_filtro, filtro_racor, data, realizado, aviso, foto, cancelado, FK_CLIENTE_id_cliente, lembrete, km) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, " ", 0, ?, 0, "")',
+  let [data] = await database.con.execute('INSERT INTO agendamento (FK_VEICULO_id_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_combustivel, outro_filtro, filtro_racor, data, realizado, aviso, foto, cancelado, FK_CLIENTE_id_cliente, lembrete, km) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, "", 0, ?, 0, "")',
     [fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, realizado, fk_cliente]);
 
   return {
@@ -215,7 +215,7 @@ database.insertUser = async function (id_cliente, nome, telefone, permicao, emai
   }
 }
 database.insertCliente = async function (email, telefone, endereco, nome, permicao, fidelidade, foto) {
-  let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permicao, sessionid, email, endereco, fidelidade, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+  let [data] = await database.con.execute('INSERT INTO cliente (nome, telefone, permissao, id_cliente, email, endereco, qtd_fidelidade, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
     [nome, telefone, permicao, email, email, endereco, fidelidade, foto]);
 
   return {
@@ -237,7 +237,7 @@ database.editAgendamento = async function (observacao, oleo, filtro_oleo, filtro
   }
 }
 database.editAgendamentoadmin = async function (observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, realizado, foto, id) {
-  let [data] = await database.con.execute('UPDATE agendamento SET obeservacao = ?, oleo = ?, filtro_oleo = ?, filtro_ar = ?, filtro_arcondicionado = ?, filtro_gasolina = ?, filtro_hidraulico = ?, filtro_racor = ?, km = ?, realizado = ?, foto = ? WHERE id = ?', [observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, realizado, foto, id]);
+  let [data] = await database.con.execute('UPDATE agendamento SET observacao = ?, oleo = ?, filtro_oleo = ?, filtro_ar = ?, filtro_arcondicionado = ?, filtro_combustivel = ?, outro_filtro = ?, filtro_racor = ?, km = ?, realizado = ?, foto = ? WHERE id_agendamento = ?', [observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, realizado, foto, id]);
   return {
     'alterado': id
   }
@@ -250,7 +250,7 @@ database.deleteAgendamento = async function (id) {
   }
 }
 database.getAgendamentocomcliente = async function (id) {
-  let [rows, fields] = await database.con.execute('SELECT a.*, v.placa, v.modelo, c.telefone, c.sessionid FROM agendamento a, veiculo v, cliente c WHERE a.fk_placa = v.id and a.fk_cliente = c.sessionid and a.id = ?', [id]);
+  let [rows, fields] = await database.con.execute('SELECT a.*, v.placa, v.modelo, c.telefone, c.id_cliente FROM agendamento a, veiculo v, cliente c WHERE a.FK_VEICULO_id_placa = v.id_placa and a.FK_CLIENTE_id_cliente = c.id_cliente and a.id_agendamento = ?', [id]);
 
   return rows;
 }
@@ -265,39 +265,34 @@ database.getClientecomemail = async function (email) {
   return rows;
 }
 database.setLogin = async function (id, email) {
-  let [data] = await database.con.execute('UPDATE cliente SET sessionid = ? WHERE sessionid = ?', [id, email]);
-
-  return {
-    'alterado': "asd"
-  }
-}
-database.setCarro = async function (id, email) {
-  let [data] = await database.con.execute('UPDATE agendamento SET fk_cliente = ? WHERE fk_cliente = ?', [id, email]);
+  let [data] = await database.con.execute('UPDATE cliente SET id_cliente = ? WHERE id_cliente = ?', [id, email]);
 
   return {
     'alterado': "asd"
   }
 }
 database.setAg = async function (id, email) {
-  let [data] = await database.con.execute('UPDATE veiculo SET fk_cliente = ? WHERE Fk_cliente = ?', [id, email]);
+  let [data] = await database.con.execute('UPDATE agendamento SET FK_CLIENTE_id_cliente = ? WHERE FK_CLIENTE_id_cliente = ?', [id, email]);
+
+  return {
+    'alterado': "asd"
+  }
+}
+database.setCarro = async function (id, email) {
+  let [data] = await database.con.execute('UPDATE veiculo SET FK_CLIENTE_id_cliente = ? WHERE FK_CLIENTE_id_cliente = ?', [id, email]);
 
   return {
     'alterado': "asd"
   }
 }
 
-database.getLoginsession = async function (email) {
-  let [rows, fields] = await database.con.execute('SELECT id, sessionid FROM cliente WHERE email = ?', [email]);
-
-  return rows;
-}
 database.getFidelidade = async function (id) {
   let [rows, fields] = await database.con.execute('SELECT * FROM fidelidade WHERE FK_CLIENTE_id_cliente = ? AND utilizado = 0', [id]);
 
   return rows;
 }
-database.getFidelidades = async function (id) {
-  let [rows, fields] = await database.con.execute('SELECT f.*, c.nome, c.sessionid FROM fidelidade f, cliente c where f.fk_cliente = c.sessionid ORDER BY f.utilizado = 1');
+database.getFidelidades = async function () {
+  let [rows, fields] = await database.con.execute('SELECT f.*, c.nome, c.id_cliente FROM fidelidade f, cliente c where f.FK_CLIENTE_id_cliente = c.id_cliente ORDER BY f.utilizado = 1');
 
   return rows;
 }
@@ -307,23 +302,8 @@ database.insertFidelidade = async function (id, gift, realizado) {
 
   return rows;
 }
-database.insertUltimo = async function (sessionid, placa) {
-  let [rows, fields] = await database.con.execute('INSERT INTO ultimosagendamentos (fk_cliente, fk_placa, dataultimo) VALUES (?, ?, NOW())', [sessionid, placa]);
-
-  return rows;
-}
-database.getUltimo = async function (sessionid, placa) {
-  let [rows, fields] = await database.con.execute('SELECT * FROM ultimosagendamentos WHERE fk_cliente = ? AND fk_placa = ?', [sessionid, placa]);
-
-  return rows;
-}
-database.putUltimo = async function (id) {
-  let [rows, fields] = await database.con.execute('UPDATE ultimosagendamentos SET dataultimo = NOW() WHERE id = ?', [id]);
-
-  return rows;
-}
 database.putFidelidades = async function (idfidelidade) {
-  let [data] = await database.con.execute('UPDATE fidelidade SET utilizado = 1 where id = ?', [idfidelidade]);
+  let [data] = await database.con.execute('UPDATE fidelidade SET utilizado = 1 where id_fidelidade = ?', [idfidelidade]);
 
   return data;
 }

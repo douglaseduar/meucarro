@@ -3,7 +3,7 @@ function carregarFidelidade() {
         .then((res) => res.json())
         .then((res) => {
             for (fidelidade of res) {
-                criarLinha(fidelidade.nome, fidelidade.cupom, fidelidade.utilizado, fidelidade.fk_cliente, fidelidade.id);
+                criarLinha(fidelidade.nome, fidelidade.cupom, fidelidade.utilizado, fidelidade.FK_CLIENTE_id_cliente, fidelidade.id_fidelidade);
             }
         })
 
@@ -55,7 +55,7 @@ function getcliente() {
         .then((res) => res.json())
         .then((res) => {
             for (cliente of res) {
-                modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.fidelidade)
+                modalcliente(cliente.nome, cliente.endereco, cliente.telefone, cliente.email, cliente.foto, cliente.qtd_fidelidade)
 
             }
 
