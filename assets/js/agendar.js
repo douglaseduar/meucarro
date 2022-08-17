@@ -53,7 +53,26 @@ function sair() {
 }
 
 
-document.querySelector("#agendar").addEventListener("click", enviaragendamento)
+document.querySelector("#agendar").addEventListener("click", verificarhora)
+
+async function verificarhora(event) {
+    event.preventDefault();
+    form = document.querySelector("#agendamento");
+    let fdata = form.vdata.value;
+    let datac = fdata.split(" ");
+    let dataco = datac[0].split("/");
+    let hora = datac[1].split(":");
+    let adata = dataco[2] + "-" + dataco[1] + "-" + dataco[0] + "T" + datac[1]; 
+    let minha_data = new Date(adata)
+    if( hora[0] <= 18 && hora[0] >= 07 && hora[1] == 00 && minha_data.getDay() != 0 && minha_data.getDay() != 6){
+        fetch('/horario/' + adata);
+
+    }else{
+        document.querySelector(".avisando").textContent = "Horário ou Data Inválida";
+        document.querySelector(".avisando").style.color = "red";
+    }
+
+}
 
 async function enviaragendamento(event) {
     event.preventDefault();
@@ -68,7 +87,10 @@ async function enviaragendamento(event) {
     let afiltrosep = "";
 
     form = document.querySelector("#agendamento");
-    adata = form.vdata.value;
+    let fdata = form.vdata.value;
+    let datac = fdata.split(" ");
+    let dataco = datac[0].split("/");
+    let adata = dataco[2] + "-" + dataco[1] + "-" + dataco[0] + "T" + datac[1]; 
     aobservacao = form.observacao.value;
     aplaca = form.select.value;
     aoleo = form.oleo.value;

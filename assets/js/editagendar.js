@@ -67,7 +67,11 @@ function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, 
     if (filtro_hidraulico == '<i class="bi bi-check-lg"></i>') {
         document.querySelector("#inlineCheckbox6").checked = true;
     }
-    form.vdata.value = vdata;
+    let datac = vdata.split("T");
+    let dataco = datac[0].split("-");
+    let adata = dataco[2] + "/" + dataco[1] + "/" + dataco[0] + " " + datac[1]; 
+
+    form.vdata.value = adata;
     var option = document.createElement("option");
     option.setAttribute("id", vplaca)
     option.textContent = vplaca
@@ -95,7 +99,7 @@ async function enviaracancelamento(event) {
             vdata: adata
         })
     }
-    let resposta = await fetch('/editagender/' + idmesmo, header);
+    fetch('/editagender/' + idmesmo, header);
     location = "/historico";
 
 }
@@ -123,7 +127,10 @@ async function enviaredicao(event) {
     let afiltrosep = "";
 
     form = document.querySelector("#agendamento");
-    adata = form.vdata.value;
+    let fdata = form.vdata.value;
+    let datac = fdata.split(" ");
+    let dataco = datac[0].split("/");
+    let adata = dataco[2] + "-" + dataco[1] + "-" + dataco[0] + "T" + datac[1]; 
     aobservacao = form.observacao.value;
     aplaca = form.select.value;
     auxplacao = form.select.selectedOptions;

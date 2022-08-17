@@ -217,7 +217,9 @@ button>a:hover {
 
     max-width: 690px;
     margin-top: 30px;
-
+    border: 1px solid grey;
+    border-radius: 20px;
+    padding: 21px;
 }
 
 #logout {
@@ -375,4 +377,20 @@ button>a:hover {
     display: none;
     cursor: pointer;
     z-index: 1;
+}
+#agendamento{
+    text-align: -webkit-center;
+}
+.teste{
+    display: flex;
+    flex-flow: wrap;
+    place-content: center;
+}
+.teste > div{
+    margin-left: 10px;
+}
+.agender1 {
+
+    max-width: 690px;
+    margin-top: 30px;
 }
