@@ -244,12 +244,11 @@ button>a:hover {
 }
 
 .tag {
-    position: absolute;
-    top: 2%;
-    left: 88%;
     font-size: 7pt !important;
     text-align: center;
-    color: orange;
+    color: grey;
+    margin-bottom: -20px;
+    margin-top: -24px;
 }
 
 

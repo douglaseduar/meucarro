@@ -1,7 +1,41 @@
-document.querySelector("#agendar").addEventListener("click", marcar);
+document.querySelector("#agendar").addEventListener("click", verificarhora);
 
-async function marcar(event) {
+async function verificarhora(event) {
     event.preventDefault();
+    form = document.querySelector("#agendamento");
+    let fdata = form.vdata.value;
+    let minha_data = new Date(fdata);
+    let data_atual = new Date();
+    if( hora[0] <= 18 && hora[0] >= 07 && hora[1] == 00 && minha_data.getDay() != 0 && minha_data.getDay() != 6){
+        if(minha_data.getDate() == data_atual.getDate() && minha_data.getHours() < data_atual.getHours()){
+            document.querySelector(".avisando").textContent = "Horário ou Data Inválida/Indisponível";
+            document.querySelector(".avisando").style.color = "red";
+        }else{
+       await fetch('/horario/' + adata)
+        .then((res) => res.json())
+        .then((res) => {
+        let verificacao = res[0].livre;
+        if(verificacao == 0){
+            let apdata = new Date(res[0].possivelhorario);
+            document.querySelector(".avisando").textContent = "Horário Indisponível. Próximo horário livre é:" + apdata.getDate() + "/" + apdata.getMonth() + "/" + apdata.getFullYear() + " às " + apdata.getHours() + ":00";
+            document.querySelector(".avisando").style.color = "orange";
+        }else if(verificacao == 2){
+            document.querySelector(".avisando").textContent = "Não temos mais horário disponível para essa data após o horário solicitado";
+            document.querySelector(".avisando").style.color = "orange";
+        }else{
+            marcar();
+        }
+
+        })
+    }}else{
+        document.querySelector(".avisando").textContent = "Horário ou Data Inválida/Indisponível";
+        document.querySelector(".avisando").style.color = "red";
+    }
+
+}
+
+
+async function marcar() {
 
     let aobservacao = "";
     let aoleo = '<i class="bi bi-check-lg"></i>';

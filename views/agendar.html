@@ -118,12 +118,15 @@
 </section>
 </div>
 <script type="text/javascript">
+const date = new Date();
+date.setDate(date.getDate() - 1);
   $(function () {
 $('#datetimepicker5').datetimepicker({
 locale: 'pt-br',
 format: 'DD/MM/YYYY HH:00',
 daysOfWeekDisabled: [0,6],
 enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+minDate: date,
 });
 });
 </script>

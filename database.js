@@ -41,7 +41,7 @@ database.getAgendamentoesp = async function (id, pesquisa) {
   return rows;
 }
 database.geteditAgendamento = async function (id, sessionid) {
-  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id_placa = a.FK_VEICULO_id_placa and a.id_agendamento = ? and a.FK_CLIENTE_id_cliente = ?', [id, sessionid]);
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id_placa = a.FK_VEICULO_id_placa and a.id_agendamento = ? and a.FK_CLIENTE_id_cliente = ? AND a.realizado = 0 AND cancelado = 0', [id, sessionid]);
 
   return rows;
 }
@@ -76,7 +76,7 @@ database.getestatisticatipossss = async function () {
   return rows;
 }
 database.getestatisticaclientes = async function () {
-  let [rows, fields] = await database.con.execute('select c.nome, COUNT(a.FK_CLIENTE_id_cliente) AS numero FROM agendamento a, cliente c WHERE realizado = 1 AND C.id_cliente = a.FK_CLIENTE_id_cliente GROUP BY FK_CLIENTE_id_cliente ORDER BY COUNT(FK_CLIENTE_id_cliente) DESC LIMIT 1');
+  let [rows, fields] = await database.con.execute('select c.nome, COUNT(a.FK_CLIENTE_id_cliente) AS numero FROM agendamento a, cliente c WHERE realizado = 1 AND NOT cancelado = 1 AND C.id_cliente = a.FK_CLIENTE_id_cliente GROUP BY FK_CLIENTE_id_cliente ORDER BY COUNT(FK_CLIENTE_id_cliente) DESC LIMIT 1');
 
   return rows;
 }
@@ -189,7 +189,11 @@ database.getDados = async function (id) {
 
   return rows;
 }
+database.getHorario = async function (data) {
+  let [rows, fields] = await database.con.execute('SELECT data FROM agendamento WHERE data = ? AND cancelado = 0 AND realizado = 0', [data]);
 
+  return rows;
+}
 database.insertVeiculo = async function (placa, resposta, tipo, cliente) {
   let [data] = await database.con.execute('INSERT INTO veiculo (placa, modelo, FK_TIPOS_VEICULO_id_tipo, FK_CLIENTE_id_cliente) VALUES (?, ?, ?, ?)',
     [placa, resposta, cliente, tipo]);
@@ -243,7 +247,7 @@ database.editAgendamentoadmin = async function (observacao, oleo, filtro_oleo, f
   }
 }
 database.deleteAgendamento = async function (id) {
-  let [data] = await database.con.execute('UPDATE agendamento SET cancelado = 1, realizado = 1 WHERE id_agendamento = ?', [id]);
+  let [data] = await database.con.execute('UPDATE agendamento SET cancelado = 1 WHERE id_agendamento = ?', [id]);
 
   return {
     'deletado': id

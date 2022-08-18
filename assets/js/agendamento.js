@@ -53,21 +53,28 @@ function criarLinha(id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, 
     hora = fdata[1];
     auxdata = fdata[0].split("-");
     data.textContent = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-    // var tag = document.createElement("div");
-    // tag.className = "tag";
-    // tag.textContent = "ÚLTIMA TROCA";
     var status = document.createElement("div");
+    var tag = document.createElement("div");
+    tag.className = "tag";
+    let datacomparacao = new Date(data1);
+    let dataaux = new Date();
     status.className = "status;"
     if (realizado == 0) {
         status.style.color = "green";
         status.innerHTML = "<i>Aberto</i>";
+        if(datacomparacao.getDate() == dataaux.getDate() && datacomparacao.getHours() > dataaux.getHours()-2){
+            tag.textContent = "não é possível editar mais";
+    }else{
         card1.setAttribute("id", id);
         card1.addEventListener("click", editagendamento)
         card.style.cursor = "pointer";
-    } else {
+        tag.textContent = "click para editar";
+    }}
+    else {
         status.style.color = "red";
         status.innerHTML = "<i>Fechado</i>"
         card.style.opacity = 0.6;
+        tag.textContent = "";
         if (foto == "") {
             imagemtabela.className = "fotoag1";
             imagemtabela.src = "sem-foto.jpg";
@@ -93,7 +100,7 @@ function criarLinha(id, fk_placa, observacao, km, oleo, filtro_oleo, filtro_ar, 
     more.appendChild(status);
     linkimagem.appendChild(imagemtabela);
     more.appendChild(linkimagem);
-    // more.appendChild(tag);
+    more.appendChild(tag);
 
 
     document.querySelector(".lista").appendChild(card).appendChild(card1).appendChild(card2).appendChild(placa).appendChild(placa1).appendChild(more);
@@ -103,22 +110,6 @@ function editagendamento() {
     let aux = this.getAttribute("id");
     document.location = "/editagendamento?id=" + aux;
 }
-
-
-async function apagando() {
-    let idaux = this.getAttribute("id");
-
-    let header = {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json; charset=UTF-8'
-        }
-    }
-    let resposta = await fetch('/car/' + idaux, header);
-
-    document.location.reload(true);
-}
-
 
 
 

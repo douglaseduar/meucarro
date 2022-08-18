@@ -263,9 +263,38 @@ app.get('/editagender/:id', isLoggedIn, async (req, res) => {
   res.send(await database.geteditAgendamento(req.params.id, req.user.id));
 
 })
-app.get('/horario/hora', isLoggedIn, async (req, res) => {
-  await database.gethorario(req.params.hora);
-})
+app.get('/horario/:hora', isLoggedIn, async (req, res) => {
+  let auxverificacao = 0;
+  let respostahora = await database.getHorario(req.params.hora);
+  let databancodedados = new Date(req.params.hora); 
+  if(respostahora.length >= 1){
+    let dataverificaocao = new Date(req.params.hora);
+    for(let i = dataverificaocao.getHours(); i<=18; i++){
+      databancodedados.setHours(i-3);
+      let stringdata = databancodedados.toISOString().split('T')[0] + "T" + databancodedados.toISOString().split('T')[1].split(":")[0] + ":00";
+      let respostahorafor = await database.getHorario(stringdata);
+      if(respostahorafor.length == 0){
+        res.send([{
+          livre: 0,
+          possivelhorario: stringdata
+        }]); 
+        auxverificacao = 1;
+        break;
+      }}
+      if(auxverificacao == 0){
+        res.send([{
+          livre: 2,
+        }]); 
+      }
+    }else{
+      res.send([{
+        livre: 1
+      }]); 
+    }
+
+
+  }
+)
 
 //Chamadas e envio de dados dos Administradores.
 
@@ -802,294 +831,6 @@ function start(client) {
 
 
 }
-
-
-  // app.post('/agender', isLoggedIn, async (req, res) => {
-  //   let {
-  //     fk_placa,
-  //     observacao,
-  //     oleo,
-  //     filtro_oleo,
-  //     filtro_ar,
-  //     filtro_arcondicionado,
-  //     filtro_gasolina,
-  //     filtro_hidraulico,
-  //     filtro_racor,
-  //     vdata,
-  //     placao
-  //   } = req.body;
-  //   let respostatel = await database.getLogin(req.user.id);
-  //   if (respostatel.telefone == "") {
-  //     res.status(201).send(await database.insertAgendamento(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id));
-  //   } else {
-  //     let gdata = vdata.split("T");
-  //     let hora = gdata[1];
-  //     let auxdata = gdata[0].split("-");
-  //     let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-  //     let number1 = "55" + respostatel[0].telefone + "@c.us";
-  //     let menssage = "✔ *AGENDAMENTO REALIZADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase() + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
-  //     client.sendText(number1, menssage)
-  //       .then((result) => {
-  //         console.log('Result: ', result); //return object success
-  //       })
-  //     res.status(201).send(await database.insertAgendamento(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id));
-
-  //   }
-  // })
-  // app.delete('/editagender/:id', isLoggedIn, async (req, res) => {
-  //   let {
-  //     vdata,
-  //     placa
-  //   } = req.body;
-  //   let respostatel1 = await database.getLogin(req.user.id);
-  //   if (respostatel1[0].telefone == "") {
-  //     database.deleteAgendamento(req.params.id);
-  //     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
-  //   } else {
-  //     database.deleteAgendamento(req.params.id);
-  //     res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
-  //     let number = "55" + respostatel1[0].telefone + "@c.us";
-  //     let gdata = vdata.split("T");
-  //     let hora = gdata[1];
-  //     let auxdata = gdata[0].split("-");
-  //     let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-  //     let menssage = "❌ *CANCELAMENTO!*\n\nPlaca: " + placa.toUpperCase() + "\nData: " + datamesmo + "\n_id do agendamento: " + req.params.id + "_\n\nSe você não for a pessoa que fez a solicitação, entre em contato conosco!";
-  //     client.sendText(number, menssage)
-  //       .then((result) => {
-  //         console.log('Result: ', result); //return object success
-  //       })
-  //   }
-  // })
-  // app.delete('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
-  //   let respostaag = await database.getAgendamentocomcliente(req.params.id);
-  //   if (respostaag[0].telefone == "") {
-  //     database.deleteAgendamento(req.params.id);
-  //     res.send('Agendamento com o id: ' + req.params.id + ' deletado com sucesso')
-  //   } else {
-  //     database.deleteAgendamento(req.params.id);
-  //     res.send('Agendamento com o id: ' + req.params.id + ' deletado com sucesso')
-  //     let number = "55" + respostaag[0].telefone + "@c.us";
-  //     let gdata = respostaag[0].data.split("T");
-  //     let hora = gdata[1];
-  //     let auxdata = gdata[0].split("-");
-  //     let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-  //     let menssage = "😥 *QUE PENA!*\nVocê não compareceu ao agendamento marcado para o dia " + datamesmo + " do veículo com placa: " + respostaag[0].placa.toUpperCase() + "\n\nPara remarcar entre em contato conosco!";
-  //     client.sendText(number, menssage)
-  //       .then((result) => {
-  //         console.log('Result: ', result); //return object success
-  //       })
-  //   }
-  // })
-  // app.post('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
-  //   let {
-  //     observacao,
-  //     oleo,
-  //     filtro_oleo,
-  //     filtro_ar,
-  //     filtro_arcondicionado,
-  //     filtro_gasolina,
-  //     filtro_hidraulico,
-  //     filtro_racor,
-  //     km
-  //   } = req.body;
-  //   let nomerealzaozao = "";
-  //   let respostac = await database.getAgendamentocomcliente(req.params.id);
-  //   if (req.files) {
-  //     var file = req.files.foto;
-  //     var filename = file.name;
-  //     var nome = filename.split(".");
-  //     var nomerealzao = nome[1];
-  //     nomerealzaozao = req.params.id + respostac[0].id_cliente + "." + nomerealzao;
-
-  //     file.mv('./assets/img/agend/' + nomerealzaozao, function (err) {
-  //       if (err) {
-  //         res.send(err)
-  //       } else {
-  //         res.header('Content-Type', 'text/html');
-  //         res.sendFile(__dirname + '/sucesso.html');
-  //       }
-  //     })
-  //   }
-
-  //   if (respostac[0].telefone == "") {
-  //       database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
-  //   } else {
-  //       database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
-      
-  //     let number = "55" + respostac[0].telefone + "@c.us";
-  //     let menssage = "🔧 *SERVIÇO CONCLUÍDO!*\n\nPode vir retirar seu carro " + respostac[0].modelo + ", ele já está novinho em folha!\n\nPara verificar os detalhes da troca acesse: meucarro.com.br/historico";
-  //     client.sendText(number, menssage)
-  //       .then((result) => {
-  //         console.log('Result: ', result); //return object success
-  //       })
-  //   }
-  // })
-  // app.put('/editagender/:id', isLoggedIn, async (req, res) => {
-  //   let respostatel2 = await database.getLogin(req.user.id);
-  //   let {
-  //     observacao,
-  //     oleo,
-  //     filtro_oleo,
-  //     filtro_ar,
-  //     filtro_arcondicionado,
-  //     filtro_gasolina,
-  //     filtro_hidraulico,
-  //     filtro_racor,
-  //     vdata,
-  //     placao
-  //   } = req.body;
-  //   if (respostatel2[0].telefone == "") {
-  //     res.status(201).send(await database.editAgendamento(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id, req.params.id));
-  //   } else {
-  //     res.status(201).send(await database.editAgendamento(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id, req.params.id));
-  //     let number = "55" + respostatel2[0].telefone + "@c.us";
-  //     let gdata = vdata.split("T");
-  //     let hora = gdata[1];
-  //     let auxdata = gdata[0].split("-");
-  //     let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-  //     let menssage = "⚠️ *AGENDAMENTO ALTERADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase() + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
-  //     client.sendText(number, menssage)
-  //       .then((result) => {
-  //         console.log('Result: ', result); //return object success
-  //       })
-  //   }
-  // })
-  // app.put('/user/', isLoggedIn, async (req, res) => {
-  //   let {
-  //     nome,
-  //     telefone,
-  //     email,
-  //     foto,
-  //     endereco
-  //   } = req.body;
-  //   if (telefone == "") {
-  //     res.status(201).send(await database.editUser(nome, telefone, email, foto, endereco, req.user.id));
-  //   } else {
-  //     res.status(201).send(await database.editUser(nome, telefone, email, foto, endereco, req.user.id))
-  //     let number = "55" + telefone + "@c.us";
-  //     let menssage = "🚗 *SEJA BEM VINDO(A) " + nome.toUpperCase() + "!*\n\nNós da Meu Carro agradecemos por você utilizar nosso serviço...\n\nPara mais informações acesse: www.meucarro.com.br/suporte";
-  //     client.sendText(number, menssage)
-  //       .then((result) => {
-  //         console.log('Result: ', result); //return object success
-  //       })
-  //   }
-
-  // })
-  // app.post('/present', isLoggedIn, async (req, res) => {
-  //   let respostagif = await database.getLogin(req.user.id);
-  //   if (respostagif[0].qtd_fidelidade >= 5) {
-  //     let verificarfidelidade = await database.getFidelidade(req.user.id);
-  //     if (verificarfidelidade == ![]) {
-  //       let auxgift = Math.floor(Math.random() * 999999) + 100000;
-  //       database.insertFidelidade(req.user.id, auxgift, 0);
-  //       let menssage = "🎁 *PARABÉNS VOCÊ GANHOU!*\n\nPara reinvindicar seu prêmio vá até a nossa loja e utilize o código abaixo:\n\n*" + auxgift + "*";
-  //       let number = "55" + respostagif[0].telefone + "@c.us";
-  //       client.sendText(number, menssage)
-  //         .then((result) => {
-  //           console.log('Result: ', result); //return object success
-  //         })
-  //       res.send([{
-  //         cod: auxgift
-  //       }]);
-  //     } else {
-  //       res.send([{
-  //         cod: verificarfidelidade[0].cupom
-  //       }]);
-  //     }
-  //   }
-
-  // })
-  // app.post('/aviso/', isLoggedIn, async (req, res) => {
-  //   let {
-  //     idag
-  //   } = req.body;
-  //   let respostaaviso = await database.getaviso(idag);
-  //   let gdata = respostaaviso[0].data.split("T");
-  //   let hora = gdata[1];
-  //   let auxdata = gdata[0].split("-");
-  //   let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-  //   res.send(database.alteraraviso(idag));
-  //   let menssage = "📢 *NÃO VÁ ESQUECER HEIN*\nVocê tem um agendamento marcado conosco:\n\nDia " + datamesmo + "\n\nSó trazer o " + respostaaviso[0].placa + " para Rua Manoel Estevão, 431 - Centro - União da Vitória.";
-  //   let number = "55" + respostaaviso[0].telefone + "@c.us";
-  //   client.sendText(number, menssage)
-  //     .then((result) => {
-  //       console.log('Result: ', result); //return object success
-  //     })
-  // })
-  // app.put('/vencidos/', isLoggedIn, async (req, res) => {
-  //   let {
-  //     idvencido
-  //   } = req.body;
-  //   let respostavencido = await database.getvencido(idvencido);
-  //   res.send(database.alterarvencido(idvencido));
-  //   let menssage = "📅 *FAZ UM TEMPINHO!*\n\n Que você não aparece para trocar o óleo do carro: " + respostavencido[0].modelo + " - " + respostavencido[0].placa.toUpperCase() + "\n\n Agende sua troca conosco para preservar a vida útil do seu motor!";
-  //   let number = "55" + respostavencido[0].telefone + "@c.us";
-  //   client.sendText(number, menssage)
-  //     .then((result) => {
-  //       console.log('Result: ', result); //return object success
-  //     })
-  // })
-  // app.post('/adminagendar/', isLoggedIn, async (req, res) => {
-  //   let {
-  //     observacao,
-  //     oleo,
-  //     filtro_oleo,
-  //     filtro_ar,
-  //     filtro_arcondicionado,
-  //     filtro_gasolina,
-  //     filtro_hidraulico,
-  //     filtro_racor,
-  //     vdata,
-  //     placao,
-  //     email,
-  //     nome,
-  //     telefone,
-  //     endereco,
-  //     tipo
-  //   } = req.body;
-  //   let respostaadmin = await database.getLogin(req.user.id);
-  //   if (respostaadmin[0].permissao == 1) {
-  //     let verificacadastro = await database.getClientecomemail(email);
-  //     let respostarobo = await robo(placao);
-  //     if (verificacadastro == ![]) {
-  //       database.insertCliente(email, telefone, endereco, nome, 0, 0, "");
-  //       let aux = respostarobo.marca + " " + respostarobo.modelo;
-  //       let numeroplaca = await database.insertVeiculo(placao, aux, email, tipo);
-
-  //       database.insertAgendamento(numeroplaca.numero, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, email);
-  //       let gdata = vdata.split("T");
-  //       let hora = gdata[1];
-  //       let auxdata = gdata[0].split("-");
-  //       let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-  //       let number1 = "55" + telefone + "@c.us";
-  //       let menssage = "✔ *AGENDAMENTO REALIZADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase() + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
-  //       client.sendText(number1, menssage)
-  //         .then((result) => {
-  //           console.log('Result: ', result); //return object success
-  //         })
-  //     } else {
-  //       let verificaveiculo = await database.getVeiculo(verificacadastro[0].id_cliente, placao);
-  //       if (verificaveiculo == ![]) {
-  //         let numeroplaca1 = await database.insertVeiculo(placao, aux, verificacadastro[0].id_cliente, tipo);
-  //         database.insertAgendamento(numeroplaca1.numero, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].id_cliente);
-  //       } else {
-  //         database.insertAgendamento(verificaveiculo[0].id, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].id_cliente);
-  //       }
-  //     }
-  //     if (verificacadastro[0].telefone != "") {
-  //       let gdata = vdata.split("T");
-  //       let hora = gdata[1];
-  //       let auxdata = gdata[0].split("-");
-  //       let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-  //       let number1 = "55" + verificacadastro[0].telefone + "@c.us";
-  //       let menssage = "✔ *AGENDAMENTO REALIZADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase() + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
-  //       client.sendText(number1, menssage)
-  //         .then((result) => {
-  //           console.log('Result: ', result); //return object success
-  //         })
-  //     }
-  //   }
-  // })
 
 
 //Função para retornar dados das Placas.

@@ -63,20 +63,37 @@ async function verificarhora(event) {
     let dataco = datac[0].split("/");
     let hora = datac[1].split(":");
     let adata = dataco[2] + "-" + dataco[1] + "-" + dataco[0] + "T" + datac[1]; 
-    let minha_data = new Date(adata)
+    let minha_data = new Date(adata);
+    let data_atual = new Date();
     if( hora[0] <= 18 && hora[0] >= 07 && hora[1] == 00 && minha_data.getDay() != 0 && minha_data.getDay() != 6){
-        fetch('/horario/' + adata);
+        if(minha_data.getDate() == data_atual.getDate() && minha_data.getHours() < data_atual.getHours()){
+            document.querySelector(".avisando").textContent = "Horário ou Data Inválida/Indisponível";
+            document.querySelector(".avisando").style.color = "red";
+        }else{
+       await fetch('/horario/' + adata)
+        .then((res) => res.json())
+        .then((res) => {
+        let verificacao = res[0].livre;
+        if(verificacao == 0){
+            let apdata = new Date(res[0].possivelhorario);
+            document.querySelector(".avisando").textContent = "Horário Indisponível. Próximo horário livre é:" + apdata.getDate() + "/" + apdata.getMonth() + "/" + apdata.getFullYear() + " às " + apdata.getHours() + ":00";
+            document.querySelector(".avisando").style.color = "orange";
+        }else if(verificacao == 2){
+            document.querySelector(".avisando").textContent = "Não temos mais horário disponível para essa data após o horário solicitado";
+            document.querySelector(".avisando").style.color = "orange";
+        }else{
+            enviaragendamento();
+        }
 
-    }else{
-        document.querySelector(".avisando").textContent = "Horário ou Data Inválida";
+        })
+    }}else{
+        document.querySelector(".avisando").textContent = "Horário ou Data Inválida/Indisponível";
         document.querySelector(".avisando").style.color = "red";
     }
 
 }
 
-async function enviaragendamento(event) {
-    event.preventDefault();
-
+async function enviaragendamento() {
     let aobservacao = "";
     let aoleo = '<i class="bi bi-check-lg"></i>';
     let afiltrooleo = "";
