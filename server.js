@@ -603,7 +603,7 @@ function start(client) {
       placa
     } = req.body;
     let respostatel1 = await database.getLogin(req.user.id);
-    database.deleteAgendamento(req.params.id);
+    database.deleteAgendamentoc(req.params.id, req.user.id);
     if (respostatel1[0].telefone != "") {
       let number = "55" + respostatel1[0].telefone + "@c.us";
       let gdata = vdata.split("T");
@@ -615,6 +615,8 @@ function start(client) {
     }
   })
   app.delete('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
+    let respostaadmin = await database.getLogin(req.user.id);
+    if (respostaadmin[0].permissao == 1) {
     let respostaag = await database.getAgendamentocomcliente(req.params.id);
     database.deleteAgendamento(req.params.id);
     if (respostaag[0].telefone != "") {
@@ -625,7 +627,7 @@ function start(client) {
       let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
       let menssage = "😥 *QUE PENA!*\nVocê não compareceu ao agendamento marcado para o dia " + datamesmo + " do veículo com placa: " + respostaag[0].placa.toUpperCase() + "\n\nPara remarcar entre em contato conosco!";
      mandarmsg(number, menssage);
-    }
+    }}
   })
   app.post('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
     let {
@@ -639,6 +641,8 @@ function start(client) {
       filtro_racor,
       km
     } = req.body;
+    let respostaadmin = await database.getLogin(req.user.id);
+    if (respostaadmin[0].permissao == 1) {
     let nomerealzaozao = "";
     let respostac = await database.getAgendamentocomcliente(req.params.id);
     let number = "55" + respostac[0].telefone + "@c.us";
@@ -663,7 +667,7 @@ function start(client) {
     database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
     if (respostac[0].telefone != "") {
     mandarmsg(number, menssage);
-    }
+    }}
   })
   app.put('/editagender/:id', isLoggedIn, async (req, res) => {
     let respostatel2 = await database.getLogin(req.user.id);

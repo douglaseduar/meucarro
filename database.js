@@ -71,7 +71,7 @@ database.getestatisticatiposss = async function () {
   return rows;
 }
 database.getestatisticatipossss = async function () {
-  let [rows, fields] = await database.con.execute('select FK_TIPOS_VEICULO_id_tipo from veiculo where FK_TIPOS_VEICULO_id_tipo = 4');
+  let [rows, fields] = await database.con.execute('select FK_TIPOS_VEICULO_id_tipo from veiculo where FK_TIPOS_VEICULO_id_tipo = 4 OR FK_TIPOS_VEICULO_id_tipo = 5');
 
   return rows;
 }
@@ -248,6 +248,13 @@ database.editAgendamentoadmin = async function (observacao, oleo, filtro_oleo, f
 }
 database.deleteAgendamento = async function (id) {
   let [data] = await database.con.execute('UPDATE agendamento SET cancelado = 1 WHERE id_agendamento = ?', [id]);
+
+  return {
+    'deletado': id
+  }
+}
+database.deleteAgendamentoc = async function (id, sessionid) {
+  let [data] = await database.con.execute('UPDATE agendamento SET cancelado = 1 WHERE id_agendamento = ? AND FK_CLIENTE_id_cliente = ?', [id, sessionid]);
 
   return {
     'deletado': id

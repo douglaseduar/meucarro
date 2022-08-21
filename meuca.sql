@@ -61,7 +61,8 @@ CREATE TABLE `cliente` (
   `permissao` int(11) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `endereco` varchar(500) DEFAULT NULL,
-  `foto` varchar(500) DEFAULT NULL
+  `foto` varchar(500) DEFAULT NULL,
+  `qtd_fidelidade` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
