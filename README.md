@@ -1,5 +1,5 @@
 # 🚗 Meu Carro
-##Apresentação
+## Apresentação
 
 Sistema de agendamento de trocas de óleo apresentado como requisito de avaliação do Curso de Análise e Desenvolvimento de Sistemas do Instituto Federal do Paraná.
 
@@ -21,6 +21,13 @@ Desenvolvido para a empresa Distribuidora Grande Rio, em NodeJS, o sistema conta
 
 ``` 
 - Servidor WEB VPS linux. É necessário que o apache, php e mysql estejam instalados e configurados corretamente. 
+ ```
+ ### NodeJS
+ 
+ ``` 
+- instalação do Nodejs
+- npm init -y
+- npm i
  ```
  
  ### Banco de dados:
