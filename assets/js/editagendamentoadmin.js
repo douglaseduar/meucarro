@@ -9,14 +9,14 @@ function carregarDadosAgendamento(idmesmo) {
         .then((res) => res.json())
         .then((res) => {
             for (agendamento of res) {
-                preencheformulario(agendamento.id, agendamento.placa, agendamento.oleo, agendamento.obeservacao);
+                preencheformulario(agendamento.id, agendamento.placa, agendamento.oleo, agendamento.observacao);
             }
 
         })
 
 }
 
-function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor) {
+function preencheformulario(id, vplaca, voleo, vobservacao) {
     let form = document.querySelector("#agendamento");
     document.querySelector("#agendamento").action = "/editagenderadmin/" + idmesmo;
 
@@ -86,6 +86,7 @@ async function concluir(event) {
     }
 
 
-    let resposta9 = await fetch('/editagenderadmin/' + idmesmo, header);
+     await fetch('/editagenderadmin/' + idmesmo, header);
+     location = '/admin';
 
 }

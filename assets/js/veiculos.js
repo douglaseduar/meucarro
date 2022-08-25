@@ -96,17 +96,21 @@ async function chamarModal() {
 
 
 async function apagando() {
-    let idaux = this.getAttribute("id");
+    var result = confirm("Tem certeza que deseja excluir o veículo?");
+    if (result == true) {
+        let idaux = this.getAttribute("id");
 
-    let header = {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json; charset=UTF-8'
+        let header = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
         }
+        let resposta = await fetch('/car/' + idaux, header);
+    
+        document.location.reload(true);
     }
-    let resposta = await fetch('/car/' + idaux, header);
-
-    document.location.reload(true);
+    
 }
 
 

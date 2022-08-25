@@ -94,22 +94,24 @@ document.querySelector("#dropagendar").addEventListener("click", enviaracancelam
 async function enviaracancelamento(event) {
     event.preventDefault();
 
-    form = document.querySelector("#agendamento");
-    adata = form.vdata.value;
-    aplaca = form.select.value;
-    let header = {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json; charset=UTF-8'
-        },
-        body: JSON.stringify({
-            placa: aplaca,
-            vdata: adata
-        })
+    var result = confirm("Tem certeza que deseja excluir o agendamento?");
+    if (result == true) {
+        form = document.querySelector("#agendamento");
+        adata = form.vdata.value;
+        aplaca = form.select.value;
+        let header = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({
+                placa: aplaca,
+                vdata: adata
+            })
+        }
+        fetch('/editagender/' + idmesmo, header);
+        location = "/historico";
     }
-    fetch('/editagender/' + idmesmo, header);
-    location = "/historico";
-
 }
 
 

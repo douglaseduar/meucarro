@@ -75,6 +75,7 @@ database.getestatisticatipossss = async function () {
 
   return rows;
 }
+
 database.getestatisticaclientes = async function () {
   let [rows, fields] = await database.con.execute('select c.nome, COUNT(a.FK_CLIENTE_id_cliente) AS numero FROM agendamento a, cliente c WHERE realizado = 1 AND NOT cancelado = 1 AND C.id_cliente = a.FK_CLIENTE_id_cliente GROUP BY FK_CLIENTE_id_cliente ORDER BY COUNT(FK_CLIENTE_id_cliente) DESC LIMIT 1');
 
@@ -170,7 +171,7 @@ database.getAgendamentoadminamanha = async function () {
   return rows;
 }
 database.getAgendamentoadminvencido = async function () {
-  let [rows, fields] = await database.con.execute("SELECT v.*, a.*, c.* FROM veiculo v, cliente c, agendamento a WHERE v.id_placa = a.FK_VEICULO_id_placa AND c.id_cliente = a.FK_CLIENTE_id_cliente AND DATE_FORMAT((a.data), '%Y-%m-%d') <= DATE_FORMAT(DATE_ADD(NOW( ), INTERVAL -1 YEAR), '%Y-%m-%d') ORDER BY a.data desc LIMIT 1");
+  let [rows, fields] = await database.con.execute("SELECT v.*, a.*, c.* FROM veiculo v, cliente c, agendamento a WHERE v.id_placa = a.FK_VEICULO_id_placa AND c.id_cliente = a.FK_CLIENTE_id_cliente AND NOT cancelado = 1 AND NOT realizado = 0 AND DATE_FORMAT((a.data), '%Y-%m-%d') <= DATE_FORMAT(DATE_ADD(NOW( ), INTERVAL -1 YEAR), '%Y-%m-%d') ORDER BY a.data desc");
 
   return rows;
 }

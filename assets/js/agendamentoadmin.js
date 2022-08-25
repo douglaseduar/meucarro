@@ -217,7 +217,7 @@ function modalagendamento(id, fk_placa, observacao, km, oleo, filtro_oleo, filtr
     observando.textContent = observacao;
     let linkimagem = document.createElement("a");
     let imagemtabela = document.createElement("img");
-    if (foto == " ") {
+    if (foto == "") {
         imagemtabela.className = "fotoag";
         imagemtabela.src = "sem-foto.jpg";
     } else {

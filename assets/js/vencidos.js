@@ -32,7 +32,7 @@ function criarLinha(id, data, nome, placa, modelo, fkcliente, avisado) {
     placatabela.style.textTransform = "uppercase";
     modelotabela.textContent = modelo;
     modelotabela.style.textTransform = "uppercase";
-    botaotabela.innerHTML = '<i class="bi bi-check-circle-fill" style="font-size: 14pt; color: #009045"></i>';
+    botaotabela.innerHTML = '<i class="bi bi-envelope-plus-fill" style="font-size: 14pt; color: orange"></i>';
     botaotabela.setAttribute("id", id);
     botaotabela.addEventListener("click", alterar);
     botaotabela.style.cursor = "pointer";

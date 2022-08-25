@@ -30,8 +30,8 @@ async function cadastrando(event) {
             tipo: aux
         })
     }
-    let resposta = await fetch('/car', header);
-    resposta = await resposta.json();
+    fetch('/car', header);
+
 
     location = "/veiculos";
 

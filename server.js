@@ -249,9 +249,13 @@ app.post('/car', isLoggedIn, async (req, res) => {
     tipo
   } = req.body;
   let cliente = req.user.id;
+  let respostacarro = await database.getVeiculo(cliente, placa);
+  if(respostacarro == ![]){
+    console.log("entrou aqui")
   let respostarobo = await robo(placa);
   let aux = respostarobo.marca + " " + respostarobo.modelo;
   res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo));
+  }
 });
 app.get('/agender/', isLoggedIn, async (req, res) => {
   res.send(await database.getAgendamento(req.user.id));
@@ -657,18 +661,20 @@ function start(client) {
       file.mv('./assets/img/agend/' + nomerealzaozao, function (err) {
         if (err) {
           res.send(err)
-        } else {
-          res.header('Content-Type', 'text/html');
-          res.sendFile(__dirname + '/sucesso.html');
         }
       })
-      mandarfoto(number, './assets/img/agend/' + nomerealzaozao, nomerealzaozao, menssage);
+      if (respostac[0].telefone != "") {
+        console.log()
+     // mandarfoto(number, __filename + '/assets/img/agend/' + nomerealzaozao, nomerealzaozao, menssage);
+      }
     }
     database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
     if (respostac[0].telefone != "") {
     mandarmsg(number, menssage);
-    }}
+    }
+    res.status(201).redirect('/admin');}
   })
+
   app.put('/editagender/:id', isLoggedIn, async (req, res) => {
     let respostatel2 = await database.getLogin(req.user.id);
     let {
@@ -825,6 +831,8 @@ function start(client) {
   }
 
   async function mandarfoto(telefone, fullpath, path, mensagem){
+    console.log("mandou foto");
+    console.log(fullpath)
     await client.sendImage(
         telefone,
         fullpath,
