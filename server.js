@@ -17,18 +17,12 @@ const app = express();
 var __filename = url.fileURLToPath(
   import.meta.url);
 var __dirname = path.dirname(__filename) + "/views";
+var caminhopadrao = path.dirname(__filename);
+
 
 app.listen(8080, () => console.log('Servidor rodando!'));
 
- venom
-  .create({
-    session: 'session-name',
-    multidevice: true 
-  })
-  .then((client) => start(client))
-  .catch((erro) => {
-    console.log(erro);
-  });
+venom.create().then((client) => start(client));
 
 app.use((req, res, next) => {
   console.log(req.url);
@@ -531,7 +525,9 @@ app.put('/fidelidades', isLoggedIn, async (req, res) => {
     let {
       idfidelidade
     } = req.body;
-    res.send(await database.putFidelidades(idfidelidade));
+    await database.putFidelidades(idfidelidade);
+    let respostafidelidade = await database.getclientecomfidelidade(idfidelidade);
+    await database.putzerarf(respostafidelidade[0].FK_CLIENTE_id_cliente);
   }
 })
 app.get('/user/', isLoggedIn, async (req, res) => {
@@ -574,7 +570,7 @@ app.get('/news', async (req, res) => {
 
 //Função para envio das mensagens no WhatsApp.
 
-function start(client) {
+async function start(client) {
 
   app.post('/agender', isLoggedIn, async (req, res) => {
     let {fk_placa, 
@@ -650,7 +646,7 @@ function start(client) {
     let nomerealzaozao = "";
     let respostac = await database.getAgendamentocomcliente(req.params.id);
     let number = "55" + respostac[0].telefone + "@c.us";
-    let menssage = "🔧 *SERVIÇO CONCLUÍDO!*\n\nPode vir retirar seu carro " + respostac[0].modelo + ", ele já está novinho em folha!\n\nPara verificar os detalhes da troca acesse: meucarro.com.br/historico";
+    let menssage = "🔧 *SERVIÇO CONCLUÍDO!*\n\nPode vir retirar seu carro " + respostac[0].placa.toUpperCase() + ", ele já está novinho em folha!\n\nPara verificar os detalhes da troca acesse: meucarro.com.br/historico";
     if (req.files) {
       var file = req.files.foto;
       var filename = file.name;
@@ -661,17 +657,17 @@ function start(client) {
       file.mv('./assets/img/agend/' + nomerealzaozao, function (err) {
         if (err) {
           res.send(err)
+        }else{
+          if (respostac[0].telefone != "") {
+            mandarfoto(number, caminhopadrao + '/assets/img/agend/' + nomerealzaozao, nomerealzaozao, menssage);
+            }
         }
       })
-      if (respostac[0].telefone != "") {
-        console.log()
-     // mandarfoto(number, __filename + '/assets/img/agend/' + nomerealzaozao, nomerealzaozao, menssage);
+    }else if(respostac[0].telefone != "") {
+      mandarmsg(number, menssage);
       }
-    }
-    database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
-    if (respostac[0].telefone != "") {
-    mandarmsg(number, menssage);
-    }
+    await database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
+    await database.putqtdf(respostac[0].id_cliente);
     res.status(201).redirect('/admin');}
   })
 
@@ -749,7 +745,7 @@ function start(client) {
         let hora = gdata[1];
         let auxdata = gdata[0].split("-");
         let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-        let menssage = "📢 *NÃO VÁ ESQUECER HEIN*\nVocê tem um agendamento marcado conosco:\n\nDia " + datamesmo + "\n\nSó trazer o " + respostaaviso[0].placa + " para Rua Manoel Estevão, 431 - Centro - União da Vitória.";
+        let menssage = "📢 *NÃO VÁ ESQUECER HEIN*\nVocê tem um agendamento marcado conosco:\n\nDia " + datamesmo + "\n\nSó trazer o veículo: " + respostaaviso[0].placa.toUpperCase() + " para Rua Manoel Estevão, 431 - Centro - União da Vitória.";
         let number = "55" + respostaaviso[0].telefone + "@c.us";
         mandarmsg(number, menssage);
     }
@@ -761,7 +757,7 @@ function start(client) {
     let respostavencido = await database.getvencido(idvencido);
     await database.alterarvencido(idvencido);
     if(respostavencido[0].telefone != ""){
-        let menssage = "📅 *FAZ UM TEMPINHO!*\n\n Que você não aparece para trocar o óleo do carro: " + respostavencido[0].modelo + " - " + respostavencido[0].placa.toUpperCase() + "\n\n Agende sua troca conosco para preservar a vida útil do seu motor!";
+        let menssage = "📅 *FAZ UM TEMPINHO!*\n\n Que você não aparece para trocar o óleo do carro: " + respostavencido[0].placa.toUpperCase() + "\n\n Agende sua troca conosco para preservar a vida útil do seu motor!";
         let number = "55" + respostavencido[0].telefone + "@c.us";
         mandarmsg(number, menssage)
     }
@@ -831,8 +827,6 @@ function start(client) {
   }
 
   async function mandarfoto(telefone, fullpath, path, mensagem){
-    console.log("mandou foto");
-    console.log(fullpath)
     await client.sendImage(
         telefone,
         fullpath,

@@ -268,7 +268,7 @@ function carregarAgendamentoHoje() {
         .then((res) => res.json())
         .then((res) => {
             for (veiculo of res) {
-                criarLinha(veiculo.id_agendamento, veiculo.observacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.FK_CLIENTE_id_cliente);
+                criarLinha(veiculo.id_agendamento, veiculo.observacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.FK_CLIENTE_id_cliente, veiculo.aviso);
             }
         })
 
@@ -283,7 +283,7 @@ function carregarAgendamentoAmanha() {
         .then((res) => res.json())
         .then((res) => {
             for (veiculo of res) {
-                criarLinha(veiculo.id_agendamento, veiculo.observacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.FK_CLIENTE_id_cliente);
+                criarLinha(veiculo.id_agendamento, veiculo.observacao, veiculo.oleo, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.nome, veiculo.FK_CLIENTE_id_cliente, veiculo.aviso);
             }
         })
 
@@ -311,7 +311,7 @@ function pesquisarag(event) {
             .then((res) => res.json())
             .then((res) => {
                 for (agender of res) {
-                    criarLinha(agender.id, agender.obeservacao, agender.oleo, agender.data, agender.realizado, agender.placa, agender.nome, agender.fk_cliente);
+                    criarLinha(agender.id_agendamento, agender.observacao, agender.oleo, agender.data, agender.realizado, agender.placa, agender.nome, agender.FK_CLIENTE_id_cliente, agender.aviso);
                 }
 
             })

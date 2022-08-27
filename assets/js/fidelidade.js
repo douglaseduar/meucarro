@@ -90,8 +90,9 @@ async function alterar() {
         },
         body: JSON.stringify({
             idfidelidade: auxid
+
         })
     }
-    let resposta = await fetch('/fidelidades/', header);
+    fetch('/fidelidades/', header);
     location.reload();
 }

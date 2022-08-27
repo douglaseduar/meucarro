@@ -36,7 +36,7 @@ database.getAgendamento = async function (id) {
   return rows;
 }
 database.getAgendamentoesp = async function (id, pesquisa) {
-  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.placa LIKE ? AND v.id_placa = a.FK_VEICULO_id_placa and a.FK_CLIENTE_id_cliente = ? and a.cancelado = 0 ORDER BY realizado = 1, data desc;', [pesquisa, id]);
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.placa LIKE CONCAT("%", ?,  "%") OR v.modelo LIKE CONCAT("%", ?,  "%") AND v.id_placa = a.FK_VEICULO_id_placa and a.FK_CLIENTE_id_cliente = ? and a.cancelado = 0 ORDER BY realizado = 1, data desc;', [pesquisa, pesquisa, id]);
 
   return rows;
 }
@@ -156,7 +156,7 @@ database.getAgendamentoadmin = async function () {
   return rows;
 }
 database.getAgendamentoespadmin = async function (pesquisa) {
-  let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome, c.id_cliente FROM agendamento ag, veiculo v, cliente c WHERE v.id_placa = ag.FK_VEICULO_id_placa AND c.id_cliente = ag.FK_CLIENTE_id_cliente AND NOT cancelado = 1 AND v.placa LIKE ? ORDER BY realizado = 1, ag.data', [pesquisa]);
+  let [rows, fields] = await database.con.execute('SELECT ag.*, v.placa, v.modelo, c.nome, c.id_cliente FROM agendamento ag, veiculo v, cliente c WHERE v.id_placa = ag.FK_VEICULO_id_placa AND c.id_cliente = ag.FK_CLIENTE_id_cliente AND NOT cancelado = 1 AND v.placa LIKE CONCAT("%", ?,  "%") OR v.modelo LIKE CONCAT("%", ?,  "%") ORDER BY realizado = 1, ag.data', [pesquisa, pesquisa]);
 
   return rows;
 }
@@ -316,6 +316,22 @@ database.insertFidelidade = async function (id, gift, realizado) {
 }
 database.putFidelidades = async function (idfidelidade) {
   let [data] = await database.con.execute('UPDATE fidelidade SET utilizado = 1 where id_fidelidade = ?', [idfidelidade]);
+
+  return data;
+}
+database.putqtdf = async function (idcliente) {
+  let [data] = await database.con.execute('UPDATE cliente SET qtd_fidelidade = qtd_fidelidade + 1 where id_cliente = ?', [idcliente]);
+
+  return data;
+}
+database.getclientecomfidelidade = async function (idfidelidade) {
+  let [data] = await database.con.execute('SELECT * FROM fidelidade WHERE id_fidelidade = ?', [idfidelidade]);
+
+  return data;
+}
+
+database.putzerarf = async function (idcliente) {
+  let [data] = await database.con.execute('UPDATE cliente SET qtd_fidelidade = 0 WHERE id_cliente = ?', [idcliente]);
 
   return data;
 }
