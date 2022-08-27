@@ -102,6 +102,6 @@ async function alterar() {
             idvencido: auxid
         })
     }
-    let resposta = await fetch('/vencidos/', header);
+    fetch('/vencidos/', header);
     location.reload();
 }

@@ -145,6 +145,11 @@ database.alteraraviso = async function (idag) {
 
   return rows;
 }
+database.modificavencido = async function (placa, idcliente, idag) {
+  let [rows, fields] = await database.con.execute('UPDATE agendamento SET lembrete = 1 WHERE FK_VEICULO_id_placa = ? AND FK_CLIENTE_id_cliente = ? AND NOT id_agendamento = ?', [placa, idcliente, idag]);
+
+  return rows;
+}
 database.geteditAgendamentoadmin = async function (id) {
   let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.id_placa = a.FK_VEICULO_id_placa and a.id_agendamento = ?', [id]);
 
@@ -171,7 +176,7 @@ database.getAgendamentoadminamanha = async function () {
   return rows;
 }
 database.getAgendamentoadminvencido = async function () {
-  let [rows, fields] = await database.con.execute("SELECT v.*, a.*, c.* FROM veiculo v, cliente c, agendamento a WHERE v.id_placa = a.FK_VEICULO_id_placa AND c.id_cliente = a.FK_CLIENTE_id_cliente AND NOT cancelado = 1 AND NOT realizado = 0 AND DATE_FORMAT((a.data), '%Y-%m-%d') <= DATE_FORMAT(DATE_ADD(NOW( ), INTERVAL -1 YEAR), '%Y-%m-%d') ORDER BY a.data desc");
+  let [rows, fields] = await database.con.execute("SELECT v.*, a.*, c.* FROM veiculo v, cliente c, agendamento a WHERE lembrete = 0 AND v.id_placa = a.FK_VEICULO_id_placa AND c.id_cliente = a.FK_CLIENTE_id_cliente AND NOT cancelado = 1 AND NOT realizado = 0 AND DATE_FORMAT((a.data), '%Y-%m-%d') <= DATE_FORMAT(DATE_ADD(NOW( ), INTERVAL -1 YEAR), '%Y-%m-%d') ORDER BY a.data desc");
 
   return rows;
 }

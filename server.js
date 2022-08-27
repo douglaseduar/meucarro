@@ -646,7 +646,7 @@ async function start(client) {
     let nomerealzaozao = "";
     let respostac = await database.getAgendamentocomcliente(req.params.id);
     let number = "55" + respostac[0].telefone + "@c.us";
-    let menssage = "🔧 *SERVIÇO CONCLUÍDO!*\n\nPode vir retirar seu carro " + respostac[0].placa.toUpperCase() + ", ele já está novinho em folha!\n\nPara verificar os detalhes da troca acesse: meucarro.com.br/historico";
+    let menssage = "🔧 *SERVIÇO CONCLUÍDO!*\n\nPode vir retirar seu veículo " + respostac[0].placa.toUpperCase() + ", ele já está novinho em folha!\n\nPara verificar os detalhes da troca acesse: meucarro.com.br/historico";
     if (req.files) {
       var file = req.files.foto;
       var filename = file.name;
@@ -666,6 +666,7 @@ async function start(client) {
     }else if(respostac[0].telefone != "") {
       mandarmsg(number, menssage);
       }
+    await database.modificavencido(respostac[0].FK_VEICULO_id_placa, respostac[0].id_cliente, req.params.id);  
     await database.editAgendamentoadmin(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, km, 1, nomerealzaozao, req.params.id);
     await database.putqtdf(respostac[0].id_cliente);
     res.status(201).redirect('/admin');}
@@ -757,7 +758,7 @@ async function start(client) {
     let respostavencido = await database.getvencido(idvencido);
     await database.alterarvencido(idvencido);
     if(respostavencido[0].telefone != ""){
-        let menssage = "📅 *FAZ UM TEMPINHO!*\n\n Que você não aparece para trocar o óleo do carro: " + respostavencido[0].placa.toUpperCase() + "\n\n Agende sua troca conosco para preservar a vida útil do seu motor!";
+        let menssage = "📅 *FAZ UM TEMPINHO!*\n\n Que você não aparece para trocar o óleo do veículo: " + respostavencido[0].placa.toUpperCase() + "\n\n Agende sua troca conosco para preservar a vida útil do seu motor!";
         let number = "55" + respostavencido[0].telefone + "@c.us";
         mandarmsg(number, menssage)
     }
@@ -801,12 +802,12 @@ async function start(client) {
       } else {
         let verificaveiculo = await database.getVeiculo(verificacadastro[0].id_cliente, placao);
         if (verificaveiculo == ![]) {
-          let numeroplaca1 = await database.insertVeiculo(placao, aux, verificacadastro[0].id_cliente, tipo);
+          let numeroplaca1 = await database.insertVeiculo(placao, respostarobo.marca + " " + respostarobo.modelo, verificacadastro[0].id_cliente, tipo);
           database.insertAgendamento(numeroplaca1.numero, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].id_cliente);
         } else {
-          database.insertAgendamento(verificaveiculo[0].id, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].id_cliente);
+          database.insertAgendamento(verificaveiculo[0].id_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, verificacadastro[0].id_cliente);
         }
-      }
+      
       if (verificacadastro[0].telefone != "") {
         let gdata = vdata.split("T");
         let hora = gdata[1];
@@ -816,8 +817,8 @@ async function start(client) {
         let menssage = "✔ *AGENDAMENTO REALIZADO COM SUCESSO!*\n\nPlaca: " + placao.toUpperCase() + "\nData: " + datamesmo + "\nObservação: " + observacao + "\n\nPara consultar seus agendamentos acesse: meucarro.com.br/historico";
         mandarmsg(number1, menssage);
       }
-    }
-  })
+  
+  }}})
 
   async function mandarmsg(telefone, mensagem){
   client.sendText(telefone, mensagem)
