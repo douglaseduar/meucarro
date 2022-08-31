@@ -1,6 +1,36 @@
-POST https://geradorbrasileiro.com/api/validate/
+GET http://localhost:8080/fidelidades
+
+###
+
+POST http://localhost:8080/car
+Content-Type: application/json
+
 {
-  "placa": [
-    "ava5566"
-  ]
+    "placa": "aaa1111",
+    "tipo": "1",
 }
+
+###
+
+PUT http://localhost:8080//editagender/2
+Content-Type: application/json
+
+{
+    "observacao": "preferencialmente peças originais",
+    "oleo": "marca do oleo",
+    "filtro_oleo": 1,
+    "filtro_ar": 1,
+    "filtro_arcondicionado": 0,
+    "filtro_gasolina": 1,
+    "filtro_hidraulico": 0,
+    "filtro_racor": 0,
+    "vdata": "2021-09-20T07:00",
+    "placa": "aaa1111"
+}
+##
+
+DELETE http://localhost:8080/car/aaa1111
+
+###
+
+GET http://localhost:8080/inicio

@@ -234,7 +234,7 @@ app.get('/car/', isLoggedIn, async (req, res) => {
   res.send(await database.getVeiculos(req.user.id));
 })
 app.delete('/car/:id', isLoggedIn, async (req, res) => {
-  database.deleteVeiculo(req.params.id);
+  database.deleteVeiculo(req.params.id, req.user.id);
   res.send('Produto com o id: ' + req.params.id + ' deletado com sucesso')
 })
 app.post('/car', isLoggedIn, async (req, res) => {

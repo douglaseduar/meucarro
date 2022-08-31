@@ -23,8 +23,8 @@ database.getVeiculo = async function (id, placa) {
 
   return rows;
 }
-database.deleteVeiculo = async function (id) {
-  let [data] = await database.con.execute('DELETE FROM veiculo WHERE id_placa = ?', [id]);
+database.deleteVeiculo = async function (id, idcliente) {
+  let [data] = await database.con.execute('DELETE FROM veiculo WHERE id_placa = ? AND FK_CLIENTE_id_cliente = ?', [id, idcliente]);
 
   return {
     'deletado': id
