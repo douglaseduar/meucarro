@@ -281,27 +281,27 @@ database.getClientecomemail = async function (email) {
 
   return rows;
 }
-database.setLogin = async function (id, email) {
-  let [data] = await database.con.execute('UPDATE cliente SET id_cliente = ? WHERE id_cliente = ?', [id, email]);
+database.setLogin = async function (id, nome, foto, email) {
+  let [data] = await database.con.execute('UPDATE cliente SET id_cliente = ?, nome = ?, foto = ? WHERE id_cliente = ?', [id, nome, foto, email]);
 
   return {
     'alterado': "asd"
   }
 }
-database.setAg = async function (id, email) {
-  let [data] = await database.con.execute('UPDATE agendamento SET FK_CLIENTE_id_cliente = ? WHERE FK_CLIENTE_id_cliente = ?', [id, email]);
+// database.setAg = async function (id, email) {
+//   let [data] = await database.con.execute('UPDATE agendamento SET FK_CLIENTE_id_cliente = ? WHERE FK_CLIENTE_id_cliente = ?', [id, email]);
 
-  return {
-    'alterado': "asd"
-  }
-}
-database.setCarro = async function (id, email) {
-  let [data] = await database.con.execute('UPDATE veiculo SET FK_CLIENTE_id_cliente = ? WHERE FK_CLIENTE_id_cliente = ?', [id, email]);
+//   return {
+//     'alterado': "asd"
+//   }
+// }
+// database.setCarro = async function (id, email) {
+//   let [data] = await database.con.execute('UPDATE veiculo SET FK_CLIENTE_id_cliente = ? WHERE FK_CLIENTE_id_cliente = ?', [id, email]);
 
-  return {
-    'alterado': "asd"
-  }
-}
+//   return {
+//     'alterado': "asd"
+//   }
+//}
 
 database.getFidelidade = async function (id) {
   let [rows, fields] = await database.con.execute('SELECT * FROM fidelidade WHERE FK_CLIENTE_id_cliente = ? AND utilizado = 0', [id]);

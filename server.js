@@ -100,9 +100,7 @@ app.get('/verificacao', isLoggedIn, async (req, res) => {
         res.redirect('/erro')
       }
     } else {
-      await database.setLogin(idfacebook, respostaemail[0].id_cliente);
-      await database.setCarro(idfacebook, respostaemail[0].id_cliente)
-      await database.setAg(idfacebook, respostaemail[0].id_cliente);
+      await database.setLogin(idfacebook, nome, foto, respostaemail[0].id_cliente); //mudar informações do cliente
       res.redirect('/configuracao');
     }
   } else {
