@@ -3,7 +3,6 @@ import database from './database.js';
 import url from 'url';
 import path from 'path';
 import fileupload from 'express-fileupload'
-import cors from 'cors';
 import request from 'request';
 import venom from 'venom-bot';
 import FacebookStrategy from 'passport-facebook';
@@ -34,7 +33,6 @@ app.use(express.json());
 app.use(express.static('assets/css'));
 app.use(express.static('assets/js'));
 app.use(express.static('assets/img'));
-app.use(cors());
 app.use(session({
   resave: false,
   saveUninitialized: true,
@@ -243,11 +241,10 @@ app.post('/car', isLoggedIn, async (req, res) => {
   let cliente = req.user.id;
   let respostacarro = await database.getVeiculo(cliente, placa);
   if(respostacarro == ![]){
-    console.log("entrou aqui")
   let respostarobo = await robo(placa);
   let aux = respostarobo.marca + " " + respostarobo.modelo;
   res.status(201).send(database.insertVeiculo(placa, aux, cliente, tipo));
-  }
+  }else{res.status(201).send("veículo já existe");}
 });
 app.get('/agender/', isLoggedIn, async (req, res) => {
   res.send(await database.getAgendamento(req.user.id));
@@ -585,7 +582,7 @@ async function start(client) {
     } = req.body;
     let respostatel = await database.getLogin(req.user.id);
     res.status(201).send(await database.insertAgendamento(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id));
-    if (respostatel.telefone != "") {
+    if (respostatel.telefone != undefined) {
         let gdata = vdata.split("T");
         let hora = gdata[1];
         let auxdata = gdata[0].split("-");
@@ -616,7 +613,7 @@ async function start(client) {
     let respostaadmin = await database.getLogin(req.user.id);
     if (respostaadmin[0].permissao == 1) {
     let respostaag = await database.getAgendamentocomcliente(req.params.id);
-    database.deleteAgendamento(req.params.id);
+    res.status(201).send(database.deleteAgendamento(req.params.id));
     if (respostaag[0].telefone != "") {
       let number = "55" + respostaag[0].telefone + "@c.us";
       let gdata = respostaag[0].data.split("T");
@@ -684,7 +681,7 @@ async function start(client) {
       vdata,
       placao
     } = req.body;
-    await database.editAgendamento(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id, req.params.id)
+    res.status(201).send(await database.editAgendamento(observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id, req.params.id));
     if (respostatel2[0].telefone != "") {
       let number = "55" + respostatel2[0].telefone + "@c.us";
       let gdata = vdata.split("T");
@@ -738,7 +735,7 @@ async function start(client) {
       idag
     } = req.body;
     let respostaaviso = await database.getaviso(idag);
-    await database.alteraraviso(idag)
+    res.status(201).send(await database.alteraraviso(idag));
     if(respostaaviso[0].telefone != ""){
         let gdata = respostaaviso[0].data.split("T");
         let hora = gdata[1];
@@ -843,6 +840,7 @@ async function start(client) {
 async function robo(placa) {
   let placaaux = placa.toUpperCase();
   var regex = '[A-Z]{3}[0-9][0-9A-Z][0-9]{2}';
+  try {
   if (placaaux.match(regex)) {
     const browser = await puppeteer.launch({
       headless: true
@@ -903,7 +901,24 @@ async function robo(placa) {
 
     return campos;
   }
-}
+} catch (error){
+  var campos = {
+    "marca": "---",
+    "modelo": "---",
+    "AnoModelo": "---",
+    "cor": "---",
+    "cilindradas": "---",
+    "potencia": "---",
+    "Combustivel": "---",
+    "fipe": "---",
+    "ipva": "---",
+    "valor": "---",
+    "logo": " "
+  };
+
+  return campos;
+}}
+
 
 //Renderização da página de erro.
 

@@ -26,9 +26,17 @@ function carregarVeiculos() {
     fetch('/car/')
         .then((res) => res.json())
         .then((res) => {
+            if(res.length == 0){
+                var option = document.createElement("option");
+                option.textContent = "ADICIONE UM VEÍCULO PRIMEIRO";
+                option.style.color = "red";
+                document.querySelector(".form-select").appendChild(option);
+                document.querySelector(".form-select").setAttribute("disabled", "disabled");
+                document.querySelector("#agendar").style.display = "none";
+            }else{
             for (veiculo of res) {
                 criarLinha(veiculo.placa, veiculo.id_placa);
-            }
+            }}
         })
 
 }

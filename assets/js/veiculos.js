@@ -96,7 +96,7 @@ async function chamarModal() {
 
 
 async function apagando() {
-    var result = confirm("Tem certeza que deseja excluir o veículo?");
+    var result = confirm("Tem certeza que deseja excluir o veículo e todos os seu agendamentos?");
     if (result == true) {
         let idaux = this.getAttribute("id");
 

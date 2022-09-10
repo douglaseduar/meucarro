@@ -6,7 +6,7 @@ database.con = await mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'meuca',
+  database: 'meudeus',
   port: '3306'
 })
 
@@ -36,7 +36,7 @@ database.getAgendamento = async function (id) {
   return rows;
 }
 database.getAgendamentoesp = async function (id, pesquisa) {
-  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where v.placa LIKE CONCAT("%", ?,  "%") OR v.modelo LIKE CONCAT("%", ?,  "%") AND v.id_placa = a.FK_VEICULO_id_placa and a.FK_CLIENTE_id_cliente = ? and a.cancelado = 0 ORDER BY realizado = 1, data desc;', [pesquisa, pesquisa, id]);
+  let [rows, fields] = await database.con.execute('select a.*, v.placa, v.modelo from agendamento a, veiculo v where a.cancelado = 0 AND v.id_placa = a.FK_VEICULO_id_placa and a.FK_CLIENTE_id_cliente = ? AND v.placa LIKE CONCAT("%", ?,  "%") OR v.modelo LIKE CONCAT("%", ?,  "%") ORDER BY realizado = 1, data desc', [id, pesquisa, pesquisa]);
 
   return rows;
 }
