@@ -52,7 +52,7 @@ async function ausente(event) {
 
 }
 
-
+document.querySelector("#agendar").addEventListener("click", concluir);
 
 async function concluir(event) {
     event.preventDefault();
@@ -68,9 +68,11 @@ async function concluir(event) {
     let foleo = form.oleo.value;
     let fkm = form.km.value;
     let fob = form.observacao.value;
+    let trocado = form.trocador.value;
+    let msg = fob + " | " + trocado
     var formao = new FormData()
     formao.append('foto', form.foto.files[0]);
-    formao.append('observacao', fob);
+    formao.append('observacao', msg);
     formao.append('oleo', foleo);
     formao.append('filtro_oleo', ffoleo);
     formao.append('filtro_ar', far);
@@ -86,7 +88,7 @@ async function concluir(event) {
     }
 
 
-     await fetch('/editagenderadmin/' + idmesmo, header);
-     location = '/admin';
+    await fetch('/editagenderadmin/' + idmesmo, header);
+    location = '/admin';
 
 }

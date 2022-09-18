@@ -25,7 +25,7 @@ function criarLinha(id, observacao, oleo, data1, realizado, placao, cliente, fkc
     placatabela.style.cursor = "pointer";
     placatabela.setAttribute("id", placao);
     placatabela.addEventListener("click", getacarrodetalhe);
-    servicostabela.innerHTML = oleo + " | " + observacao + ' <i class="bi bi-search" style="font-size: 9pt"></i>';
+    servicostabela.innerHTML = oleo + " | " + observacao.substring(0, 25)  + "... " + ' <i class="bi bi-search" style="font-size: 9pt"></i>';
     servicostabela.style.cursor = "pointer";
     servicostabela.setAttribute("id", id);
     servicostabela.addEventListener("click", getagendamentodetalhe);

@@ -27,11 +27,12 @@ function carregarVeiculos() {
         .then((res) => res.json())
         .then((res) => {
             if(res.length == 0){
-                var option = document.createElement("option");
+                document.querySelector(".form-select").remove();
+                var option = document.createElement("button");
                 option.textContent = "ADICIONE UM VEÍCULO PRIMEIRO";
-                option.style.color = "red";
-                document.querySelector(".form-select").appendChild(option);
-                document.querySelector(".form-select").setAttribute("disabled", "disabled");
+                option.className = "btn btn-success";
+                option.addEventListener("click", cadastrou);
+                document.querySelector(".teste").appendChild(option);
                 document.querySelector("#agendar").style.display = "none";
             }else{
             for (veiculo of res) {
@@ -40,7 +41,11 @@ function carregarVeiculos() {
         })
 
 }
+function cadastrou(event){
+    event.preventDefault();
 
+    location = "/cadastro-de-veiculo";
+}
 function criarLinha(vplaca, vid) {
     var option = document.createElement("option");
     option.setAttribute("value", vid)

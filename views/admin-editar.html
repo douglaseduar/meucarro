@@ -29,17 +29,19 @@
             name="select">
           </select>
           <h6 style="margin-top: 15px; margin-bottom: 15px;"> O que foi trocado? </h6>
-          <input type="text" class="form-control fadmin" name="filtro_oleo" placeholder="Filtro de Óleo">
-          <input type="text" class="form-control fadmin" name="filtro_ar" placeholder="Filtro de Ar">
-          <input type="text" class="form-control fadmin" name="filtro_gasolina" placeholder="Filtro de Combustível">
-          <input type="text" class="form-control fadmin" name="filtro_arcondicionado"
+          <input type="text" class="form-control fadmin" name="filtroo" placeholder="Filtro de Óleo">
+          <input type="text" class="form-control fadmin" name="filtroar" placeholder="Filtro de Ar">
+          <input type="text" class="form-control fadmin" name="filtrocomb" placeholder="Filtro de Combustível">
+          <input type="text" class="form-control fadmin" name="filtroarc"
             placeholder="Filtro de Ar Condicionado">
-          <input type="text" class="form-control fadmin" name="filtro_racor" placeholder="Filtro Separador">
-          <input type="text" class="form-control fadmin" name="filtro_hidraulico" placeholder="Outro Filtro">
+          <input type="text" class="form-control fadmin" name="filtroracor" placeholder="Filtro Separador">
+          <input type="text" class="form-control fadmin" name="outrofiltro" placeholder="Outro Filtro">
           <h6 style="margin-top: 15px; margin-bottom: 15px;"> Qual óleo foi usado?</h6>
           <input type="text" class="form-control" name="oleo" placeholder="Marca do óleo">
           <h6 style="margin-top: 15px; margin-bottom: 15px;"> Quantos km?</h6>
           <input type="text" class="form-control" name="km" placeholder="Quilometragem do Veículo">
+          <h6 style="margin-top: 15px; margin-bottom: 15px;"> Quem realizou o serviço?</h6>
+          <input type="text" class="form-control" name="trocador" placeholder="Nome do Funcionário">
           <div class="form-floating" style="margin-top: 20px;">
             <textarea class="form-control tamanho" placeholder="Leave a comment here" id="floatingTextarea"
               style="height: 100px; font-size: 12pt;" name="observacao"></textarea>
@@ -50,7 +52,7 @@
             <input type="file" accept='image/*' class="form-control-file" name="foto" id="exampleFormControlFile1">
           </div>
         </div>
-        <button class="btn btn-success btn-block mb-4" type="submit" id="agendar">Concluir Agendamento</button>
+        <button class="btn btn-success btn-block mb-4" id="agendar">Concluir Agendamento</button>
   </form>
 
   <button class="btn btn-warning btn-block mb-4" id="dropagendar">Cliente não Apareceu</button>

@@ -624,7 +624,7 @@ async function start(client) {
      mandarmsg(number, menssage);
     }}
   })
-  app.post('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
+  app.put('/editagenderadmin/:id', isLoggedIn, async (req, res) => {
     let {
       observacao,
       oleo,
