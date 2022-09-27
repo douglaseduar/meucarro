@@ -88,7 +88,7 @@ async function verificarhora(event) {
         .then((res) => {
         let verificacao = res[0].livre;
         if(verificacao == 0){
-            let apdata = new Date(res[0].possivelhorario);
+            let apdata = new Date(res[0].possivelhorario);  
             document.querySelector(".avisando").textContent = "Horário Indisponível. Próximo horário livre é:" + apdata.getDate() + "/" + apdata.getMonth() + "/" + apdata.getFullYear() + " às " + apdata.getHours() + ":00";
             document.querySelector(".avisando").style.color = "orange";
         }else if(verificacao == 2){

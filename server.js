@@ -816,22 +816,42 @@ async function start(client) {
   }}})
 
   async function mandarmsg(telefone, mensagem){
-  client.sendText(telefone, mensagem)
-  .then((result) => {
-    console.log('Result: ', result); //return object success
-  })
+      client.sendText(telefone, mensagem)
+      .then((result) =>{console.log('Result: ', result);})
+      .catch((erro) => {
+        console.error('Error when sending: ', erro);
+        let aux = telefone.substr(0, 4);
+        let aux1 = telefone.substr(5);
+        let corrigido = aux + aux1;
+        client.sendText(corrigido, mensagem)
+        .then((result) =>{console.log('Result: ', result);})
+        .catch((erro) => {console.error('Error when sending: ', erro)});
+      });
+
   }
 
   async function mandarfoto(telefone, fullpath, path, mensagem){
-    await client.sendImage(
+      await client.sendImage(
         telefone,
         fullpath,
         path,
         mensagem
-      );
+      ).then((result) =>{console.log('Result: ', result);})
+      .catch((erro) => {
+        console.error('Error when sending: ', erro);
+        let aux = telefone.substr(0, 4);
+        let aux1 = telefone.substr(5);
+        let corrigido = aux + aux1;
+        client.sendImage(
+          corrigido,
+          fullpath,
+          path,
+          mensagem
+        ).then((result) =>{console.log('Result: ', result);})
+        .catch((erro) => {console.error('Error when sending: ', erro)});
+      });
+
   }
-
-
 }
 
 
