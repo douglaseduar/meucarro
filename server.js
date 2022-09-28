@@ -582,7 +582,7 @@ async function start(client) {
     } = req.body;
     let respostatel = await database.getLogin(req.user.id);
     res.status(201).send(await database.insertAgendamento(fk_placa, observacao, oleo, filtro_oleo, filtro_ar, filtro_arcondicionado, filtro_gasolina, filtro_hidraulico, filtro_racor, vdata, 0, req.user.id));
-    if (respostatel.telefone != undefined) {
+    if (respostatel.telefone != "") {
         let gdata = vdata.split("T");
         let hora = gdata[1];
         let auxdata = gdata[0].split("-");
@@ -601,11 +601,7 @@ async function start(client) {
     database.deleteAgendamentoc(req.params.id, req.user.id);
     if (respostatel1[0].telefone != "") {
       let number = "55" + respostatel1[0].telefone + "@c.us";
-      let gdata = vdata.split("T");
-      let hora = gdata[1];
-      let auxdata = gdata[0].split("-");
-      let datamesmo = auxdata[2] + "/" + auxdata[1] + "/" + auxdata[0] + " | " + hora;
-      let menssage = "❌ *CANCELAMENTO!*\n\nPlaca: " + placa.toUpperCase() + "\nData: " + datamesmo + "\n_id do agendamento: " + req.params.id + "_\n\nSe você não for a pessoa que fez a solicitação, entre em contato conosco!";
+      let menssage = "❌ *CANCELAMENTO!*\n\nPlaca: " + placa.toUpperCase() + "\nData: " + vdata + "\n_id do agendamento: " + req.params.id + "_\n\nSe você não for a pessoa que fez a solicitação, entre em contato conosco!";
       mandarmsg(number, menssage);  
     }
   })
@@ -825,7 +821,16 @@ async function start(client) {
         let corrigido = aux + aux1;
         client.sendText(corrigido, mensagem)
         .then((result) =>{console.log('Result: ', result);})
-        .catch((erro) => {console.error('Error when sending: ', erro)});
+        .catch((erro) => {
+          console.error('Error when sending: ', erro)
+          let aux = telefone.substr(0, 4);
+          let aux1 = telefone.substr(5);
+          let corrigido = aux + '9' + aux1;
+          client.sendText(corrigido, mensagem)
+        .then((result) =>{console.log('Result: ', result);})
+        .catch((erro) => {
+          console.error('Error when sending: ', erro)});
+        });
       });
 
   }
@@ -848,7 +853,18 @@ async function start(client) {
           path,
           mensagem
         ).then((result) =>{console.log('Result: ', result);})
-        .catch((erro) => {console.error('Error when sending: ', erro)});
+        .catch((erro) => {console.error('Error when sending: ', erro)
+        let aux = telefone.substr(0, 4);
+        let aux1 = telefone.substr(5);
+        let corrigido = aux + '9' + aux1;
+        client.sendImage(
+          corrigido,
+          fullpath,
+          path,
+          mensagem
+        ).then((result) =>{console.log('Result: ', result);})
+        .catch((erro) => {console.error('Error when sending: ', erro) });
+      });
       });
 
   }
