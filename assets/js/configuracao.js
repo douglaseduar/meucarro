@@ -1,4 +1,13 @@
-document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
+function fmarquee(ver){
+    if(ver == "verdade"){
+        document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
+    }else{
+        document.querySelector("marquee").textContent = "Adicione seu número do WhatsApp para receber todos os avisos do sistema!";
+        document.querySelector("marquee").style.color = "white";
+        document.querySelector("marquee").style.height = "30px";
+        document.querySelector("marquee").style.background = "green";
+    }
+}
 
 function carregarDados(id) {
     fetch('/user/')
@@ -23,6 +32,11 @@ function preencher(id, nome, telefone, email, endereco, foto) {
         form.foto.value = "";
     }
     document.querySelector("#endereco").value = endereco
+    if(telefone == ""){
+        fmarquee("1");
+    }else{
+        fmarquee("verdade")
+    }
 }
 
 

@@ -1,7 +1,7 @@
 let iddoagendamento = location.search;
 let idaux = iddoagendamento.split("=");
 let idmesmo = idaux[1];
-
+var datadoagendamento = "";
 document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
 
 function carregarDadosMenu() {
@@ -75,6 +75,7 @@ function preencheformulario(id, vplaca, voleo, vobservacao, vdata, filtro_oleo, 
     if (filtro_hidraulico == '<i class="bi bi-check-lg"></i>') {
         document.querySelector("#inlineCheckbox6").checked = true;
     }
+    datadoagendamento = vdata;
     let datac = vdata.split("T");
     let dataco = datac[0].split("-");
     let adata = dataco[2] + "/" + dataco[1] + "/" + dataco[0] + " " + datac[1]; 
@@ -142,7 +143,10 @@ async function verificarhora(event) {
         .then((res) => res.json())
         .then((res) => {
         let verificacao = res[0].livre;
-        if(verificacao == 0){
+        if(datadoagendamento == adata){
+            enviaredicao();
+        }
+        else if(verificacao == 0){
             let apdata = new Date(res[0].possivelhorario);
             document.querySelector(".avisando").textContent = "Horário Indisponível. Próximo horário livre é:" + apdata.getDate() + "/" + (apdata.getMonth() + 1) + "/" + apdata.getFullYear() + " às " + apdata.getHours() + ":00";
             document.querySelector(".avisando").style.color = "orange";

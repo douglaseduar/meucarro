@@ -1,18 +1,27 @@
-document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
+function fmarquee(ver){
+    if(ver == "verdade"){
+        document.querySelector("marquee").textContent = "Seja bem vindo ao nosso sistema, quando tivermos algum aviso ele irá passar aqui!";
+    }else{
+        document.querySelector("marquee").textContent = "Adicione seu número do WhatsApp para receber todos os avisos do sistema!";
+        document.querySelector("marquee").style.color = "white";
+        document.querySelector("marquee").style.height = "30px";
+        document.querySelector("marquee").style.background = "green";
+    }
+}
 
 function carregarDadosMenu() {
     fetch('/user/')
         .then((res) => res.json())
         .then((res) => {
             for (cliente of res) {
-                preencherMenu(cliente.nome, cliente.foto, cliente.qtd_fidelidade);
+                preencherMenu(cliente.nome, cliente.foto, cliente.qtd_fidelidade, cliente.telefone);
             }
 
         })
 
 }
 
-function preencherMenu(nome, foto, fidelidade) {
+function preencherMenu(nome, foto, fidelidade, telefone) {
     var aux = 5;
     var aux1 = 0;
     if (foto != "") {
@@ -41,6 +50,11 @@ function preencherMenu(nome, foto, fidelidade) {
         gift.style.color = "cyan";
         document.querySelector("#gift").style.display = "block";
 
+    }
+    if(telefone == ""){
+        fmarquee("1");
+    }else{
+        fmarquee("verdade")
     }
     document.querySelector(".premios").appendChild(gift)
 
