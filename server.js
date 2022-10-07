@@ -874,7 +874,7 @@ async function start(client) {
 //Função para retornar dados das Placas.
 
 async function robo(placa) {
-  let placaaux = placa.toUpperCase();
+  //let placaaux = placa.toUpperCase();
   var regex = '[A-Z]{3}[0-9][0-9A-Z][0-9]{2}';
   try {
   if (placaaux.match(regex)) {
