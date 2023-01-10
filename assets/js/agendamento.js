@@ -165,8 +165,8 @@ function carregarPlaca(pesquisa) {
         fetch('/agenderesp/' + pesquisa)
             .then((res) => res.json())
             .then((res) => {
-                for (veiculo1 of res) {
-                    criarLinha(veiculo1.id, veiculo1.fk_placa, veiculo1.observacao, veiculo1.km, veiculo1.oleo, veiculo1.filtro_oleo, veiculo1.filtro_ar, veiculo1.filtro_arcondicionado, veiculo1.filtro_gasolina, veiculo1.filtro_hidraulico, veiculo1.filtro_racor, veiculo1.data, veiculo1.realizado, veiculo1.placa, veiculo1.modelo);
+                for (veiculo of res) {
+                    criarLinha(veiculo.id_agendamento, veiculo.FK_VEICULO_id_placa, veiculo.observacao, veiculo.km, veiculo.oleo, veiculo.filtro_oleo, veiculo.filtro_ar, veiculo.filtro_arcondicionado, veiculo.filtro_combustivel, veiculo.outro_filtro, veiculo.filtro_racor, veiculo.data, veiculo.realizado, veiculo.placa, veiculo.modelo, veiculo.foto);
                 }
 
             })

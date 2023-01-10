@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { text } from 'express';
 import database from './database.js';
 import url from 'url';
 import path from 'path';
@@ -552,7 +552,7 @@ app.get('/cardetalhe/:id', isLoggedIn, async (req, res) => {
 //Request das noticias para a página "inicio".
 
 app.get('/news', async (req, res) => {
-  const link = `https://newsdata.io/api/1/news?apikey=pub_9045d02aa3dde8a8642911a1673ef7f21ca9&q=gasolina%20OR%20ipva%20OR%20carros%20OR%20automóveis%20OR%20motor&language=pt`;
+  const link = `https://newsdata.io/api/1/news?apikey=pub_9045d02aa3dde8a8642911a1673ef7f21ca9&q=gasolina%20OR%20ipva%20OR%20automóvel%20OR%20automóveis&language=pt`;
   request(link, (err, response, html) => {
     if (!err) {
       const json1 = JSON.parse(html);
@@ -887,39 +887,34 @@ async function robo(placa) {
       width: 1280,
       height: 1800
     })
+    
     await page.goto("https://www.tabelafipebrasil.com/placa/" + placa);
-    const resultado = await page.evaluate(() => {
-      let rmarca = document.querySelectorAll("td")[1].textContent;
-      let rmodelo = document.querySelectorAll("td")[3].textContent;
-      let rAnoModelo = document.querySelectorAll("td")[5].textContent;
-      let rcor = document.querySelectorAll("td")[9].textContent;
-      let rcilindradas = document.querySelectorAll("td")[11].textContent;
-      let rpotencia = document.querySelectorAll("td")[13].textContent;
-      let rCombustivel = document.querySelectorAll("td")[15].textContent;
-      let rfipe = document.querySelectorAll("td")[91].textContent;
-      let ripva = document.querySelectorAll("td.tableNumber")[2].textContent;
-      let rvalor = document.querySelectorAll("td")[93].textContent;
-      let rlogo = document.querySelector("img.fipeLogoDIV.fipeLogoIMG.lazyloaded").src;
+    const vaidar = await page.evaluate(() => {
+      const nodeList = document.querySelectorAll("td");
+      const textArray = [...nodeList];
+      const list = textArray.map(({textContent}) => ({textContent}));
+      return list;
+
+    })
 
       var campos = {
-        "marca": rmarca,
-        "modelo": rmodelo,
-        "AnoModelo": rAnoModelo,
-        "cor": rcor,
-        "cilindradas": rcilindradas,
-        "potencia": rpotencia,
-        "Combustivel": rCombustivel,
-        "fipe": rfipe,
-        "ipva": ripva,
-        "valor": rvalor,
-        "logo": rlogo
+        "marca": vaidar[1].textContent,
+        "modelo": vaidar[3].textContent,
+        "AnoModelo": vaidar[5].textContent,
+        "cor": vaidar[9].textContent,
+        "cilindradas": vaidar[11].textContent,
+        "potencia": vaidar[13].textContent,
+        "Combustivel": vaidar[15].textContent,
+        "fipe": "N/A",
+        "ipva": "N/A",
+        "valor": "N/A",
+        "logo": " "
       };
 
-      return campos;
+     
 
-    });
     await browser.close();
-    return resultado;
+    return campos;
   } else {
     var campos = {
       "marca": "---",
@@ -938,6 +933,7 @@ async function robo(placa) {
     return campos;
   }
 } catch (error){
+  console.log(error);
   var campos = {
     "marca": "---",
     "modelo": "---",
@@ -950,6 +946,7 @@ async function robo(placa) {
     "ipva": "---",
     "valor": "---",
     "logo": " "
+
   };
 
   return campos;
